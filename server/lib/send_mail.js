@@ -1,7 +1,7 @@
 "use strict";
 const nodemailer = require("nodemailer");
 require("dotenv").config();
-const path = require("path")
+const path = require("path");
 
 // async..await is not allowed in global scope, must use a wrapper
 
@@ -10,7 +10,7 @@ async function sendMail({ subject, receivers, text, htmlBody, files }) {
     const options = {
         from: {
             name: "Eternal",
-            address: process.env.USER
+            address: process.env.USER,
         }, // sender address
         to: receivers, // list of receivers
         subject: subject, // Subject line
@@ -23,9 +23,9 @@ async function sendMail({ subject, receivers, text, htmlBody, files }) {
         //         contentType: "application/pdf"
         //     }
         // ]
-        attachments: files
+        attachments: files,
     };
-    
+
     const transporter = nodemailer.createTransport({
         service: "gmail.com",
         host: "smtp.gmail.com",
@@ -49,3 +49,4 @@ async function sendMail({ subject, receivers, text, htmlBody, files }) {
     //
 }
 module.exports.sendMail = sendMail;
+
