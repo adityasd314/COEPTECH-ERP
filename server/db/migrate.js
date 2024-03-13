@@ -1,15 +1,15 @@
-import { drizzle } from "drizzle-orm/neon-http";
-import { migrate } from "drizzle-orm/neon-http/migrator";
-import { neon } from "@neondatabase/serverless";
+const { drizzle } = require("drizzle-orm/neon-http");
+const { migrate } = require("drizzle-orm/neon-http/migrator");
+const { neon } = require("@neondatabase/serverless");
 
-const sql = neon(process.env.DATABASE_URL);
+const sql = neon("postgresql://coeptechhackathon:smyK4rq2gewa@ep-dry-poetry-a52onwth-pooler.us-east-2.aws.neon.tech/coep_erp?sslmode=require");
 
 const db = drizzle(sql);
 
 const main = async () => {
 	try {
 		await migrate(db, {
-			migrationsFolder: process.env.MIGRATIONS_FOLDER || '',
+			migrationsFolder: "db/migrations" || '',
 		});
 
 		console.log("Migration successful");

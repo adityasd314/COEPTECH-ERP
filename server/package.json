@@ -31,9 +31,9 @@
     "prisma": "^5.11.0"
   },
   "scripts": {
-    "db:generate": "drizzle-kit generate:pg --schema ./db/schema.ts --out=./db/migrations",
-    "db:migrate": "npm run ./db/migrate.ts",
-    "db:seed": "npm run ./db/seed.ts",
+    "db:generate": "drizzle-kit generate:pg --schema ./drizzle/schema.ts --out=./db/migrations",
+    "db:migrate": "node ./db/migrate.js",
+    "db:seed": "node ./db/seed.ts",
     "start": "nodemon index.js"
   }
 }

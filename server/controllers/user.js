@@ -21,6 +21,7 @@ const loginUser = async (req, res) => {
     
     if (!email || !password) {
         res.status(400).json({ error: "All fields must be filled" });
+        return;
     }
     
     try {
@@ -34,13 +35,16 @@ const loginUser = async (req, res) => {
         const isMatch = await compareHash(password, user.passwordHash);
         if (!isMatch) {
             res.status(400).json({ error: "Invalid credentials" });
+            return;
         }
 
         const token = createToken(user);
         delete user.passwordHash;
         res.status(200).json({ ...user, token });
+        return;
     } catch (error) {
         res.status(400).json({ error: error.message });
+        return;
     }
 };
 
@@ -55,21 +59,23 @@ const signupUser = async (req, res) => {
     try {
         data = {
             email: email,
-            password_hash: await hashPassword(password),
-            user_role: "STUDENT",
+            passwordHash: await hashPassword(password),
             mis: mis,
         };
+        
         if (mis) {
             data.mis = mis;
         }
         if (user_role) {
             data.user_role = user_role;
         }
-
-        const user = await client.user.create({ data: data });
+        const roleId = ((await DrizzleClient.select({roleId: roles.roleId}).from(roles).where(eq(roles.roleName, user_role)))[0]).roleId;
+        data.roleId = roleId;
+        
+        const user = (await DrizzleClient.insert(users).values(data).returning({ email:users.email, mis:users.mis, roleId: users.roleId}))[0];
+        ;
 
         const token = createToken(user);
-        delete user.password_hash;
         res.status(200).json({ ...user, token });
     } catch (error) {
         res.status(400).json({ error: error.message });

@@ -178,14 +178,16 @@ const tutorials = pgTable("tutorials", {
 });
 
 const students = pgTable("students", {
-    studentId: serial("student_id").primaryKey().notNull(),
-    mis: varchar("mis", { length: 50 }).notNull().references(() => users.mis),
-    departmentId: integer("department_id"),
-    year: integer("year"),
-}, (table) => {
-    return {
-        misKey: uniqueIndex("students_mis_key").on(table.mis),
-    };
+	studentId: serial("student_id").primaryKey().notNull(),
+	mis: varchar("mis", { length: 50 }).notNull().references(() => users.mis),
+	departmentId: integer("department_id"),
+	year: integer("year"),
+	userId: integer("user_id").references(() => users.userId),
+},
+(table) => {
+	return {
+		misKey: uniqueIndex("students_mis_key").on(table.mis),
+	}
 });
 
 const observationChecklist = pgTable("observation_checklist", {

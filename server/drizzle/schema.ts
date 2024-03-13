@@ -183,18 +183,6 @@ export const tutorials = pgTable("tutorials", {
 	duration: integer("duration"),
 });
 
-export const students = pgTable("students", {
-	studentId: serial("student_id").primaryKey().notNull(),
-	mis: varchar("mis", { length: 50 }).notNull().references(() => users.mis),
-	departmentId: integer("department_id"),
-	year: integer("year"),
-},
-(table) => {
-	return {
-		misKey: uniqueIndex("students_mis_key").on(table.mis),
-	}
-});
-
 export const observationChecklist = pgTable("observation_checklist", {
 	checklistId: serial("checklist_id").primaryKey().notNull(),
 	checklistName: varchar("checklist_name", { length: 255 }),
@@ -236,6 +224,19 @@ export const uploadedDocuments = pgTable("uploaded_documents", {
 export const roles = pgTable("roles", {
 	roleId: serial("role_id").primaryKey().notNull(),
 	roleName: varchar("role_name", { length: 50 }).notNull(),
+});
+
+export const students = pgTable("students", {
+	studentId: serial("student_id").primaryKey().notNull(),
+	mis: varchar("mis", { length: 50 }).notNull().references(() => users.mis),
+	departmentId: integer("department_id"),
+	year: integer("year"),
+	userId: integer("user_id").references(() => users.userId),
+},
+(table) => {
+	return {
+		misKey: uniqueIndex("students_mis_key").on(table.mis),
+	}
 });
 
 export const userRole = pgTable("user_role", {
