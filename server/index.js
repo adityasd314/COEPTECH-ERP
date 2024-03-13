@@ -15,5 +15,5 @@ const userRouter = require("./routes/user");
 app.use("/user", userRouter);
 
 app.listen(5000, () => {
-  console.log("Server is runnning..");
+    console.log("http://localhost:5000/");
 });

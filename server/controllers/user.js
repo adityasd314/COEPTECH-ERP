@@ -65,7 +65,7 @@ const signupUser = async (req, res) => {
         if (user_role) {
             data.user_role = user_role;
         }
-        
+
         const user = await client.user.create({ data: data });
 
         const token = createToken(user);
