@@ -17,6 +17,8 @@ copy drizzle/schema.ts => db/schema.js
 
 ## for making changes in schemas
 ## make subsequent changes in ./drizzle/schema.ts
+
+    
 for generating a migration sql run
 `npm run db:generate`
 for applying changes to database run

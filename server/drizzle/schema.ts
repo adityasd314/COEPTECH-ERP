@@ -25,7 +25,7 @@ export const users = pgTable("users", {
 	email: varchar("email", { length: 255 }).notNull(),
 	mis: varchar("mis", { length: 50 }).notNull(),
 	passwordHash: varchar("password_hash", { length: 255 }).notNull(),
-	roleId: integer("role_id").notNull().references(() => roles.roleId),
+	roleId: integer("role_id").notNull().references(() => roles.roleId).references(() => roles.roleId),
 },
 (table) => {
 	return {
@@ -35,7 +35,7 @@ export const users = pgTable("users", {
 
 export const accountAdmins = pgTable("account_admins", {
 	adminId: serial("admin_id").primaryKey().notNull(),
-	userId: integer("user_id").notNull().references(() => users.userId),
+	userId: integer("user_id").notNull().references(() => users.userId).references(() => users.userId),
 },
 (table) => {
 	return {
@@ -53,8 +53,8 @@ export const professors = pgTable("professors", {
 
 export const bookings = pgTable("bookings", {
 	bookingId: serial("booking_id").primaryKey().notNull(),
-	professorId: integer("professor_id").references(() => professors.professorId),
-	venueId: integer("venue_id").references(() => venues.venueId),
+	professorId: integer("professor_id").references(() => professors.professorId).references(() => professors.professorId),
+	venueId: integer("venue_id").references(() => venues.venueId).references(() => venues.venueId),
 	bookingDate: date("booking_date"),
 	startTime: time("start_time", { precision: 6 }),
 	endTime: time("end_time", { precision: 6 }),
@@ -68,35 +68,35 @@ export const venues = pgTable("venues", {
 	description: text("description"),
 	capacity: integer("capacity"),
 	location: varchar("location", { length: 255 }),
-	permissionFacultyId: integer("permission_faculty_id").references(() => professors.professorId),
+	permissionFacultyId: integer("permission_faculty_id").references(() => professors.professorId).references(() => professors.professorId),
 });
 
 export const departments = pgTable("departments", {
 	departmentId: serial("department_id").primaryKey().notNull(),
 	departmentName: varchar("department_name", { length: 100 }).notNull(),
-	headOfDepartmentId: integer("head_of_department_id").references((): AnyPgColumn => headsOfDepartment.hodId),
+	headOfDepartmentId: integer("head_of_department_id").references((): AnyPgColumn => headsOfDepartment.hodId).references((): AnyPgColumn => headsOfDepartment.hodId),
 });
 
 export const courses = pgTable("courses", {
 	courseId: serial("course_id").primaryKey().notNull(),
 	courseName: varchar("course_name", { length: 255 }).notNull(),
 	courseCode: varchar("course_code", { length: 50 }).notNull(),
-	departmentId: integer("department_id").references(() => departments.departmentId),
+	departmentId: integer("department_id").references(() => departments.departmentId).references(() => departments.departmentId),
 });
 
 export const headsOfDepartment = pgTable("heads_of_department", {
 	hodId: serial("hod_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
-	departmentId: integer("department_id").references((): AnyPgColumn => departments.departmentId),
+	departmentId: integer("department_id").references((): AnyPgColumn => departments.departmentId).references((): AnyPgColumn => departments.departmentId),
 });
 
 export const documents = pgTable("documents", {
 	documentId: serial("document_id").primaryKey().notNull(),
 	documentName: varchar("document_name", { length: 255 }).notNull(),
-	uploaderId: integer("uploader_id").references(() => professors.professorId),
+	uploaderId: integer("uploader_id").references(() => professors.professorId).references(() => professors.professorId),
 	uploadDate: timestamp("upload_date", { precision: 6, mode: 'string' }).defaultNow(),
-	venueId: integer("venue_id").references(() => venues.venueId),
+	venueId: integer("venue_id").references(() => venues.venueId).references(() => venues.venueId),
 	cloudinaryLink: varchar("cloudinary_link", { length: 255 }),
 	status: documentStatus("status").default('pending'),
 });
@@ -114,8 +114,8 @@ export const documentTypes = pgTable("document_types", {
 
 export const eventDocuments = pgTable("event_documents", {
 	eventDocumentId: serial("event_document_id").primaryKey().notNull(),
-	eventId: integer("event_id").notNull().references(() => events.eventId),
-	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId),
+	eventId: integer("event_id").notNull().references(() => events.eventId).references(() => events.eventId),
+	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId).references(() => documentTypes.documentId),
 },
 (table) => {
 	return {
@@ -130,7 +130,7 @@ export const events = pgTable("events", {
 	startDate: timestamp("start_date", { precision: 6, mode: 'string' }).notNull(),
 	endDate: timestamp("end_date", { precision: 6, mode: 'string' }).notNull(),
 	description: text("description"),
-	createdByUserId: integer("created_by_user_id").notNull().references(() => users.userId),
+	createdByUserId: integer("created_by_user_id").notNull().references(() => users.userId).references(() => users.userId),
 },
 (table) => {
 	return {
@@ -140,26 +140,26 @@ export const events = pgTable("events", {
 
 export const facultyVenuePermissions = pgTable("faculty_venue_permissions", {
 	permissionId: serial("permission_id").primaryKey().notNull(),
-	facultyId: integer("faculty_id").references(() => professors.professorId),
-	venueId: integer("venue_id").references(() => venues.venueId),
+	facultyId: integer("faculty_id").references(() => professors.professorId).references(() => professors.professorId),
+	venueId: integer("venue_id").references(() => venues.venueId).references(() => venues.venueId),
 	permissionRequired: boolean("permission_required").default(true),
 });
 
 export const feedback = pgTable("feedback", {
 	feedbackId: serial("feedback_id").primaryKey().notNull(),
-	studentId: integer("student_id").references(() => students.studentId),
+	studentId: integer("student_id").references(() => students.studentId).references(() => students.studentId),
 	sessionType: varchar("session_type", { length: 20 }),
-	sessionId: integer("session_id").references(() => lectures.lectureId, { onDelete: "cascade" } ).references(() => practicals.practicalId, { onDelete: "cascade" } ).references(() => tutorials.tutorialId, { onDelete: "cascade" } ),
+	sessionId: integer("session_id").references(() => lectures.lectureId, { onDelete: "cascade" } ).references(() => practicals.practicalId, { onDelete: "cascade" } ).references(() => lectures.lectureId, { onDelete: "cascade" } ).references(() => practicals.practicalId, { onDelete: "cascade" } ).references(() => tutorials.tutorialId, { onDelete: "cascade" } ).references(() => tutorials.tutorialId, { onDelete: "cascade" } ),
 	feedbackText: text("feedback_text"),
 	rating: integer("rating"),
 	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
-	departmentId: integer("department_id").references(() => departments.departmentId),
+	departmentId: integer("department_id").references(() => departments.departmentId).references(() => departments.departmentId),
 });
 
 export const lectures = pgTable("lectures", {
 	lectureId: serial("lecture_id").primaryKey().notNull(),
-	courseId: integer("course_id").references(() => courses.courseId),
-	professorId: integer("professor_id").references(() => professors.professorId),
+	courseId: integer("course_id").references(() => courses.courseId).references(() => courses.courseId),
+	professorId: integer("professor_id").references(() => professors.professorId).references(() => professors.professorId),
 	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
 	location: varchar("location", { length: 255 }),
 	duration: integer("duration"),
@@ -167,8 +167,8 @@ export const lectures = pgTable("lectures", {
 
 export const practicals = pgTable("practicals", {
 	practicalId: serial("practical_id").primaryKey().notNull(),
-	courseId: integer("course_id").references(() => courses.courseId),
-	professorId: integer("professor_id").references(() => professors.professorId),
+	courseId: integer("course_id").references(() => courses.courseId).references(() => courses.courseId),
+	professorId: integer("professor_id").references(() => professors.professorId).references(() => professors.professorId),
 	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
 	location: varchar("location", { length: 255 }),
 	duration: integer("duration"),
@@ -176,8 +176,8 @@ export const practicals = pgTable("practicals", {
 
 export const tutorials = pgTable("tutorials", {
 	tutorialId: serial("tutorial_id").primaryKey().notNull(),
-	courseId: integer("course_id").references(() => courses.courseId),
-	professorId: integer("professor_id").references(() => professors.professorId),
+	courseId: integer("course_id").references(() => courses.courseId).references(() => courses.courseId),
+	professorId: integer("professor_id").references(() => professors.professorId).references(() => professors.professorId),
 	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
 	location: varchar("location", { length: 255 }),
 	duration: integer("duration"),
@@ -187,15 +187,15 @@ export const observationChecklist = pgTable("observation_checklist", {
 	checklistId: serial("checklist_id").primaryKey().notNull(),
 	checklistName: varchar("checklist_name", { length: 255 }),
 	description: text("description"),
-	departmentId: integer("department_id").references(() => departments.departmentId),
-	facultyId: integer("faculty_id").references(() => professors.professorId),
+	departmentId: integer("department_id").references(() => departments.departmentId).references(() => departments.departmentId),
+	facultyId: integer("faculty_id").references(() => professors.professorId).references(() => professors.professorId),
 });
 
 export const submittedDocuments = pgTable("submitted_documents", {
 	submissionId: serial("submission_id").primaryKey().notNull(),
-	eventId: integer("event_id").notNull().references(() => events.eventId),
-	userId: integer("user_id").notNull().references(() => users.userId),
-	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId),
+	eventId: integer("event_id").notNull().references(() => events.eventId).references(() => events.eventId),
+	userId: integer("user_id").notNull().references(() => users.userId).references(() => users.userId),
+	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId).references(() => documentTypes.documentId),
 	documentUrl: varchar("document_url", { length: 512 }).notNull(),
 	submissionDate: timestamp("submission_date", { precision: 6, mode: 'string' }).defaultNow(),
 },
@@ -209,11 +209,11 @@ export const submittedDocuments = pgTable("submitted_documents", {
 
 export const uploadedDocuments = pgTable("uploaded_documents", {
 	documentId: serial("document_id").primaryKey().notNull(),
-	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId),
+	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId).references(() => documentTypes.documentId),
 	documentName: varchar("document_name", { length: 255 }).notNull(),
 	uploadDate: timestamp("upload_date", { precision: 6, mode: 'string' }).defaultNow(),
 	documentUrl: varchar("document_url", { length: 512 }).notNull(),
-	uploadedByUserId: integer("uploaded_by_user_id").notNull().references(() => users.userId),
+	uploadedByUserId: integer("uploaded_by_user_id").notNull().references(() => users.userId).references(() => users.userId),
 },
 (table) => {
 	return {
@@ -228,7 +228,7 @@ export const roles = pgTable("roles", {
 
 export const students = pgTable("students", {
 	studentId: serial("student_id").primaryKey().notNull(),
-	mis: varchar("mis", { length: 50 }).notNull().references(() => users.mis),
+	mis: varchar("mis", { length: 50 }).notNull().references(() => users.mis).references(() => users.mis),
 	departmentId: integer("department_id"),
 	year: integer("year"),
 	userId: integer("user_id").references(() => users.userId),
@@ -240,8 +240,8 @@ export const students = pgTable("students", {
 });
 
 export const userRole = pgTable("user_role", {
-	userId: integer("user_id").notNull().references(() => users.userId),
-	roleId: integer("role_id").notNull().references(() => roles.roleId),
+	userId: integer("user_id").notNull().references(() => users.userId).references(() => users.userId),
+	roleId: integer("role_id").notNull().references(() => roles.roleId).references(() => roles.roleId),
 },
 (table) => {
 	return {
