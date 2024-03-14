@@ -1,0 +1,25 @@
+.stat-tab
+{
+    margin-right: 10% !important;
+    margin-left: 2%;
+}
+.head
+{
+    width: 550px;
+    height: max-content;
+}
+.add-csv
+{
+    height: 50px;
+    width: 50px;
+}
+.add-employee
+{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+#tab-list
+{
+    height:fit-content
+}

@@ -1,0 +1,30 @@
+.logo-container
+{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10%;
+    margin-top: 5%;
+}
+#forgot,#checkbox
+{
+    cursor: pointer;
+}
+.logo
+{
+    width: 160px;
+    height: 180px;
+}
+
+.button-container
+{
+    width: 100%;
+    height: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}

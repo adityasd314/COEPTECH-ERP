@@ -1,0 +1,35 @@
+.profile-card
+{
+    height: max-content;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+#main
+{
+    height: 100vh;
+    background-color: #fff;
+}
+.header-container
+{
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: 2%;
+    color: pink;
+}
+.main
+{
+    height: 100vh;
+}
+
+*{
+    color: #000;
+}
+
+.leave-form
+{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    height: max-content;
+}
