@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
 
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT || 'http://localhost:5000';
+
 export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -10,7 +12,7 @@ export const useLogin = () => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch('http://localhost:5000/user/login', {
+    const response = await fetch(API_ENDPOINT + '/user/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
