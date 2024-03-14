@@ -1,7 +1,7 @@
 // import { useState } from 'react';
 import './App.css';
 import Navbar from './components/Chakra/Navbar';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {Routes, Route } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 import Home from './Home';
 import StudentDashboard from './StudentDashboard';
@@ -17,7 +17,6 @@ function App() {
 
   return (
     <>
-      <Router>
         <Navbar user={user} currentPage={window.location.pathname} />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -43,7 +42,6 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/about" element={<About />} />
         </Routes>
-      </Router>
     </>
   );
 }
