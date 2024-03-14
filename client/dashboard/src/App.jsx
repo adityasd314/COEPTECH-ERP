@@ -3,11 +3,11 @@ import './App.css';
 import Navbar from './components/Chakra/Navbar';
 import {Routes, Route } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
-import Home from './Home';
-import StudentDashboard from './StudentDashboard';
-import AdminDashboard from './AdminDashboard';
-import FacultyDashboard from './FacultyDashboard';
-import About from './About';
+import Home from './pages/Home';
+import StudentDashboard from './pages/StudentDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import FacultyDashboard from './pages/FacultyDashboard';
+import About from './pages/About';
 import LoginForm from './components/Auth/LoginForm';
 import ProtectedRoute from './components/ProtectedRoute';
 
