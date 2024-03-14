@@ -1,9 +1,12 @@
 {
-    "name": "coeptecherp",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "dependencies": {
-        "concurrently": "^8.2.2"
-    }
+  "name": "coeptecherp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "scripts": {
+    "dev": "concurrently \"cd server && nodemon\" \"cd client/dashboard && npm run dev\""
+  }
 }
