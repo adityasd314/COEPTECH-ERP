@@ -1,5 +1,6 @@
 const BASE_URL = "https://www.coep.org.in";
-function search(query) {
+const { writeNotices } =  require('./getRealTimeNotices');
+async function search(query, data) {
     const results = [];
     const regex = new RegExp(query, "i"); // "i" flag for case-insensitive matching
     data.forEach(item => {
@@ -9,7 +10,10 @@ function search(query) {
     });
     return results;
   }
-  const data = require('./scrapedData.json');
+  (async function (){
+  const dt = await writeNotices(1);
+  let data = require('./scrapedData.json');
+  data = Object.values(Object.fromEntries([...dt,...data].map((x)=>[x.link, x])))
   const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -17,7 +21,8 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 rl.question("Enter search query: ", (query) => {
-    const searchResults = search(query);
+    const searchResults = search(query, data);
     console.log("Search results:", searchResults);
     rl.close();
   });
+})()
