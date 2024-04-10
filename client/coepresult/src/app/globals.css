@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+  /* height: 100vh; */
+  user-select: none;
+}
+
+@media print {
+  body {
+    background: none;
+  }
+
+  .hide-on-print {
+    display: none;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .heading-main {
+    font-size: xx-large;
+  }
+  .justify-evenly {
+    justify-content: flex-start;
+  }
+}

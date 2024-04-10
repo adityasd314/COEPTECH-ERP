@@ -70,11 +70,8 @@ const signupUser = async (req, res) => {
             data.user_role = user_role;
         }
         const roleId = ((await DrizzleClient.select({roleId: roles.roleId}).from(roles).where(eq(roles.roleName, user_role)))[0]).roleId;
-        data.roleId = roleId;
-        
+        data.roleId = roleId;   
         const user = (await DrizzleClient.insert(users).values(data).returning({ email:users.email, mis:users.mis, roleId: users.roleId}))[0];
-        ;
-
         const token = createToken(user);
         res.status(200).json({ ...user, token });
     } catch (error) {
