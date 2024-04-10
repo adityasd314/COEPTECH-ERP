@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "express": "^4.19.2"
   },
   "scripts": {
     "dev": "concurrently \"cd server && nodemon\" \"cd client/dashboard && npm run dev\""
