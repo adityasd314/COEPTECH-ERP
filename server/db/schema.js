@@ -1,8 +1,8 @@
 const { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, timestamp, index, boolean, primaryKey } = require("drizzle-orm/pg-core");
 const { sql } = require("drizzle-orm");
 
-const bookingStatus = pgEnum("booking_status", ['cancelled', 'confirmed', 'pending']);
-const documentStatus = pgEnum("document_status", ['rejected', 'approved', 'pending']);
+const bookingStatus = pgEnum("booking_status", ['cancelled', 'confirmed', 'pending', 'with_drawn']);
+const documentStatus = pgEnum("document_status", ['rejected', 'approved', 'pending', 'with_drawn']);
 
 const performanceMetrics = pgTable("performance_metrics", {
     metricId: serial("metric_id").primaryKey().notNull(),

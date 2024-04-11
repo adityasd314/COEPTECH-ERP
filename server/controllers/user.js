@@ -7,7 +7,6 @@ const hashPassword = require("../lib/hash_pass");
 const compareHash = require("../lib/compare_hash");
 const {roles,users} = require("../db/schema")
 
-
 const { use } = require("../routes/user");
 const createToken = (user) => {
     return jwt.sign({ user }, "secret", { expiresIn: "3d" });
