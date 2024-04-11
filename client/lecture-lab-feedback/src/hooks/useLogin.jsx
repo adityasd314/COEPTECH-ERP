@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
-import roles from '../constants/roles';
+// import roles from '../constants/roles';
 const API_ENDPOINT =
   import.meta.env.VITE_API_ENDPOINT || 'http://localhost:5000';
 
@@ -19,14 +19,13 @@ export const useLogin = () => {
       body: JSON.stringify({ email, password }),
     });
     const user = await response.json();
-
     if (!response.ok) {
       setIsLoading(false);
       setError(user.error);
     }
     if (response.ok) {
       // set the user role
-      user.role = roles[user.roleId];
+      user.role = user.role.toUpperCase();
 
       // save the user to local storage
       localStorage.setItem('user', JSON.stringify(user));

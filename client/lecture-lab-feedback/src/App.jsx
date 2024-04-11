@@ -29,7 +29,7 @@ function App() {
                   ) : user.role === 'TEACHER' ? (
                     <TeacherDashboard user={user} />
                   ) : (
-                    user.role === 'ADMIN' && <AdminDashboard />
+                    user.role === 'ADMIN' && <AdminDashboard user={user} />
                   )
                 }
               />

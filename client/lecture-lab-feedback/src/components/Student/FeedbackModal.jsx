@@ -48,7 +48,7 @@ const FeedbackFormModal = ({ data, isOpen, onClose }) => {
         <ModalBody overflow={'scroll'}>
           <Box maxW="500px" mx="auto" mt="4">
             <Heading fontSize={'large'} mb="4" textTransform={'capitalize'}>
-              {data.course_name}
+              {data.courseName}
             </Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
               {Object.entries(
@@ -102,7 +102,7 @@ const FeedbackFormModal = ({ data, isOpen, onClose }) => {
         </ModalBody>
         <ModalFooter>
           <Text fontSize="sm">
-            Feedback for {data.course_id} by {data.professor_name}
+            Feedback for {data.courseCode} by {data.professorName}
           </Text>
         </ModalFooter>
       </ModalContent>

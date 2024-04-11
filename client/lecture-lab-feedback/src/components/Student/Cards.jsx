@@ -3,6 +3,9 @@ import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
 export default function Cards({ data, setModalOpen, setData }) {
   console.log('data', data);
+  if (!data) {
+    return <Box>No data</Box>;
+  }
   return (
     <Box
       display="flex"
@@ -14,15 +17,21 @@ export default function Cards({ data, setModalOpen, setData }) {
       m={4}
       borderRadius={8}
       shadow={'md'}>
-      {data.map((item) => (
+      {data.map((item, idx) => (
         <Card
-          key={item.id}
+          key={idx}
           shadow={'md'}
           borderWidth={2}
           px={4}
           m={4}
           borderRadius={8}
-          bg={item.type == 'LAB' ? '#d9edf8' : '#e4f1ee'}
+          bg={
+            item.type == 'LAB'
+              ? '#d9edf8'
+              : item.type == 'LECTURE'
+              ? '#e4f1ee'
+              : '#f8d7da'
+          }
           minW={'sm'}
           maxW={'sm'}
           minH={'3xs'}
@@ -44,15 +53,15 @@ export default function Cards({ data, setModalOpen, setData }) {
             cursor: 'not-allowed',
           }}>
           <CardHeader>
-            {item.course_id} <br /> {item.course_name}
+            {item.courseId} <br /> {item.courseName}
           </CardHeader>
           <CardBody>
             <p>
-              {item.type} by {item.professor_name}{' '}
+              {item.type} by {item.professorName}{' '}
             </p>
-            <p>{item.date_time.toDateString()}</p>
+            <p>{item.dateTime}</p>
             <p>{item.location}</p>
-            <p>Duartion: {item.duration/60} hrs</p>
+            <p>Duartion: {item.duration / 60} hrs</p>
           </CardBody>
           <CardFooter>
             <Button

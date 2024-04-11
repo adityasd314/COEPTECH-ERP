@@ -4,60 +4,49 @@ import { useEffect, useState } from 'react';
 import { Box } from '@chakra-ui/react';
 import FeedbackFormModal from '../components/Student/FeedbackModal';
 import { Heading } from '@chakra-ui/react';
+import useSWR from 'swr';
+
 export default function StudentDashboard({ user }) {
-  // get todays letures and labs
+  const myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+
+  const raw = JSON.stringify({
+    user_id: '47',
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow',
+  };
+
+  const { data, error, isLoading } = useSWR(
+    'http://localhost:5000/lecture-lab/getAllLecturesLabsPracticals',
+    (url) =>
+      fetch(
+        'http://localhost:5000/lecture-lab/getAllLecturesLabsPracticals',
+        requestOptions
+      )
+        .then((res) => res.json())
+        .catch((err) => console.log(err))
+  );
+
   const [llData, setllData] = useState([]);
-  // fetch data from the server
+  const [toBeReviewed, setToBeReviewed] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
-  const [data, setData] = useState({});
+
   useEffect(() => {
-    setllData([
-      {
-        id: 1,
-        course_id: 'MA-0001',
-        course_name: 'Vector Calculus and Partial Differential Equations',
-        type: 'LECTURE',
-        professor_id: 12,
-        professor_name: 'Dr. John Doe',
-        date_time: new Date(),
-        location: 'ET 103',
-        duration: 60,
-      },
-      {
-        id: 2,
-        course_id: 'CE-0002',
-        course_name: 'Structural Analysis - I',
-        type: 'LAB',
-        professor_id: 13,
-        professor_name: 'Dr. Jane Doe',
-        date_time: new Date(),
-        location: 'ET 101',
-        duration: 120,
-      },
-      {
-        id: 3,
-        course_id: 'ET-0003',
-        course_name: 'Digital Signal Processing',
-        type: 'LECTURE',
-        professor_id: 11,
-        professor_name: 'Dr. Deadpool',
-        date_time: new Date(),
-        location: 'ET 101',
-        duration: 60,
-      },
-      {
-        id: 4,
-        course_id: 'ET-0004',
-        course_name: 'Microprocessors and Microcontrollers',
-        type: 'LAB',
-        professor_id: 10,
-        professor_name: 'Dr. Strange',
-        date_time: new Date(),
-        location: 'ET 101',
-        duration: 120,
-      },
-    ]);
-  }, []);
+    if (data) {
+      // console.log(data);
+      // console.log(data.data);
+      setllData(data.data);
+    }
+  }, [data]);
+
+  if (error) return <div>Error: {error}</div>;
+  if (isLoading) return <div>loading...</div>;
+
   return (
     <Box>
       <Heading
@@ -72,9 +61,9 @@ export default function StudentDashboard({ user }) {
       <Text textAlign="center" fontSize="xl" color="gray.700">
         Welcome {user.email.split('@')[0]}
       </Text>
-      <Cards setModalOpen={setModalOpen} data={llData} setData={setData} />
+      <Cards setModalOpen={setModalOpen} data={llData} setData={setToBeReviewed} />
       <FeedbackFormModal
-        data={data}
+        data={toBeReviewed}
         isOpen={modalOpen}
         onClose={() => {
           setModalOpen(false);
