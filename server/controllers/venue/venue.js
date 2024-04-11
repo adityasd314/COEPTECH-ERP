@@ -57,44 +57,26 @@ const addVenue = async(req, res) => {
   }
 };
 
-const updateVenue = async(req, res) => {
-  try{
-    const {venue_id, param, value}=req.body;
-    console.log(req.body);
-    switch (param) {
-      case 'venueName':
-        await DrizzleClient.update(venues).set({venueName : value}).where(eq(venues.venueId, venue_id));
-        break;
-      case 'description':
-        await DrizzleClient.update(venues).set({description : value}).where(eq(venues.venueId, venue_id));
-        break;
-      case 'capacity':
-        await DrizzleClient.update(venues).set({capacity : value}).where(eq(venues.venueId, venue_id));
-        break;
-      case 'location':
-        await DrizzleClient.update(venues).set({location : value}).where(eq(venues.venueId, venue_id));
-        break;
-      case 'permission_faculty_id':
-        await DrizzleClient.update(venues).set({permission_faculty_id : value}).where(eq(venues.venueId, venue_id));
-        break;
-      default:
-        return res.status(400).json({ error: "Invalid parameter" });
-    }
-    res.status(200).json({ venue_id })
-  }catch(error){
+const updateVenue = async (req, res) => {
+  try {
+    const { venue_id } = req.params;
+    const updatedVenue = req.body; 
+    delete updatedVenue.venue_id;
+    await DrizzleClient.update(venues).set(updatedVenue).where(eq(venues.venueId, venue_id));
+    res.status(200).json({ venue_id });
+  } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
-  
-
-  return 0;
 };
 
 const deleteVenue = async(req, res) => {
-  const {venue_id} = req.body;
+  const venue_id = req.params['venue_id'];
+  console.log(venue_id)
   try{  
     const deleteVenue = await DrizzleClient.delete(venues).where(eq(venues.venueId, venue_id)).returning({venue_id: venues.venueId});
     res.status(200).json({deleteVenue});
   }catch(error){
+    console.log(error)
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
