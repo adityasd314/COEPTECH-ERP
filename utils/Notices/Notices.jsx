@@ -1,7 +1,8 @@
+"use client";
 import React, { useState, useEffect } from "react";
-import "./Notices.css";
 import scrapedData from "./scrapedData.json";
-
+import "./Notices.css"
+import { HeroHighlight } from "../../client/dashboard/src/components/ui/hero-highlight";
 const BASE_URL = "https://www.coep.org.in";
 
 const Notices = () => {
@@ -14,28 +15,7 @@ const Notices = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = scrapedData.filter((item) => item.date.length==10);
-
-        // var myHeaders = new Headers();
-        // myHeaders.append('Content-Type', 'application/json');
-
-        // var raw = JSON.stringify({
-        //   pageNumber: '1',
-        // });
-
-        // var requestOptions = {
-        //   method: 'POST',
-        //   headers: myHeaders,
-        //   body: raw,
-        //   redirect: 'follow',
-        // };
-
-        // const firstPageData = await fetch(
-        //   `http://localhost:5000/user/getNoticesByPageNumber`, requestOptions
-        // ).then((response) => response.json()).then((result) => result.data.filter((item) => item.date.length==10));
-
-        // setOriginalData([...firstPageData, ...data]);
-        
+        const data = scrapedData.filter((item) => item.date.length === 10);
         setOriginalData(data);
         setIsLoading(false);
       } catch (error) {
@@ -116,6 +96,7 @@ const Notices = () => {
                 href={`${BASE_URL}/${notice.link}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-black hover:underline"
               >
                 {notice.title}
               </a>
@@ -125,6 +106,7 @@ const Notices = () => {
                 href={`${BASE_URL}/${notice.link}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="text-black hover:underline"
               >
                 Link
               </a>
@@ -149,7 +131,9 @@ const Notices = () => {
       pageButtons.push(
         <button
           key={i}
-          className={currentPage === i ? "active" : ""}
+          className={`px-4 py-2 ${
+            currentPage === i ? "bg-blue-500 text-black" : "text-black"
+          }`}
           onClick={() => {
             setCurrentPage(i);
             renderPage(i);
@@ -167,6 +151,7 @@ const Notices = () => {
             renderPage(currentPage - 1);
           }}
           disabled={currentPage === 1}
+          className="px-4 py-2 text-black"
         >
           Prev
         </button>
@@ -177,10 +162,13 @@ const Notices = () => {
             renderPage(currentPage + 1);
           }}
           disabled={currentPage === totalPages}
+          className="px-4 py-2 text-black"
         >
           Next
         </button>
+<br /><br />
       </div>
+      
     );
   };
 
@@ -198,7 +186,7 @@ const Notices = () => {
     const dataToShow = data.slice(startIndex, endIndex);
     return (
       <>
-        <table>
+        <table className="w-full">
           <thead>
             <tr>
               <th>Date</th>
@@ -208,7 +196,7 @@ const Notices = () => {
           </thead>
           {renderTable(dataToShow)}
         </table>
-        <div className="pagination">
+        <div className="flex justify-center items-center my-4">
           {renderPagination(Math.ceil(data.length / noticesPerPage))}
         </div>
       </>
@@ -216,35 +204,51 @@ const Notices = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Notices</h1>
-      <div className="search">
-        <div>
+    <HeroHighlight className="h-[50rem] w-full dark:bg-grid-black/[0.2] bg-grid-black/[0.2]  bg-gray-300  text-black relative flex items-center justify-center">
+    <div className="container mx-auto p-8">
+      <h1 className="text-center text-black my-8 text-2xl font-bold">
+        Notices
+      </h1>
+      <div className="search flex justify-between mb-4">
+        <div className="flex">
           <input
             type="text"
             id="searchInput"
             placeholder="Search..."
             onChange={handleSearchInputChange}
+            className="px-4 py-2 border border-gray-300 rounded mr-2"
           />
-          <button onClick={() => setCurrentPage(1)}>Search</button>
+          <button
+            onClick={() => setCurrentPage(1)}
+            className="px-4 py-2 bg-blue-500 text-black rounded"
+          >
+            Search
+          </button>
         </div>
-        <div className="date-search">
+        <div className="flex">
           <input
             type="text"
             id="dateInput"
             placeholder="Search by date (mm/yyyy)"
             onChange={searchByDate}
+            className="px-4 py-2 border text-black border-gray-300 rounded mr-2"
           />
-          <button onClick={searchByDate}>Search</button>
+          <button
+            onClick={searchByDate}
+            className="px-4 py-2 bg-blue-500 text-black rounded"
+          >
+            Search
+          </button>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="loader">Loading...</div>
+        <div className="loader text-center">Loading...</div>
       ) : (
         renderPage(currentPage)
       )}
     </div>
+    </HeroHighlight>
   );
 };
 

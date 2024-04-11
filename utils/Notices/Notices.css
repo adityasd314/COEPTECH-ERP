@@ -1,10 +1,8 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(45deg, #49a09d, #5f2c82);
+    background-color: white;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: background-color 0.3s ease;
@@ -14,25 +12,30 @@ body {
 
 h1 {
     text-align: center;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    color: #333; /* Change text color to black */
     margin-top: 40px;
     margin-bottom: 30px;
     transition: color 0.3s ease;
     animation: slideInDown 0.5s ease;
+    font-size: 2.5rem; /* Increase font size */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle text shadow */
 }
 
-h1 a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s ease;
+h1::after {
+    content: "";
+    display: block;
+    width: 60px; /* Add a decorative line under the heading */
+    height: 3px;
+    background-color: #333;
+    margin: 10px auto; /* Center the line horizontally */
 }
+
 
 h1 a:hover {
     color: #ff6347;
     text-decoration: none;
 }
-table {
+table { 
     width: 800px;
     border-collapse: collapse;
     overflow: hidden;
@@ -42,10 +45,16 @@ table {
     animation: slideInLeft 0.5s ease;
 }
 
-th, td {
+th {
     text-align: left;
     padding: 12px;
     color: #fff;
+    transition: background-color 0.3s ease;
+}
+td{
+    text-align: left;
+    padding: 12px;
+    color: #000;
     transition: background-color 0.3s ease;
 }
 
@@ -55,6 +64,10 @@ th {
 
 tr:hover {
     background-color: rgba(255, 255, 255, 0.3);
+}
+
+tbody{
+    background-color: white;
 }
 
 /* Link Styles */
@@ -78,7 +91,7 @@ a:hover {
 
 .pagination button {
     background-color: #55608f;
-    color: white;
+    color: black;
     padding: 10px 15px;
     margin: 0 5px;
     border: none;
@@ -165,7 +178,7 @@ button {
     border: none;
     border-radius: 5px;
     background-color: #455082;
-    color: white;
+    color: black;
     cursor: pointer;
     font-size: 16px;
 }
