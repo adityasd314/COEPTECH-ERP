@@ -1,17 +1,18 @@
-const { drizzle } = require("drizzle-orm/neon-http");
 const { migrate } = require("drizzle-orm/neon-http/migrator");
-const { neon } = require("@neondatabase/serverless");
-const dotenv = require("dotenv")
-dotenv.config()
+const postgres = require("postgres");
+const { drizzle } =  require('drizzle-orm/postgres-js')
+const dotenv = require('dotenv');
+dotenv.config();
+const connectionString = process.env.DATABASE_URL
 
-const sql = neon(process.env.DATABASE_URL);
-
-const db = drizzle(sql);
-
+// Disable prefetch as it is not supported for "Transaction" pool mode
+const client = postgres(connectionString, { prepare: false })
+const db = drizzle(client);
+console.log({client, db})
 const main = async () => {
 	try {
 		await migrate(db, {
-			migrationsFolder: process.env.MIGRATION_FOLDER || '',
+		migrationsFolder: process.env.MIGRATIONS_FOLDER || '',
 		});
 
 		console.log("Migration successful");

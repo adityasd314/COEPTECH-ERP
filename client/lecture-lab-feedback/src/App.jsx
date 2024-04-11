@@ -13,7 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 function App() {
   const { user, dispatch, isLoading } = useAuthContext();
   if (isLoading) return <div>Loading...</div>;
-
+  console.log('user', user);
   return (
     <>
       <Navbar user={user} currentPage={window.location.pathname} />
@@ -25,7 +25,7 @@ function App() {
               <ProtectedRoute
                 children={
                   user.role === 'STUDENT' ? (
-                    <StudentDashboard />
+                    <StudentDashboard user={user} />
                   ) : user.role === 'TEACHER' ? (
                     <FacultyDashboard />
                   ) : (
