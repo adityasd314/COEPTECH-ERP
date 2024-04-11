@@ -15,6 +15,7 @@ const {
   makeBooking,
   cancelBooking,
   getMyBookings,
+  editBooking
 } = require('../controllers/venue/booking');
 
 const { generateReport } = require('../controllers/venue/report');
@@ -39,8 +40,9 @@ router.get('/getVenues', getAllVenues);
 router.get('/getVenueById/:venue_id', getVenueById);
 router.get('/availableVenues', getAvailableVenues);
 
-router.post('/bookings', makeBooking);
-router.put('/bookings/:booking_id/cancel', cancelBooking);
-router.get('/bookings', getMyBookings);
+router.post('/booking/make', makeBooking);
+router.post('/booking/edit', editBooking);
+router.post('/booking/cancel', cancelBooking);
+router.post('/booking/myBookings', getMyBookings);
 
 module.exports = router;
