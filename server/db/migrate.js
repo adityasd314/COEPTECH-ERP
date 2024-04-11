@@ -12,7 +12,7 @@ console.log({client, db})
 const main = async () => {
 	try {
 		await migrate(db, {
-			migrationsFolder: process.env.MIGRATIONS_FOLDER || '',
+		migrationsFolder: process.env.MIGRATIONS_FOLDER || '',
 		});
 
 		console.log("Migration successful");

@@ -1,6 +1,6 @@
 const { eq } = require('drizzle-orm');
 const DrizzleClient = require("../../lib/drizzle-client");
-const { bookings } = require("../../db/schema");
+const { bookings, venues } = require("../../db/schema");
 
 const grantBooking = async (req, res) => {
   try {
@@ -66,19 +66,35 @@ const revokeBooking = async (req, res) => {
 
 const getAllBookings = async (req, res) => {
   try {
-    const allBookings = await DrizzleClient.select().from(bookings);
-    return res.status(200).json({ allBookings });
+    const parsedFacultyId = parseInt(req.body.facultyId);
+    const {isAdmin } = req.body;
+    if(isAdmin){
+      const allBookings = await DrizzleClient.select().from(bookings);
+      return res.status(200).json({ allBookings });
+    } else {
+      const venueOfInterest = await DrizzleClient.select().from(venues).where(eq(venues.permissionFacultyId, parsedFacultyId));
+      const venueId = venueOfInterest[0].venueId;
+
+      const allBookings = await DrizzleClient.select().from(bookings).where(eq(bookings.venueId, venueId));
+      console.log(allBookings);
+      return res.status(200).json({ allBookings });
+    
+    }
+    
   } catch (error) {
     console.error('Error fetching all bookings:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
+
+
+
 const makeBooking = async (req, res) => {
   try {
     const { professorId, venueId, bookingDate, startTime, endTime, purpose } = req.body;
     
-
+    console.log(professorId, venueId, bookingDate, startTime, endTime, purpose);
     const createdBooking = await DrizzleClient.insert(bookings).values({
       professorId : parseInt(professorId),
       venueId: parseInt(venueId) ,
@@ -88,7 +104,7 @@ const makeBooking = async (req, res) => {
       purpose,
       status: 'pending'
     }).returning();
-
+    console.log(createdBooking);
 
     return res.status(200).json({ success: true, message: 'Booking made successfully.', createdBooking });
   } catch (error) {

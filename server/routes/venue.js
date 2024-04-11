@@ -19,6 +19,7 @@ const {
 } = require('../controllers/venue/booking');
 
 const { generateReport } = require('../controllers/venue/report');
+const { getSchedule } = require('../controllers/venue/permission');
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.post('/addVenues', addVenue);
 router.put('/editVenues/:venue_id', updateVenue);     
 router.delete('/deleteVenues/:venue_id', deleteVenue);
 
-router.get('/booking', getAllBookings);
+router.post('/booking', getAllBookings);
 router.post('/booking/grant', grantBooking);
 router.post('/booking/revoke', revokeBooking);
 
@@ -38,11 +39,14 @@ router.post('/reports', generateReport);
 
 router.get('/getVenues', getAllVenues);     
 router.get('/getVenueById/:venue_id', getVenueById); 
-router.get('/availableVenues', getAvailableVenues);  
+router.post('/availableVenues', getAvailableVenues);  
 
 router.post('/booking/make', makeBooking);
 router.post('/booking/edit', editBooking);
 router.post('/booking/cancel', cancelBooking);
 router.post('/booking/myBookings', getMyBookings);
+
+router.get('/getSchedule', getSchedule);
+
 
 module.exports = router;
