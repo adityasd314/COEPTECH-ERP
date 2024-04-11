@@ -8,12 +8,14 @@ app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
+const testRouter = require("./routes/test");
 const userRouter = require("./routes/user");
 const venueRouter = require("./routes/venue");
 
 // connectDB();
 
 app.use("/user", userRouter);
+app.use("/test", testRouter);
 app.use("/venue", venueRouter);
 
 app.listen(5000, () => {

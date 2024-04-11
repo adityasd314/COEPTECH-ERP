@@ -50,7 +50,7 @@ const loginUser = async (req, res) => {
 // signup a user
 const signupUser = async (req, res) => {
     const { mis, email, password, user_role } = req.body;
-
+    // 'admin', 'teacher', 'student'
     if (!email || !password) {
         res.status(400).json({ error: "All fields must be filled" });
     }
@@ -58,22 +58,19 @@ const signupUser = async (req, res) => {
     try {
         data = {
             email: email,
+            role: user_role ,
             passwordHash: await hashPassword(password),
-            mis: mis,
         };
-        
+        console.log({data})
         if (mis) {
             data.mis = mis;
         }
-        if (user_role) {
-            data.user_role = user_role;
-        }
-        const roleId = ((await DrizzleClient.select({roleId: roles.roleId}).from(roles).where(eq(roles.roleName, user_role)))[0]).roleId;
-        data.roleId = roleId;   
-        const user = (await DrizzleClient.insert(users).values(data).returning({ email:users.email, mis:users.mis, roleId: users.roleId}))[0];
+       
+        const user = (await DrizzleClient.insert(users).values(data).execute())[0];
         const token = createToken(user);
         res.status(200).json({ ...user, token });
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: error.message });
     }
 };

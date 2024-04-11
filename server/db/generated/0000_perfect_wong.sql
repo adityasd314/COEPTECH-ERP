@@ -1,11 +1,17 @@
 DO $$ BEGIN
- CREATE TYPE "booking_status" AS ENUM('cancelled', 'confirmed', 'pending');
+ CREATE TYPE "booking_status" AS ENUM('withdrawn', 'cancelled', 'confirmed', 'pending');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "document_status" AS ENUM('rejected', 'approved', 'pending');
+ CREATE TYPE "document_status" AS ENUM('withdrawn', 'rejected', 'approved', 'pending');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "roles" AS ENUM('student', 'teacher', 'admin');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -20,8 +26,8 @@ CREATE TABLE IF NOT EXISTS "bookings" (
 	"professor_id" integer,
 	"venue_id" integer,
 	"booking_date" date,
-	"start_time" "time(6)",
-	"end_time" "time(6)",
+	"start_time" time,
+	"end_time" time,
 	"purpose" text,
 	"status" "booking_status" DEFAULT 'pending'
 );
@@ -143,16 +149,12 @@ CREATE TABLE IF NOT EXISTS "reports" (
 	"cloudinary_link" varchar(255)
 );
 --> statement-breakpoint
-CREATE TABLE IF NOT EXISTS "roles" (
-	"role_id" serial PRIMARY KEY NOT NULL,
-	"role_name" varchar(50) NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "students" (
 	"student_id" serial PRIMARY KEY NOT NULL,
 	"mis" varchar(50) NOT NULL,
 	"department_id" integer,
-	"year" integer
+	"year" integer,
+	"user_id" integer
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "submitted_documents" (
@@ -183,17 +185,15 @@ CREATE TABLE IF NOT EXISTS "uploaded_documents" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user_role" (
-	"user_id" integer NOT NULL,
-	"role_id" integer NOT NULL,
-	CONSTRAINT "user_role_pkey" PRIMARY KEY("user_id","role_id")
+	"user_id" serial PRIMARY KEY NOT NULL,
+	"role_id" varchar
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
 	"user_id" serial PRIMARY KEY NOT NULL,
 	"email" varchar(255) NOT NULL,
-	"mis" varchar(50) NOT NULL,
 	"password_hash" varchar(255) NOT NULL,
-	"role_id" integer NOT NULL
+	"role" "roles"
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "venues" (
@@ -360,9 +360,10 @@ DO $$ BEGIN
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
+
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "students" ADD CONSTRAINT "students_mis_users_mis_fk" FOREIGN KEY ("mis") REFERENCES "users"("mis") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "students" ADD CONSTRAINT "students_user_id_users_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -405,24 +406,6 @@ END $$;
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "uploaded_documents" ADD CONSTRAINT "uploaded_documents_uploaded_by_user_id_users_user_id_fk" FOREIGN KEY ("uploaded_by_user_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "user_role" ADD CONSTRAINT "user_role_user_id_users_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "users"("user_id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "user_role" ADD CONSTRAINT "user_role_role_id_roles_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "roles"("role_id") ON DELETE no action ON UPDATE no action;
-EXCEPTION
- WHEN duplicate_object THEN null;
-END $$;
---> statement-breakpoint
-DO $$ BEGIN
- ALTER TABLE "users" ADD CONSTRAINT "users_role_id_roles_role_id_fk" FOREIGN KEY ("role_id") REFERENCES "roles"("role_id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
