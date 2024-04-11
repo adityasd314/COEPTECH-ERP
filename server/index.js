@@ -10,6 +10,7 @@ app.use(express.json());
 
 const testRouter = require("./routes/test");
 const userRouter = require("./routes/user");
+const lectureRouter = require("./routes/lectureLab");
 const venueRouter = require("./routes/venue");
 
 // connectDB();
@@ -17,6 +18,7 @@ const venueRouter = require("./routes/venue");
 app.use("/user", userRouter);
 app.use("/test", testRouter);
 app.use("/venue", venueRouter);
+app.use("/lecture-lab", lectureRouter);
 
 app.listen(5000, () => {
     console.log("http://localhost:5000/");
