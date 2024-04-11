@@ -8,8 +8,9 @@ const getAllVenues = async (req, res) => {
   try {
     const allVenues = await DrizzleClient.select().from(venues);
     res.status(200).json({ allVenues });
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+  }catch(error){
+    console.log({error})
+    res.status(500).json({ error: "Internal Server Error" });
     return;
   }
 };

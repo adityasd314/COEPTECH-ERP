@@ -1,17 +1,18 @@
-import { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, type AnyPgColumn, timestamp, index, boolean } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, timestamp, index, boolean } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
-export const keyStatus = pgEnum("key_status", ['expired', 'invalid', 'valid', 'default'])
-export const keyType = pgEnum("key_type", ['stream_xchacha20', 'secretstream', 'secretbox', 'kdf', 'generichash', 'shorthash', 'auth', 'hmacsha256', 'hmacsha512', 'aead-det', 'aead-ietf'])
-export const factorStatus = pgEnum("factor_status", ['verified', 'unverified'])
-export const factorType = pgEnum("factor_type", ['webauthn', 'totp'])
-export const aalLevel = pgEnum("aal_level", ['aal3', 'aal2', 'aal1'])
-export const codeChallengeMethod = pgEnum("code_challenge_method", ['plain', 's256'])
-export const equalityOp = pgEnum("equality_op", ['in', 'gte', 'gt', 'lte', 'lt', 'neq', 'eq'])
-export const action = pgEnum("action", ['ERROR', 'TRUNCATE', 'DELETE', 'UPDATE', 'INSERT'])
-export const bookingStatus = pgEnum("booking_status", ['pending', 'confirmed', 'cancelled', 'withdrawn'])
-export const documentStatus = pgEnum("document_status", ['pending', 'approved', 'rejected', 'withdrawn'])
-export const roles = pgEnum("roles", ['admin', 'teacher', 'student'])
+export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
+export const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
+export const factorType = pgEnum("factor_type", ['totp', 'webauthn'])
+export const factorStatus = pgEnum("factor_status", ['unverified', 'verified'])
+export const aalLevel = pgEnum("aal_level", ['aal1', 'aal2', 'aal3'])
+export const codeChallengeMethod = pgEnum("code_challenge_method", ['s256', 'plain'])
+export const equalityOp = pgEnum("equality_op", ['eq', 'neq', 'lt', 'lte', 'gt', 'gte', 'in'])
+export const action = pgEnum("action", ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'ERROR'])
+export const bookingStatus = pgEnum("booking_status", ['withdrawn', 'cancelled', 'confirmed', 'pending'])
+export const documentStatus = pgEnum("document_status", ['withdrawn', 'rejected', 'approved', 'pending'])
+export const roles = pgEnum("roles", ['student', 'teacher', 'admin'])
+export const lectureStatus = pgEnum("lecture_status", ['UPCOMING', 'CONDUCTED', 'CANCELLED'])
 
 
 export const performanceMetrics = pgTable("performance_metrics", {
@@ -29,16 +30,6 @@ export const reports = pgTable("reports", {
 	cloudinaryLink: varchar("cloudinary_link", { length: 255 }),
 });
 
-export const accountAdmins = pgTable("account_admins", {
-	adminId: serial("admin_id").primaryKey().notNull(),
-	userId: integer("user_id").notNull().references(() => users.userId),
-},
-(table) => {
-	return {
-		userIdKey: uniqueIndex("account_admins_user_id_key").on(table.userId),
-	}
-});
-
 export const userRole = pgTable("user_role", {
 	userId: serial("user_id").primaryKey().notNull(),
 	roleId: varchar("role_id"),
@@ -48,7 +39,7 @@ export const users = pgTable("users", {
 	userId: serial("user_id").primaryKey().notNull(),
 	email: varchar("email", { length: 255 }),
 	passwordHash: varchar("password_hash", { length: 255 }).notNull(),
-	role: roles("role").notNull(),
+	role: roles("role"),
 },
 (table) => {
 	return {
@@ -75,6 +66,16 @@ export const bookings = pgTable("bookings", {
 	status: bookingStatus("status").default('pending'),
 });
 
+export const accountAdmins = pgTable("account_admins", {
+	adminId: serial("admin_id").primaryKey().notNull(),
+	userId: integer("user_id").notNull().references(() => users.userId),
+},
+(table) => {
+	return {
+		userIdKey: uniqueIndex("account_admins_user_id_key").on(table.userId),
+	}
+});
+
 export const venues = pgTable("venues", {
 	venueId: serial("venue_id").primaryKey().notNull(),
 	venueName: varchar("venue_name", { length: 255 }).notNull(),
@@ -87,7 +88,7 @@ export const venues = pgTable("venues", {
 export const departments = pgTable("departments", {
 	departmentId: serial("department_id").primaryKey().notNull(),
 	departmentName: varchar("department_name", { length: 100 }).notNull(),
-	headOfDepartmentId: integer("head_of_department_id").references((): AnyPgColumn => headsOfDepartment.hodId),
+	headOfDepartmentId: integer("head_of_department_id").references(() => headsOfDepartment.hodId),
 });
 
 export const courses = pgTable("courses", {
@@ -101,7 +102,6 @@ export const headsOfDepartment = pgTable("heads_of_department", {
 	hodId: serial("hod_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
-	departmentId: integer("department_id").references((): AnyPgColumn => departments.departmentId),
 });
 
 export const documents = pgTable("documents", {
@@ -112,32 +112,6 @@ export const documents = pgTable("documents", {
 	venueId: integer("venue_id").references(() => venues.venueId),
 	cloudinaryLink: varchar("cloudinary_link", { length: 255 }),
 	status: documentStatus("status").default('pending'),
-});
-
-export const events = pgTable("events", {
-	eventId: serial("event_id").primaryKey().notNull(),
-	eventName: varchar("event_name", { length: 255 }).notNull(),
-	startDate: timestamp("start_date", { precision: 6, mode: 'string' }).notNull(),
-	endDate: timestamp("end_date", { precision: 6, mode: 'string' }).notNull(),
-	description: text("description"),
-	createdByUserId: integer("created_by_user_id").notNull().references(() => users.userId),
-},
-(table) => {
-	return {
-		idxEventsCreatedByUserId: index("idx_events_created_by_user_id").on(table.createdByUserId),
-	}
-});
-
-export const eventDocuments = pgTable("event_documents", {
-	eventDocumentId: serial("event_document_id").primaryKey().notNull(),
-	eventId: integer("event_id").notNull().references(() => events.eventId),
-	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId),
-},
-(table) => {
-	return {
-		idxEventDocumentsDocumentTypeId: index("idx_event_documents_document_type_id").on(table.documentTypeId),
-		idxEventDocumentsEventId: index("idx_event_documents_event_id").on(table.eventId),
-	}
 });
 
 export const documentTypes = pgTable("document_types", {
@@ -158,6 +132,58 @@ export const facultyVenuePermissions = pgTable("faculty_venue_permissions", {
 	permissionRequired: boolean("permission_required").default(true),
 });
 
+export const lectures = pgTable("lectures", {
+	lectureId: serial("lecture_id").primaryKey().notNull(),
+	courseId: integer("course_id").references(() => courses.courseId),
+	professorId: integer("professor_id").references(() => professors.professorId),
+	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
+	location: varchar("location", { length: 255 }),
+	duration: integer("duration"),
+	state: lectureStatus("state").default('UPCOMING').notNull(),
+});
+
+export const practicals = pgTable("practicals", {
+	practicalId: serial("practical_id").primaryKey().notNull(),
+	courseId: integer("course_id").references(() => courses.courseId),
+	professorId: integer("professor_id").references(() => professors.professorId),
+	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
+	location: varchar("location", { length: 255 }),
+	duration: integer("duration"),
+	state: lectureStatus("state").default('UPCOMING').notNull(),
+});
+
+export const tutorials = pgTable("tutorials", {
+	tutorialId: serial("tutorial_id").primaryKey().notNull(),
+	courseId: integer("course_id").references(() => courses.courseId),
+	professorId: integer("professor_id").references(() => professors.professorId),
+	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
+	location: varchar("location", { length: 255 }),
+	duration: integer("duration"),
+	state: lectureStatus("state").default('UPCOMING').notNull(),
+});
+
+export const observationChecklist = pgTable("observation_checklist", {
+	checklistId: serial("checklist_id").primaryKey().notNull(),
+	checklistName: varchar("checklist_name", { length: 255 }),
+	description: text("description"),
+	departmentId: integer("department_id").references(() => departments.departmentId),
+	facultyId: integer("faculty_id").references(() => professors.professorId),
+});
+
+export const events = pgTable("events", {
+	eventId: serial("event_id").primaryKey().notNull(),
+	eventName: varchar("event_name", { length: 255 }).notNull(),
+	startDate: timestamp("start_date", { precision: 6, mode: 'string' }).notNull(),
+	endDate: timestamp("end_date", { precision: 6, mode: 'string' }).notNull(),
+	description: text("description"),
+	createdByUserId: integer("created_by_user_id").notNull().references(() => users.userId),
+},
+(table) => {
+	return {
+		idxEventsCreatedByUserId: index("idx_events_created_by_user_id").on(table.createdByUserId),
+	}
+});
+
 export const students = pgTable("students", {
 	studentId: serial("student_id").primaryKey().notNull(),
 	mis: varchar("mis", { length: 50 }).notNull(),
@@ -169,52 +195,6 @@ export const students = pgTable("students", {
 	return {
 		misKey: uniqueIndex("students_mis_key").on(table.mis),
 	}
-});
-
-export const feedback = pgTable("feedback", {
-	feedbackId: serial("feedback_id").primaryKey().notNull(),
-	studentId: integer("student_id").references(() => students.studentId),
-	sessionType: varchar("session_type", { length: 20 }),
-	sessionId: integer("session_id").references(() => lectures.lectureId, { onDelete: "cascade" } ).references(() => practicals.practicalId, { onDelete: "cascade" } ).references(() => tutorials.tutorialId, { onDelete: "cascade" } ),
-	feedbackText: text("feedback_text"),
-	rating: integer("rating"),
-	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
-	departmentId: integer("department_id").references(() => departments.departmentId),
-});
-
-export const lectures = pgTable("lectures", {
-	lectureId: serial("lecture_id").primaryKey().notNull(),
-	courseId: integer("course_id").references(() => courses.courseId),
-	professorId: integer("professor_id").references(() => professors.professorId),
-	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
-	location: varchar("location", { length: 255 }),
-	duration: integer("duration"),
-});
-
-export const practicals = pgTable("practicals", {
-	practicalId: serial("practical_id").primaryKey().notNull(),
-	courseId: integer("course_id").references(() => courses.courseId),
-	professorId: integer("professor_id").references(() => professors.professorId),
-	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
-	location: varchar("location", { length: 255 }),
-	duration: integer("duration"),
-});
-
-export const tutorials = pgTable("tutorials", {
-	tutorialId: serial("tutorial_id").primaryKey().notNull(),
-	courseId: integer("course_id").references(() => courses.courseId),
-	professorId: integer("professor_id").references(() => professors.professorId),
-	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
-	location: varchar("location", { length: 255 }),
-	duration: integer("duration"),
-});
-
-export const observationChecklist = pgTable("observation_checklist", {
-	checklistId: serial("checklist_id").primaryKey().notNull(),
-	checklistName: varchar("checklist_name", { length: 255 }),
-	description: text("description"),
-	departmentId: integer("department_id").references(() => departments.departmentId),
-	facultyId: integer("faculty_id").references(() => professors.professorId),
 });
 
 export const submittedDocuments = pgTable("submitted_documents", {
@@ -245,4 +225,29 @@ export const uploadedDocuments = pgTable("uploaded_documents", {
 	return {
 		idxUploadedDocumentsDocumentTypeId: index("idx_uploaded_documents_document_type_id").on(table.documentTypeId),
 	}
+});
+
+export const eventDocuments = pgTable("event_documents", {
+	eventDocumentId: serial("event_document_id").primaryKey().notNull(),
+	eventId: integer("event_id").notNull().references(() => events.eventId),
+	documentTypeId: integer("document_type_id").notNull().references(() => documentTypes.documentId),
+},
+(table) => {
+	return {
+		idxEventDocumentsDocumentTypeId: index("idx_event_documents_document_type_id").on(table.documentTypeId),
+		idxEventDocumentsEventId: index("idx_event_documents_event_id").on(table.eventId),
+	}
+});
+
+export const feedback = pgTable("feedback", {
+	feedbackId: serial("feedback_id").primaryKey().notNull(),
+	studentId: integer("student_id").references(() => students.studentId),
+	sessionType: varchar("session_type", { length: 20 }),
+	sessionId: integer("session_id").references(() => lectures.lectureId, { onDelete: "cascade" } ).references(() => practicals.practicalId, { onDelete: "cascade" } ).references(() => tutorials.tutorialId, { onDelete: "cascade" } ),
+	feedbackText: text("feedback_text"),
+	rating: integer("rating"),
+	dateTime: timestamp("date_time", { precision: 6, mode: 'string' }),
+	departmentId: integer("department_id").references(() => departments.departmentId),
+	professorId: integer("professor_id").references(() => professors.professorId),
+	courseId: integer("course_id").references(() => courses.courseId),
 });

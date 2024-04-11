@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-  temp
+  getAllLecturesLabsPracticals
 } = require('../controllers/lecture');
 
 
@@ -10,7 +10,7 @@ const router = express.Router();
 
 // Admin Only Routes
 
-router.post('/temp', temp);
+router.post('/getAllLecturesLabsPracticals', getAllLecturesLabsPracticals);
 
 
 module.exports = router;
