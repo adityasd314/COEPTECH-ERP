@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, timestamp, index, boolean } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, unique, timestamp, index, boolean } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
@@ -11,7 +11,7 @@ export const equalityOp = pgEnum("equality_op", ['eq', 'neq', 'lt', 'lte', 'gt',
 export const action = pgEnum("action", ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'ERROR'])
 export const bookingStatus = pgEnum("booking_status", ['withdrawn', 'cancelled', 'confirmed', 'pending'])
 export const documentStatus = pgEnum("document_status", ['withdrawn', 'rejected', 'approved', 'pending'])
-export const roles = pgEnum("roles", ['student', 'teacher', 'admin'])
+export const roles = pgEnum("roles", ['student', 'teacher', 'admin', 'hod'])
 export const lectureStatus = pgEnum("lecture_status", ['UPCOMING', 'CONDUCTED', 'CANCELLED'])
 
 
@@ -51,8 +51,9 @@ export const professors = pgTable("professors", {
 	professorId: serial("professor_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
-	department: varchar("department", { length: 100 }),
+	department: integer("department").references(() => departments.departmentId),
 	position: varchar("position", { length: 100 }),
+	userId: integer("user_id").references(() => users.userId),
 });
 
 export const bookings = pgTable("bookings", {
@@ -89,6 +90,11 @@ export const departments = pgTable("departments", {
 	departmentId: serial("department_id").primaryKey().notNull(),
 	departmentName: varchar("department_name", { length: 100 }).notNull(),
 	headOfDepartmentId: integer("head_of_department_id").references(() => headsOfDepartment.hodId),
+},
+(table) => {
+	return {
+		departmentsDepartmentIdKey: unique("departments_department_id_key").on(table.departmentId),
+	}
 });
 
 export const courses = pgTable("courses", {
@@ -102,6 +108,7 @@ export const headsOfDepartment = pgTable("heads_of_department", {
 	hodId: serial("hod_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
+	userId: integer("user_id").references(() => users.userId),
 });
 
 export const documents = pgTable("documents", {

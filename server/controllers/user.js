@@ -5,7 +5,7 @@ const DrizzleClient = require('../lib/drizzle-client');
 const client = require('../lib/prisma-client');
 const hashPassword = require('../lib/hash_pass');
 const compareHash = require('../lib/compare_hash');
-const { roles, users } = require('../db/schema');
+const { roles, users, students, professors, headsOfDepartment, departments } = require('../db/schema');
 
 const { use } = require('../routes/user');
 const createToken = (user) => {
@@ -48,7 +48,7 @@ const loginUser = async (req, res) => {
 
 // signup a user
 const signupUser = async (req, res) => {
-  const { mis, email, password, user_role: role } = req.body;
+  const { email, password, user_role: role } = req.body;
   if (!roles.enumValues.includes(role)) {
     res
       .status(400)
@@ -57,24 +57,113 @@ const signupUser = async (req, res) => {
       });
     return;
   }
-  if (!email || (!password && !role)) {
-    res.status(400).json({ error: 'All fields must be filled' });
+
+  if (!email || !password) {
+    res.status(400).json({ error: 'All fields must be filled', requiredFields: ['email', 'password'] });
+    return;
   }
 
   try {
     data = {
       email: email,
-      role: role || 'student',
+      role: role,
       passwordHash: await hashPassword(password),
     };
-    console.log({ data });
-    if (mis) {
-      data.mis = mis;
-    }
+    
+    if (role === 'student') {
+      const { mis } = req.body;
+      if (!mis) {
+        res.status(400).json({ error: 'All fields must be filled', requiredFields: ['mis'] });
+        return;
+      }
+      const departmentId = mis.slice(4, 6);
+      const year = mis.slice(2, 4);
+      const user = (await DrizzleClient.insert(users).values(data).returning({userId: users.userId
+        , role: users.role,email: users.email,passwordHash: users.passwordHash
+      }).execute())[0];
+     
+  
+      const token = createToken(user);
+      const { userId } = user;
+      const studentId = await DrizzleClient.insert(students).values({
+        userId: userId,
+        mis: mis,
+        departmentId: departmentId,
+        year: year,
+      }).returning({studentId: students.studentId}).execute();
+      return res.status(200).json({ ...user, token, studentId: studentId[0].studentId });
+    } else if (role === 'teacher') {
+      // insert into professor
+      const { name, departmentId, position } = req.body;
+      if (!name || !departmentId || !position) {
+        res.status(400).json({ error: 'All fields must be filled', requiredFields: ['name', 'departmentId', 'position'] });
+        return;
+      }
+      const user = (await DrizzleClient.insert(users).values(data).returning({userId: users.userId
+        , role: users.role,email: users.email,passwordHash: users.passwordHash
+      }).execute())[0];
+     
+  
+      const token = createToken(user);
+      const { userId } = user;
+      const professorId = await DrizzleClient.insert(professors).values({
+        userId: userId,
+        name: name,
+        departmentId: departmentId,
+        position: position,
+        email: email,
 
-    const user = (await DrizzleClient.insert(users).values(data).execute())[0];
+      }).returning({professorId: professors.professorId}).execute();
+      return res.status(200).json({ ...user, token, professorId: professorId[0].professorId });
+
+    } else if (role === 'hod') {
+      const { departmentId, name } = req.body;
+      if (!departmentId || !name) {
+        res.status(400).json({ error: 'All fields must be filled', requiredFields: ['departmentId', 'name'] });
+        return;
+      }
+      // insert in headsOfDepartment
+      const user = (await DrizzleClient.insert(users).values(data).returning({userId: users.userId
+        , role: users.role,email: users.email,passwordHash: users.passwordHash
+      }).execute())[0];
+     
+  
+      const token = createToken(user);
+      const { userId } = user;
+      const hodId = await DrizzleClient.insert(headsOfDepartment).values({
+        userId: userId,
+        name: name,
+        email: email,
+      }).returning({hodId: headsOfDepartment.hodId}).execute();
+      console.log(hodId);
+      // find departmentId if exists in departments
+      const department = await DrizzleClient.select().from(departments).where(eq(departments.departmentId, departmentId));
+      console.log(department);
+      // if exists update name and hodId
+      if (department.length > 0) {
+        console.log("<<>>")
+        await DrizzleClient.update(departments).set({ headOfDepartmentId: hodId[0].hodId }).where(eq(departments.departmentId, departmentId));
+        console.log("<<>>")
+      }
+      else {
+        // insert in departments
+        console.log(">>")
+        await DrizzleClient.insert(departments).values({
+          departmentId: departmentId,
+          headOfDepartmentId: hodId[0].hodId,
+        }).execute();
+
+      }
+      return res.status(200).json({ ...user, token, hodId: hodId[0].hodId });
+    }
+    const user = (await DrizzleClient.insert(users).values(data).returning({userId: users.userId
+      , role: users.role,email: users.email,passwordHash: users.passwordHash
+    }).execute())[0];
+   
+
     const token = createToken(user);
-    res.status(200).json({ ...user, token });
+    const { userId } = user;
+    res.status(200).json({user,token, message: 'User created' });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });

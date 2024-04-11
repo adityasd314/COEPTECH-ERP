@@ -1,5 +1,5 @@
-const { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, timestamp, index, boolean } =   require("drizzle-orm/pg-core")
-  const { sql } =  require("drizzle-orm")
+const { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, unique, timestamp, index, boolean } =require ("drizzle-orm/pg-core")
+  const { sql } =require ("drizzle-orm")
 
 const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
@@ -11,7 +11,7 @@ const equalityOp = pgEnum("equality_op", ['eq', 'neq', 'lt', 'lte', 'gt', 'gte',
 const action = pgEnum("action", ['INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'ERROR'])
 const bookingStatus = pgEnum("booking_status", ['withdrawn', 'cancelled', 'confirmed', 'pending'])
 const documentStatus = pgEnum("document_status", ['withdrawn', 'rejected', 'approved', 'pending'])
-const roles = pgEnum("roles", ['student', 'teacher', 'admin'])
+const roles = pgEnum("roles", ['student', 'teacher', 'admin', 'hod'])
 const lectureStatus = pgEnum("lecture_status", ['UPCOMING', 'CONDUCTED', 'CANCELLED'])
 
 
@@ -51,8 +51,9 @@ const professors = pgTable("professors", {
 	professorId: serial("professor_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
-	department: varchar("department", { length: 100 }),
+	department: integer("department").references(() => departments.departmentId),
 	position: varchar("position", { length: 100 }),
+	userId: integer("user_id").references(() => users.userId),
 });
 
 const bookings = pgTable("bookings", {
@@ -89,6 +90,11 @@ const departments = pgTable("departments", {
 	departmentId: serial("department_id").primaryKey().notNull(),
 	departmentName: varchar("department_name", { length: 100 }).notNull(),
 	headOfDepartmentId: integer("head_of_department_id").references(() => headsOfDepartment.hodId),
+},
+(table) => {
+	return {
+		departmentsDepartmentIdKey: unique("departments_department_id_key").on(table.departmentId),
+	}
 });
 
 const courses = pgTable("courses", {
@@ -102,6 +108,7 @@ const headsOfDepartment = pgTable("heads_of_department", {
 	hodId: serial("hod_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
+	userId: integer("user_id").references(() => users.userId),
 });
 
 const documents = pgTable("documents", {
@@ -251,9 +258,8 @@ const feedback = pgTable("feedback", {
 	professorId: integer("professor_id").references(() => professors.professorId),
 	courseId: integer("course_id").references(() => courses.courseId),
 });
-
-module.exports = {
-    	performanceMetrics,
+module.exports =  {
+	performanceMetrics,
 	reports,
 	userRole,
 	users,
@@ -277,4 +283,17 @@ module.exports = {
 	uploadedDocuments,
 	eventDocuments,
 	feedback,
-};
+	keyStatus,
+	keyType,
+	factorType,
+	factorStatus,
+	aalLevel,
+	codeChallengeMethod,
+	equalityOp,
+	action,
+	bookingStatus,
+	documentStatus,
+	roles,
+	lectureStatus
+
+}
