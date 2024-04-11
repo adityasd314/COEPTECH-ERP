@@ -50,10 +50,14 @@ const loginUser = async (req, res) => {
 // signup a user
 const signupUser = async (req, res) => {
     const { mis, email, password, user_role:role } = req.body;
-    // 'admin', 'teacher', 'student'
+    if(!roles.enumValues.includes(role)){
+        res.status(400).json({ error: "Invalid role\nValid roles are"+roles.enumValues.join(",")   });
+        return;
+    }
     if (!email || !password &&  !role) {
         res.status(400).json({ error: "All fields must be filled" });
     }
+
 
     try {
         data = {
