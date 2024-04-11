@@ -48,6 +48,8 @@ const professors = pgTable("professors", {
     position: varchar("position", { length: 100 }),
 });
 
+//venue booking
+
 const bookings = pgTable("bookings", {
     bookingId: serial("booking_id").primaryKey().notNull(),
     professorId: integer("professor_id").references(() => professors.professorId),
@@ -67,6 +69,8 @@ const venues = pgTable("venues", {
     location: varchar("location", { length: 255 }),
     permissionFacultyId: integer("permission_faculty_id").references(() => professors.professorId),
 });
+
+//venue booking end
 
 const departments = pgTable("departments", {
     departmentId: serial("department_id").primaryKey().notNull(),

@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "concurrently": "^8.2.2",
+    "express": "^4.19.2",
     "jsdom": "^24.0.0",
     "node-fetch": "^3.3.2"
   },
