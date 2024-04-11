@@ -19,6 +19,7 @@ const {
 } = require('../controllers/venue/booking');
 
 const { generateReport } = require('../controllers/venue/report');
+const { getSchedule } = require('../controllers/venue/permission');
 
 const router = express.Router();
 
@@ -44,5 +45,8 @@ router.post('/booking/make', makeBooking);
 router.post('/booking/edit', editBooking);
 router.post('/booking/cancel', cancelBooking);
 router.post('/booking/myBookings', getMyBookings);
+
+router.get('/getSchedule', getSchedule);
+
 
 module.exports = router;
