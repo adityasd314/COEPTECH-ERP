@@ -1,8 +1,6 @@
-const { drizzle } = require( "drizzle-orm/node-postgres");
-// const schema = require('./../db/schema');
-const { Pool } =require( "pg");
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-const db = drizzle(pool);
+const postgres = require("postgres")
+const sql = postgres("postgres://postgres.rvvoznnspleurqmmeczr:4OwlYObWEsQeDoCZ@aws-0-us-west-1.pooler.supabase.com:5432/postgres")
+const { drizzle } =  require('drizzle-orm/postgres-js')
+
+const db = drizzle(sql);
 module.exports = db;
