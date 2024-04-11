@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 import StudentDashboard from './pages/StudentDashboard';
 import AdminDashboard from './pages/AdminDashboard';
-import FacultyDashboard from './pages/FacultyDashboard';
+import TeacherDashboard from './pages/TeacherDashboard';
 import About from './pages/About';
 import LoginForm from './components/Auth/LoginForm';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -27,7 +27,7 @@ function App() {
                   user.role === 'STUDENT' ? (
                     <StudentDashboard user={user} />
                   ) : user.role === 'TEACHER' ? (
-                    <FacultyDashboard />
+                    <TeacherDashboard user={user} />
                   ) : (
                     user.role === 'ADMIN' && <AdminDashboard />
                   )

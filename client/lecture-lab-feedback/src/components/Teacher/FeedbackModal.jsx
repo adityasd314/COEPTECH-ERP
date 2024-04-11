@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Button,
   Modal,
@@ -18,14 +18,14 @@ import {
   Box,
   Heading,
 } from '@chakra-ui/react';
-
-import { LECTURE_FEEDBACK, LAB_FEEDBACK } from '../../constants/feedback';
+import LECTURE_FEEDBACK from '../../constants/lecture_feedback';
 
 import { useForm } from 'react-hook-form';
 
 const FeedbackFormModal = ({ data, isOpen, onClose }) => {
   const { register, handleSubmit } = useForm();
   const [feedback, setFeedback] = useState('');
+
   const onSubmit = (data) => {
     console.log(data); // You can handle form submission logic here
     onClose();
@@ -40,27 +40,18 @@ const FeedbackFormModal = ({ data, isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} size="md">
       <ModalOverlay />
-      <ModalContent height={'80vh'}>
+      <ModalContent>
         <ModalHeader>Provide Feedback</ModalHeader>
         <ModalCloseButton />
-        <ModalBody overflow={'scroll'}>
+        <ModalBody>
           <Box maxW="500px" mx="auto" mt="4">
-            <Heading fontSize={'large'} mb="4" textTransform={'capitalize'}>
-              {data.course_name}
-            </Heading>
+            <Heading mb="4">Lecture Feedback Form</Heading>
             <form onSubmit={handleSubmit(onSubmit)}>
-              {Object.entries(
-                data.type == 'LECTURE' ? LECTURE_FEEDBACK : LAB_FEEDBACK
-              ).map(([category, questions]) => (
+              {Object.entries(LECTURE_FEEDBACK).map(([category, questions]) => (
                 <Box key={category} mb="4">
-                  <Text
-                    fontSize={'medium'}
-                    textTransform={'capitalize'}
-                    fontWeight={'bold'}>
-                    {category}
-                  </Text>
+                  <Text textTransform={'capitalize'}>{category}</Text>
                   {questions.map((question, index) => (
                     <FormControl key={index} mb="4">
                       <FormLabel>{question}</FormLabel>
