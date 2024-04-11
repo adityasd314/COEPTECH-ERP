@@ -1,8 +1,6 @@
-const { eq, lte, gte, ne, desc } = require('drizzle-orm');
+const { eq, DrizzleError } = require('drizzle-orm');
 const DrizzleClient = require("../../lib/drizzle-client")
-
 const {venues, bookings} = require("../../db/schema");
-
 const { use } = require("../../routes/venue");
 
 const getAllVenues = async(req, res) => {
@@ -103,16 +101,30 @@ const deleteVenue = async(req, res) => {
 
 const getAvailableVenues = async(req, res) => {
   try {
-    const { start_date } = req.body;
-    const end_date = new Date(start_date);
-    end_date.setDate(end_date.getDate() + 30);
-    const monthlybookings = await DrizzleClient.select().from(bookings).where(eq(bookings.status, "confirmed"));
-    const filteredBookings = monthlybookings.filter(booking => {
-      const bookingStartTime = new Date(booking.startTime);
-      const bookingEndTime = new Date(booking.endTime);
-      return bookingStartTime >= start_date && bookingEndTime <= end_date;
+    const { start_date, end_date } = req.body;
+    const allVenues = await DrizzleClient.select().from(venues);
+    const bookingsforVenue = await DrizzleClient.select().from(bookings).where(eq(bookings.status, 'confirmed'));
+
+    const bookingsforVenueinDuration = bookingsforVenue.filter(booking => {
+        const bookingDate = new Date(booking.bookingDate);
+        const start_date_n = new Date(start_date);
+        const end_date_n = new Date(end_date);
+        return bookingDate >= start_date_n && bookingDate <= end_date_n;
     });
-    res.status(200).json({ filteredBookings });
+
+    let availableVenues = allVenues.reduce((acc, venue) => {
+        acc[venue.venueId] = {
+            venueName: venue.venueName
+        };
+        return acc;
+    }, {});
+    
+    bookingsforVenueinDuration.forEach(booking => {
+        const venueId = booking.venueId;
+        delete availableVenues[venueId];
+    });
+
+    res.status(200).json({ availableVenues   });
   } catch (error) {
     console.error("Error fetching bookings:", error);
     res.status(500).json({ error: "Internal Server Error" });
