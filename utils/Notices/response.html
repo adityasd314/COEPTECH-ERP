@@ -1,63 +1,252 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Notices</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Notices</h1>
-    <table id="noticesTable">
-        <tr>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Notices</h1>
+      <div class="search">
+        <div>
+          <input type="text" id="searchInput" placeholder="Search..." />
+          <button onclick="searchNotices()">Search</button>
+        </div>
+        <div class="date-search">
+          <input
+            type="text"
+            id="dateInput"
+            placeholder="Search by date (mm/yyyy)" />
+          <button onclick="searchByDate()">Search</button>
+        </div>
+      </div>
+      <table id="noticesTable">
+        <thead>
+          <tr>
             <th>Date</th>
             <th>Title</th>
             <th>Link</th>
-        </tr>
-    </table>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
+      <div class="pagination"></div>
+    </div>
     <script>
-        const notices = [
-            {
-                date: '03/07/2017',
-                link: 'https://www.coep.org.in/content/hostelprovisionalallotmentlistboysgirls201718',
-                title: 'Hostel Provisional Allotment List (Boys+Girls) 2017-18'
-            },
-            {
-                date: '08/05/2017',
-                link: 'https://www.coep.org.in/content/hosteladmissionforacademicyear201718forsytyfinalyearbtechboysandgirls',
-                title: 'Hostel Admission For Academic Year 2017-18.(For SY/TY/ Final Year B. Tech.- Boys and Girls)'
-            }
-        ];
+      const BASE_URL = 'https://www.coep.org.in';
+      let originalData = [];
+      let currentPage = 1;
+      let currentSearchResults = [];
+      let currentFilteredResults = [];
+      async function fetchAndRenderNotices() {
+        const data = (await fetch('scrapedData.json').then((response) =>
+          response.json()
+        )).filter((item) => item.date.length==10);
 
-        const tableBody = document.getElementById('noticesTable').getElementsByTagName('tbody')[0] || document.createElement('tbody');
+        // var myHeaders = new Headers();
+        // myHeaders.append('Content-Type', 'application/json');
 
-        for (const notice of notices) {
-            const row = tableBody.insertRow();
-            const dateCell = row.insertCell();
-            const titleCell = row.insertCell();
-            const linkCell = row.insertCell();
+        // var raw = JSON.stringify({
+        //   pageNumber: '1',
+        // });
 
-            dateCell.textContent = notice.date;
-            titleCell.innerHTML =`<a href="${notice.link}" target="_blank">${notice.title}</a>`;
-            linkCell.innerHTML = `<a href="${notice.link}" target="_blank">Link</a>`;
+        // var requestOptions = {
+        //   method: 'POST',
+        //   headers: myHeaders,
+        //   body: raw,
+        //   redirect: 'follow',
+        // };
+
+        // const firstPageData = await fetch(
+        //   `http://localhost:5000/user/getNoticesByPageNumber`, requestOptions
+        // ).then((response) => response.json()).then((result) => result.data.filter((item) => item.date.length==10));
+        // originalData = [...firstPageData, ...data];
+        originalData = data;
+        renderPage(currentPage, originalData);
+      }
+
+      async function search(query) {
+        const results = [];
+        const regex = new RegExp(query, 'i');
+        originalData.forEach((item) => {
+          if (
+            regex.test(item.date) ||
+            regex.test(item.title) ||
+            (item.link && regex.test(item.link.replace('/content/', '')))
+          ) {
+            results.push({ ...item, link: `${item.link}` });
+          }
+        });
+        return results;
+      }
+
+      async function searchByDate() {
+        const dateInput = document.getElementById('dateInput').value.trim();
+        if (dateInput === '') {
+          renderPage(currentPage, originalData);
+          return;
         }
 
+        let [month, year] = dateInput.split('/');
+        if (!month || isNaN(month) || month.length < 1 || month.length > 2) {
+          return;
+        }
+
+        if (!year) {
+          year = month;
+          month = '*';
+        } else if (isNaN(year) || year.length !== 4) {
+          return;
+        }
+
+        currentFilteredResults = originalData.filter((item) => {
+          const [itemDay, itemMonth, itemYear] = item.date.split('/');
+          return (
+            (month === '*' || itemMonth === month) &&
+            (year === '*' || itemYear === year)
+          );
+        });
+
+        if (currentFilteredResults.length > 0) {
+          renderPage(1, currentFilteredResults);
+        }
+      }
+
+      async function renderTable(data) {
+        const tableBody =
+          document
+            .getElementById('noticesTable')
+            .getElementsByTagName('tbody')[0] ||
+          document.createElement('tbody');
+        tableBody.innerHTML = '';
+
+        data.forEach((notice, index) => {
+          const row = tableBody.insertRow();
+          const dateCell = row.insertCell();
+          const titleCell = row.insertCell();
+          const linkCell = row.insertCell();
+
+          dateCell.textContent = notice.date;
+          titleCell.innerHTML = `<a href="${BASE_URL}/${notice.link}" target="_blank">${notice.title}</a>`;
+          linkCell.innerHTML = `<a href="${BASE_URL}/${notice.link}" target="_blank">Link</a>`;
+          row.classList.add('animate');
+        });
+
         document.getElementById('noticesTable').appendChild(tableBody);
+      }
+
+      async function renderPagination(totalPages) {
+        const paginationContainer = document.querySelector('.pagination');
+        paginationContainer.innerHTML = '';
+
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Prev';
+        prevButton.addEventListener('click', () => {
+          if (currentPage > 1) {
+            currentPage--;
+            renderPage(
+              currentPage,
+              currentSearchResults.length > 0
+                ? currentSearchResults
+                : currentFilteredResults.length > 0
+                ? currentFilteredResults
+                : originalData
+            );
+          }
+        });
+        paginationContainer.appendChild(prevButton);
+
+        let startPage = Math.max(1, currentPage - 1);
+        let endPage = Math.min(totalPages, startPage + 3);
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.textContent = i;
+          pageButton.addEventListener('click', () => {
+            currentPage = i;
+            renderPage(
+              currentPage,
+              currentSearchResults.length > 0
+                ? currentSearchResults
+                : currentFilteredResults.length > 0
+                ? currentFilteredResults
+                : originalData
+            );
+          });
+          if (i === currentPage) {
+            pageButton.classList.add('active');
+          }
+          paginationContainer.appendChild(pageButton);
+        }
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.addEventListener('click', () => {
+          if (currentPage < totalPages) {
+            currentPage++;
+            renderPage(
+              currentPage,
+              currentSearchResults.length > 0
+                ? currentSearchResults
+                : currentFilteredResults.length > 0
+                ? currentFilteredResults
+                : originalData
+            );
+          }
+        });
+        paginationContainer.appendChild(nextButton);
+      }
+
+      async function renderPage(page, data) {
+        const startIndex = (page - 1) * 10;
+        const endIndex = startIndex + 10;
+        const dataToShow = data.slice(startIndex, endIndex);
+        renderTable(dataToShow);
+        renderPagination(Math.ceil(data.length / 10));
+      }
+
+      async function searchNotices() {
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput.value.trim();
+        if (query === '') {
+          renderPage(currentPage, originalData);
+          return;
+        }
+
+        const searchResults = await search(query);
+        if (searchResults.length > 0) {
+          currentSearchResults = searchResults;
+          renderPage(1, currentSearchResults);
+        } else {
+          alert('No matching results found.');
+        }
+      }
+
+      fetchAndRenderNotices();
+
+      document.getElementById('searchInput').addEventListener('input', () => {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query === '') {
+          renderPage(currentPage, originalData);
+          return;
+        }
+
+        search(query).then((searchResults) => {
+          currentSearchResults = searchResults;
+          renderPage(1, currentSearchResults);
+        });
+      });
+
+      document.getElementById('dateInput').addEventListener('input', () => {
+        const dateInput = document.getElementById('dateInput').value.trim();
+        if (dateInput === '') {
+          renderPage(currentPage, originalData);
+          return;
+        }
+
+        searchByDate();
+      });
     </script>
-</body>
+  </body>
 </html>

@@ -12,6 +12,7 @@ async function search(query, data) {
   }
   (async function (){
   const dt = await writeNotices(1);
+  console.log(dt[0]);
   let data = require('./scrapedData.json');
   data = Object.values(Object.fromEntries([...dt,...data].map((x)=>[x.link, x])))
   const readline = require('readline');
