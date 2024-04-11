@@ -76,6 +76,7 @@ const getAllBookings = async (req, res) => {
       const venueId = venueOfInterest[0].venueId;
 
       const allBookings = await DrizzleClient.select().from(bookings).where(eq(bookings.venueId, venueId));
+      console.log(allBookings);
       return res.status(200).json({ allBookings });
     
     }
@@ -93,7 +94,7 @@ const makeBooking = async (req, res) => {
   try {
     const { professorId, venueId, bookingDate, startTime, endTime, purpose } = req.body;
     
-
+    console.log(professorId, venueId, bookingDate, startTime, endTime, purpose);
     const createdBooking = await DrizzleClient.insert(bookings).values({
       professorId : parseInt(professorId),
       venueId: parseInt(venueId) ,
@@ -103,7 +104,7 @@ const makeBooking = async (req, res) => {
       purpose,
       status: 'pending'
     }).returning();
-
+    console.log(createdBooking);
 
     return res.status(200).json({ success: true, message: 'Booking made successfully.', createdBooking });
   } catch (error) {

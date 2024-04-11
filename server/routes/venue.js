@@ -39,7 +39,7 @@ router.post('/reports', generateReport);
 
 router.get('/getVenues', getAllVenues);     
 router.get('/getVenueById/:venue_id', getVenueById); 
-router.get('/availableVenues', getAvailableVenues);  
+router.post('/availableVenues', getAvailableVenues);  
 
 router.post('/booking/make', makeBooking);
 router.post('/booking/edit', editBooking);
