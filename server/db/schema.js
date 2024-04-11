@@ -1,8 +1,8 @@
 const { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, timestamp, index, boolean, primaryKey } = require("drizzle-orm/pg-core");
 const { sql } = require("drizzle-orm");
 
-const bookingStatus = pgEnum("booking_status", ['cancelled', 'confirmed', 'pending']);
-const documentStatus = pgEnum("document_status", ['rejected', 'approved', 'pending']);
+const bookingStatus = pgEnum("booking_status", ['cancelled', 'confirmed', 'pending', 'with_drawn']);
+const documentStatus = pgEnum("document_status", ['rejected', 'approved', 'pending', 'with_drawn']);
 
 const performanceMetrics = pgTable("performance_metrics", {
     metricId: serial("metric_id").primaryKey().notNull(),
@@ -48,8 +48,6 @@ const professors = pgTable("professors", {
     position: varchar("position", { length: 100 }),
 });
 
-//venue booking
-
 const bookings = pgTable("bookings", {
     bookingId: serial("booking_id").primaryKey().notNull(),
     professorId: integer("professor_id").references(() => professors.professorId),
@@ -69,8 +67,6 @@ const venues = pgTable("venues", {
     location: varchar("location", { length: 255 }),
     permissionFacultyId: integer("permission_faculty_id").references(() => professors.professorId),
 });
-
-//venue booking end
 
 const departments = pgTable("departments", {
     departmentId: serial("department_id").primaryKey().notNull(),
