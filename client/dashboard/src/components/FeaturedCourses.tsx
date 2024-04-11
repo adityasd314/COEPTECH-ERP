@@ -2,6 +2,7 @@
 import Link from "next/link"
 import courseData from "../data/music_courses.json"
 import { BackgroundGradient } from "./ui/background-gradient"
+import { HeroHighlight, Highlight } from "./ui/hero-highlight";
 
 interface Course{
     id: number,
@@ -19,11 +20,13 @@ function FeaturedCourses() {
 
 
   return (
-    <div className="py-12 bg-gray-900" style={{marginBottom:"10vh"}}>
+
+    <div className="pt-12 py-12 bg-gray-300 dark:bg-grid-black/[0.2]"  style={{marginBottom:"10vh"}}>
         <div>
             <div className="text-center">
-                <h2 className="text-base text-teal-600 font-semibold tracking-wide uppercase">OUR SOLUTIONS</h2>
-                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-white sm:text-4xl">ONE PLATFORM FOR ALL THE PROBLEMS</p>
+<br/>
+<br/><br/><br/>
+                <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-black sm:text-4xl">ONE PLATFORM FOR ALL THE PROBLEMS</p>
             </div>
         </div>
         <div className="mt-10 mx-8">
@@ -31,12 +34,14 @@ function FeaturedCourses() {
                 {featuredCourses.map((course:Course)=> (
                     <div key={course.id} className="flex justify-center">
                         <BackgroundGradient
-                        className="flex flex-col rounded-[22px] bg-white dark:bg-zinc-900 overflow-hidden h-full max-w-sm">
+                        className="flex flex-col rounded-[10px] bg-white dark:bg-white overflow-hidden h-full max-w-sm">
                             <div className="p-4 sm:p-6 flex flex-col items-center text-center flex-grow">
-                                <p className="text-lg sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">{course.title}</p>
-                                <p className="text-sm text-neutral-600 dark:text-neutral-400 flex-grow">{course.description}</p>
+                                <p className="text-lg sm:text-xl text-black mt-4 mb-2 dark:text-black">{course.title}</p>
+                                <p className="text-sm text-neutral-600 dark:text-black flex-grow">{course.description}</p>
                                 <Link href={`/courses/${course.slug}`}>
-                                Learn More
+                                <div className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-full inline-block mt-4 transition duration-300 ease-in-out">
+            Learn More
+        </div>
                                 </Link>
                             </div>
                         </BackgroundGradient>
@@ -45,6 +50,7 @@ function FeaturedCourses() {
             </div>
         </div>
     </div>
+
   )
 }
 

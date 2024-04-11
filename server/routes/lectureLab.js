@@ -1,9 +1,16 @@
 const express = require('express');
-// controller functions
-const { getAllLectureLabTutorials } = require('../controllers/lecture');
+const {
+  temp
+} = require('../controllers/lecture');
+
+
+
+
 const router = express.Router();
 
-// login route
-router.post('/getAllLectureLab', getAllLectureLabTutorials);
+// Admin Only Routes
+
+router.post('/temp', temp);
+
 
 module.exports = router;

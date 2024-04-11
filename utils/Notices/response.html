@@ -3,35 +3,33 @@
   <head>
     <title>Notices</title>
     <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   </head>
   <body>
     <div class="container">
-      <h1>Notices</h1>
-      <div class="search">
+      <h1 class="text-center text-white my-8">Notices</h1>
+      <div class="search flex justify-between mb-4">
         <div>
-          <input type="text" id="searchInput" placeholder="Search..." />
-          <button onclick="searchNotices()">Search</button>
+          <input type="text" id="searchInput" placeholder="Search..." class="px-4 py-2 border border-gray-300 rounded mr-2">
+          <button onclick="searchNotices()" class="px-4 py-2 bg-blue-500 text-white rounded">Search</button>
         </div>
         <div class="date-search">
-          <input
-            type="text"
-            id="dateInput"
-            placeholder="Search by date (mm/yyyy)" />
-          <button onclick="searchByDate()">Search</button>
+          <input type="text" id="dateInput" placeholder="Search by date (mm/yyyy)" class="px-4 py-2 border border-gray-300 rounded mr-2">
+          <button onclick="searchByDate()" class="px-4 py-2 bg-blue-500 text-white rounded">Search</button>
         </div>
       </div>
-      <table id="noticesTable">
+      <table id="noticesTable" class="w-full mb-8">
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Title</th>
-            <th>Link</th>
+            <th class="bg-blue-700 text-white px-4 py-2">Date</th>
+            <th class="bg-blue-700 text-white px-4 py-2">Title</th>
+            <th class="bg-blue-700 text-white px-4 py-2">Link</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
 
-      <div class="pagination"></div>
+      <div class="pagination flex justify-center"></div>
     </div>
     <script>
       const BASE_URL = 'https://www.coep.org.in';

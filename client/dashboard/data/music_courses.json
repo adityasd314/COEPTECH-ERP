@@ -3,12 +3,11 @@
       {
         "id": 1,
         "title": "Leave Managemnet System",
-        "slug": "guitar-fundamentals",
+        "slug": "lms",
         "description": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         "price": 99.99,
         "instructor": "John Doe",
         "isFeatured": true,
-        "image": "/courses/guitar.jpg" 
       },
       {
         "id": 8,
