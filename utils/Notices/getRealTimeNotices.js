@@ -6,7 +6,7 @@ async function writeNotices(pagesNumber){
     
     async function getNotices(pagesNumber = NUMBER_OF_PAGES) {
     
-        const pagesToFetch = new Array(pagesNumber).fill(0).map((_, i) => `https://www.coep.org.in/node?page=${i + 1}`)
+        const pagesToFetch = new Array(pagesNumber).fill(0).map((_, i) => `https://www.coep.org.in/node?page=${i}`)
         const pagesResponse = await Promise.all(pagesToFetch.map(async (page) => (await fetch(page))));
         const pagesResponseHTML = await Promise.all(pagesResponse.map(async (response) => response.text()));
     

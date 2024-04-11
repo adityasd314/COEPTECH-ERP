@@ -5,7 +5,12 @@
   "license": "MIT",
   "dependencies": {
     "concurrently": "^8.2.2",
+<<<<<<< HEAD
     "express": "^4.19.2"
+=======
+    "jsdom": "^24.0.0",
+    "node-fetch": "^3.3.2"
+>>>>>>> f31242bd8f388b1f2b0ce0a5f33c96d3b99cdf92
   },
   "scripts": {
     "dev": "concurrently \"cd server && nodemon\" \"cd client/dashboard && npm run dev\""
