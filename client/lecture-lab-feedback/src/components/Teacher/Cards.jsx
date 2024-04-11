@@ -52,7 +52,7 @@ export default function Cards({ data, setModalOpen, setData }) {
             </p>
             <p>{item.date_time.toDateString()}</p>
             <p>{item.location}</p>
-            <p>Duartion: {item.duration/60} hrs</p>
+            <p>{item.duration}</p>
           </CardBody>
           <CardFooter>
             <Button
