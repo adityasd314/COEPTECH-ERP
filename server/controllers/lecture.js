@@ -1,6 +1,6 @@
 const { eq } = require('drizzle-orm');
 const db = require("../lib/drizzle-client");
-const { users, students, courses, lectures, practicals, tutorials, professors } = require("../db/schema");
+const { users,feedback, students, courses, lectures, practicals, tutorials, professors } = require("../db/schema");
 const { type } = require('os');
 
 const getAllLecturesLabsPracticals = async (req, res) => {
@@ -43,6 +43,30 @@ const getAllLecturesLabsPracticals = async (req, res) => {
 
   res.status(200).json({ message: "Test route works", data: result.flat().map((item) => ({ ...item, professorName: professerIdToNameMap[item.professorId], courseName: courseIdToNameMap[item.courseId], })) });
 }
+const submitFeedback = async (req, res) => {
+  const {userId, courseId, sessionType, sessionId,data:feedbackText, professorId, departmentId} = req.body;
+  const date_time = new Date().toISOString();
+
+const studentId = (await db.select({
+  studentId: students.studentId,
+}).from(students).where(eq(students.userId, userId)))[0].studentId;
+  const dataObj = JSON.parse(feedbackText);
+  const rating = dataObj["overall satisfaction0"];
+  const insertedRows = await db.insert(feedback).values({
+    studentId,
+    sessionType,
+    sessionId,
+    feedbackText,
+    rating,
+    date_time,
+    departmentId,
+    professorId,
+
+    courseId,
+  }).returning({ feedbackId: feedback.feedbackId });
+
+  res.status(200).json({ message: "Feedback sent", insertedRows });
+}
 const updateLectureState = async (req, res) => {
   const { lectureId, state } = req.body;
   await db.update(lectures).set({ state }).where(eq(lectures.lectureId, lectureId));
@@ -63,4 +87,5 @@ module.exports = {
   , updateLectureState
   , updateTutorialState
   , updatePracticalState
+  ,submitFeedback
 };
