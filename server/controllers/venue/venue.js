@@ -106,11 +106,11 @@ const getAvailableVenues = async (req, res) => {
       return booking.bookingDate === booking_date;
     });
 
-    const SameDateConfirmedBookings = bookingsforVenue.filter((booking) => {
+    const SameDateConfirmedBookings = SameDateBookings.filter((booking) => {
       return booking.status === 'confirmed';
     });
 
-    const filteredBookings = SameDateBookings.filter((booking) => {
+    const filteredBookings = SameDateConfirmedBookings.filter((booking) => {
 
       const bookingDate = booking.bookingDate;
       const bookingStartTime = parseDateTime(bookingDate, booking.startTime);
