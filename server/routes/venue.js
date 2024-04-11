@@ -28,7 +28,7 @@ router.post('/addVenues', addVenue);
 router.put('/editVenues/:venue_id', updateVenue);     
 router.delete('/deleteVenues/:venue_id', deleteVenue);
 
-router.get('/booking', getAllBookings);
+router.post('/booking', getAllBookings);
 router.post('/booking/grant', grantBooking);
 router.post('/booking/revoke', revokeBooking);
 
