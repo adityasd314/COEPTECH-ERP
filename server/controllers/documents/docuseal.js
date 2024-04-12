@@ -1,4 +1,4 @@
-var axios = require("axios").default; 
+const axios = require("axios").default; 
 const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const { eq } = require('drizzle-orm');
@@ -8,102 +8,71 @@ const { venues, bookings, professors, reports } = require("../../db/schema");
 const dom = new JSDOM('<!DOCTYPE html>');
 const document = dom.window.document;
 
-const getBookingById = async(BookingId) => {
-    try{
-      const booking = await DrizzleClient.select().from(bookings).where(eq(bookings.bookingId, BookingId))
-      return booking
-    }catch(error){
-      console.log(error);
-    }
-}
+const getDocument = async (req, res) => {
+    const { booking_id, user_id } = req.body;
 
-const getProfessorName = async(ProfessorId) => {
-    try{
-        const professor = await(DrizzleClient.select().from(professors).where(eq(professors.professorId, ProfessorId)));
-        return professor;
-    }catch(error){
-        console.log(error);
-    }
-}
+    try {
+        // Fetch booking data from the database
+        const bookingdata = await DrizzleClient.select().from(bookings).where(eq(bookings.bookingId, booking_id)).limit(1);
+        const venueData = await DrizzleClient.select().from(venues).where(eq(venues.venueId, bookingdata[0].venueId)).limit(1);
+        const professorData = await DrizzleClient.select().from(professors).where(eq(professors.professorId, bookingdata[0].professorId)).limit(1);
+        const facultyData = await DrizzleClient.select().from(professors).where(eq(professors.professorId, venueData[0].permissionFacultyId)).limit(1);
+        
+        // Read the HTML template file
+        const htmlContent = fs.readFileSync('./controllers/documents/template2.html', 'utf8');
+        
+        // Parse the HTML content using JSDOM
+        const div = document.createElement('div');
+        div.innerHTML = htmlContent;
 
-const getFacultyName = async(venue_id) => {
-    try{
-        const venue = await (DrizzleClient.select().from(venues).where(eq(venues.venueId, venue_id)));
-        const facId = venue[0].permissionFacultyId;
-        const faculty =await  (DrizzleClient.select().from (professors).where(eq(professors.professorId, facId)));
-        return faculty;
-    }catch(error){
-        console.log(error);
-    }
-}
+        // Fill in the placeholders with actual data
+        const currentDate = new Date();
+        div.querySelector('.content strong').textContent = currentDate;
+        div.querySelector('.reason').textContent = bookingdata[0].purpose;
+        div.querySelector('.proposedBy').textContent = professorData[0].name;
+        div.querySelector('.approvedBy').textContent = facultyData[0].name;
+        div.querySelector('.signature-box:nth-child(1) img').src = "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png";
+        div.querySelector('.signature-box:nth-child(2) img').src = "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png";
+        div.querySelector('.venue').textContent = venueData[0].venueName;
+        div.querySelector('.date').textContent = bookingdata[0].bookingDate;
+        div.querySelector('.start').textContent = bookingdata[0].startTime;
+        div.querySelector('.end').textContent = bookingdata[0].endTime;
 
+        // Get the modified HTML content
+        const modifiedHtmlContent = div.innerHTML;
 
-const getDocument = async(req, res) => {
-    const {booking_id, user_id} = req.body;
+        // Make API request to DocuSeal
+        const options = {
+            method: 'POST',
+            url: 'https://api.docuseal.co/templates/html',
+            headers: { 'X-Auth-Token': '8gV9scT3s4iPTkNgVThdUxC2jEkQzVvYsfeB6pxutwW', 'content-type': 'application/json' },
+            data: {
+                html: modifiedHtmlContent,
+                name: 'Template'
+            }
+        };
 
-    const bookingdata = await getBookingById(booking_id);
-    const professorData = await getProfessorName(bookingdata[0].professorId);
-    const facultyData = await getFacultyName(bookingdata[0].venueId);
-    const currentDate = new Date();
-    const htmlContent = fs.readFileSync('./controllers/documents/template2.html', 'utf8');
-
-
-    const div = document.createElement('div');
-    div.innerHTML = htmlContent;
-    div
-    const textField1 = div.querySelector('.content strong');
-    if (textField1) {
-        textField1.textContent =  currentDate;
-    }
-    const textField2 = div.querySelector('.reason');
-    if (textField2) {
-        textField2.textContent =  bookingdata[0].purpose;
-    }
-    const textField3 = div.querySelector('.proposedBy');
-    if (textField3) {
-        textField3.textContent =  professorData[0].name;
-    }
-    const textField4 = div.querySelector('.approvedBy');
-    if (textField4) {
-        textField4.textContent =  facultyData[0].name;
-    }
-    const textField5 = div.querySelector('.signature-box:nth-child(1) img');
-    if (textField5) {
-        textField5.src = "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png";
-    }const textField6 = div.querySelector('.signature-box:nth-child(2) img');
-    if (textField6) {
-        textField6.src =  "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png";
-    }
-    const modifiedHtmlContent = div.innerHTML;
-
-    var options = {
-        method: 'POST',
-        url: 'https://api.docuseal.co/templates/html',
-        headers: {'X-Auth-Token': '8gV9scT3s4iPTkNgVThdUxC2jEkQzVvYsfeB6pxutwW', 'content-type': 'application/json'},
-        data: {
-        html: modifiedHtmlContent,
-        name: 'Template'
-        }
-    };
-
-    axios.request(options).then(function (response) {
+        // Send request and handle response
+        const response = await axios.request(options);
         const resp = response.data;
 
-        //data = {
+        // Save the report data to the database or perform any other necessary actions
+        // const data = {
         //     reportName: 'Permission Letter',
         //     reportDate: currentDate,
         //     reportType: 'letter',
         //     generatedBy: user_id,
         //     cloudinaryLink: resp.documents[0].url,
-        // }
-        // DrizzleClient.insert(reports).values(data)
-        res.status(200).json({ resp })
-    }).catch(function (error) {
+        // };
+        // await DrizzleClient.insert(reports).values(data);
+
+        res.status(200).json({ resp });
+    } catch (error) {
         console.error(error);
-    });
-    
-}
+        res.status(500).json({ error: "An error occurred while generating the document" });
+    }
+};
 
 module.exports = {
     getDocument
-}
+};

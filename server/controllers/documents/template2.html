@@ -1,141 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permission Letter</title>
-    <style>
-        @page {
-            size: A4;
-            margin: 0;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            position: relative;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding-bottom: 180px; /* Adjusted padding for signatures */
-        }
-        .header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .header img {
-            width: 100px;
-            margin-right: 20px;
-        }
-        .header-content {
-            text-align: center;
-        }
-        .header-content h2 {
-            font-weight: bold;
-            margin: 5px 0;
-        }
-        .header-content p {
-            margin: 5px 0;
-        }
-        hr {
-            border: 1px solid black;
-            margin: 20px 0;
-        }
-        .content {
-            margin-bottom: 20px;  /* Adjusted margin */
-        }
-        .signatures {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px;
-            padding-bottom: 20px; /* Adjusted padding */
-            box-sizing: border-box;
-        }
-        .signature-box {
-            width: 45%;
-            float: left;
-            border-bottom: 1px solid black;
-            margin-bottom: 20px;
-            padding-top: 10px; 
-            padding-bottom: 20px;
-        }
-        .signature-box p {
-            margin: 5px 0;
-        }
-        .signature-img {
-            width: 80px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://www.coep.org.in/sites/default/files/COEP_Tech_University_Logo%20%281%29.jpg" alt="COEP Logo">
-            <div class="header-content">
-                <h2>COEP Technological University, Pune</h2>
-                <p>Wellesley Road, Chhatrapati Shivaji Maharaj Nagar, Pune-411005</p>
-                <p><a href="https://www.coep.org.in">www.coep.org.in</a></p>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Permission Letter</title>
+        <style>
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                position: relative;
+                min-height: 100vh;
+                box-sizing: border-box;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding-bottom: 180px; /* Adjusted padding for signatures */
+            }
+            .header {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+            .header img {
+                width: 100px;
+                margin-right: 20px;
+            }
+            .header-content {
+                text-align: center;
+            }
+            .header-content h2 {
+                font-weight: bold;
+                margin: 5px 0;
+            }
+            .header-content p {
+                margin: 5px 0;
+            }
+            hr {
+                border: 1px solid black;
+                margin: 20px 0;
+            }
+            .content {
+                margin-bottom: 20px;  /* Adjusted margin */
+            }
+            .signatures {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                padding: 20px;
+                padding-bottom: 20px; /* Adjusted padding */
+                box-sizing: border-box;
+            }
+            .signature-box {
+                width: 45%;
+                float: left;
+                border-bottom: 1px solid black;
+                margin-bottom: 20px;
+                padding-top: 10px; 
+                padding-bottom: 20px;
+            }
+            .signature-box p {
+                margin: 5px 0;
+            }
+            .signature-img {
+                width: 80px;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <img src="https://www.coep.org.in/sites/default/files/COEP_Tech_University_Logo%20%281%29.jpg" alt="COEP Logo">
+                <div class="header-content">
+                    <h2>COEP Technological University, Pune</h2>
+                    <p>Wellesley Road, Chhatrapati Shivaji Maharaj Nagar, Pune-411005</p>
+                    <p><a href="https://www.coep.org.in">www.coep.org.in</a></p>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="content">
+                <p>Date:<strong></strong></p>
+                <p>To,</p>
+                <p><strong>Head of the Department,</strong><br>
+                <strong>Electronics and Telecommunications,</strong><br>
+                <strong>COEP Technological University,</strong><br>
+                <strong>Pune</strong></p>
+                <p >Reason :<strong class="reason"> </strong></p>
+                <p>We would like to inform you of an upcoming event scheduled to take place at <strong class="venue"></strong>. In order to facilitate the event smoothly,
+                we kindly request permission to utilize the venue for the specified <strong>reason</strong>.
+                The event is scheduled to take place on <strong class="date"></strong> from <strong class="start"></strong> to <strong class="end"></strong>
+                <p>We assure you that all necessary arrangements will be made to ensure that the venue is utilized responsibly and left in the same condition as it was found. We understand the importance of maintaining the facilities and will adhere to all guidelines provided by the authorities.</p>
+                <p>Thank you for considering our request. We look forward to your favorable response.</p>
+                <p><strong>Sincerely,</strong></p>
             </div>
         </div>
-        
-        <hr>
-        
-        <div class="content">
-            <p>Date:<strong></strong></p>
-            <p>To,</p>
-            <p><strong>Head of the Department,</strong><br>
-               <strong>Electronics and Telecommunications,</strong><br>
-               <strong>COEP Technological University,</strong><br>
-               <strong>Pune</strong></p>
-            <p >Reason :<strong class="reason"> </strong></p>
-            <p>As Gymkhana is organizing the COEP Gathering, we are excited to bring together our students and faculty for this annual social event. In line with our tradition, we are planning to arrange refreshments for all participants.</p>
-            <p>For this purpose, we kindly request permission to utilize the EnTC arena for refreshment purposes during the COEP Gathering. The refreshment activities are scheduled to take place on the 29th, 30th, and 31st of March 2024.</p>
-            <p>We assure you that all necessary arrangements will be made to ensure that the arena is left in the same condition as it was found. We understand the importance of maintaining the facilities and will adhere to all guidelines provided by the university.</p>
-            <p>Thank you for considering our request. We look forward to your favorable response.</p>
-            <p><strong>Sincerely,</strong></p>
+
+        <div class="signatures">
+            <div class="signature-box">
+                <img class="signature-img" src="" alt="Signature 1">
+                <p class="signature-text"><strong>Proposed by:</strong> <span class="proposedBy">[ProposedBy]</span><br>
+                    </p>
+            </div>
+            <div class="signature-box">
+                <img class="signature-img" src="" alt="Signature 2">
+                <p class="signature-text"><strong>Approved by:</strong> <span class="approvedBy">[ApprovedBy]</span><br>
+                    </p>
+            </div.signature-box:nth-child(2) img>
         </div>
-    </div>
 
-    <div class="signatures">
-        <div class="signature-box">
-            <img class="signature-img" src="" alt="Signature 1">
-            <p class="signature-text"><strong>Proposed by:</strong> <span class="proposedBy">[ProposedBy]</span><br>
-                </p>
-        </div>
-        <div class="signature-box">
-            <img class="signature-img" src="" alt="Signature 2">
-            <p class="signature-text"><strong>Approved by:</strong> <span class="approvedBy">[ApprovedBy]</span><br>
-                </p>
-        </div.signature-box:nth-child(2) img>
-    </div>
+        <script>
+            // Object containing information to fill in the placeholders
+            let obj = {
+                logoURL: "https://www.coep.org.in/sites/default/files/COEP_Tech_University_Logo%20%281%29.jpg",
+                websiteURL: "https://www.coep.org.in",
+                signature1URL: "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png",
+                signature2URL: "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png",
+                date: "April 12, 2024", 
+                proposedBy: "Club Secretary", 
+                approvedBy: "Hon. Faculty Advisor",
+                reason: "Gathring permission"
+            };
 
-    <script>
-        // Object containing information to fill in the placeholders
-        let obj = {
-            logoURL: "https://www.coep.org.in/sites/default/files/COEP_Tech_University_Logo%20%281%29.jpg",
-            websiteURL: "https://www.coep.org.in",
-            signature1URL: "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png",
-            signature2URL: "https://rvvoznnspleurqmmeczr.supabase.co/storage/v1/object/public/signatures/siganture.png",
-            date: "April 12, 2024", 
-            proposedBy: "Club Secretary", 
-            approvedBy: "Hon. Faculty Advisor",
-            reason: "Gathring permission"
-        };
-
-        // Fill in the placeholders with actual data
-        document.querySelector('.reason').textContent = "Reason : " + obj.reason;
-        document.getElementById('proposedBy').textContent = obj.proposedBy;
-        document.getElementById('approvedBy').textContent = obj.approvedBy;
-        document.querySelector('.signature-box:nth-child(1) img').src = obj.signature1URL;
-        document.querySelector('').src = obj.signature2URL;
-    </script>
-</body>
-</html>
+            // Fill in the placeholders with actual data
+            document.querySelector('.reason').textContent = "Reason : " + obj.reason;
+            document.getElementById('proposedBy').textContent = obj.proposedBy;
+            document.getElementById('approvedBy').textContent = obj.approvedBy;
+            document.querySelector('.signature-box:nth-child(1) img').src = obj.signature1URL;
+            document.querySelector('').src = obj.signature2URL;
+        </script>
+    </body>
+    </html>
