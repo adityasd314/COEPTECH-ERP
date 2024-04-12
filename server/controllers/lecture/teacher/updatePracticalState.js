@@ -3,7 +3,7 @@ const db = require("../../../lib/drizzle-client");
 const { users, feedback, students, courses, lectures, practicals, tutorials, professors } = require("../../../db/schema");
 // lets do proper error handling
 const updatePracticalState = async (req, res) => {
-    try{  const { practicalId, state } = req.body;
+    try{  const { id: practicalId, state } = req.body;
       if (!practicalId || !state) {
           res.status(400).json({ message: "Invalid data",dataFormat: { practicalId: "string", state: "string" }});
           return;

@@ -5,7 +5,7 @@ const { users, feedback, students, courses, lectures, practicals, tutorials, pro
 
 const updateLectureState = async (req, res) => {
     try{
-    const { lectureId, state } = req.body;
+    const { id: lectureId, state } = req.body;
     if (!lectureId || !state) {
         res.status(400).json({ message: "Invalid data",dataFormat: { lectureId: "string", state: "string" }});
         return;

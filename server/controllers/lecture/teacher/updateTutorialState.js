@@ -3,7 +3,7 @@ const db = require("../../../lib/drizzle-client");
 const { users, feedback, students, courses, lectures, practicals, tutorials, professors } = require("../../../db/schema");
 // lets do proper error handling
 const updateTutorialState = async (req, res) => {
-    try{ const { tutorialId, state } = req.body;
+    try{ const { id: tutorialId, state } = req.body;
      if (!tutorialId || !state) {
          res.status(400).json({ message: "Invalid data",dataFormat: { tutorialId: "string", state: "string" }});
          return;
