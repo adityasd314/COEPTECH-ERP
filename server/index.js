@@ -12,6 +12,7 @@ const testRouter = require("./routes/test");
 const userRouter = require("./routes/user");
 const lectureRouter = require("./routes/lectureLab");
 const venueRouter = require("./routes/venue");
+const docuRouter = require("./routes/documents");
 
 // connectDB();
 
@@ -19,6 +20,7 @@ app.use("/user", userRouter);
 app.use("/test", testRouter);
 app.use("/venue", venueRouter);
 app.use("/lecture-lab", lectureRouter);
+app.use("/document", docuRouter);
 
 app.listen(5000, () => {
     console.log("http://localhost:5000/");

@@ -2,6 +2,16 @@ const { eq } = require('drizzle-orm');
 const DrizzleClient = require("../../lib/drizzle-client");
 const { bookings, venues } = require("../../db/schema");
 
+const getBookingById = async( req, res ) => {
+  try{
+    const BookingId = parseInt(req.body.bookingId);
+    const booking = (await DrizzleClient.select().from(bookings).where(eq(bookings.bookingId, BookingId)));
+    res.status(200).json({ booking });
+  }catch(error){
+    res.status(500).json({ 'error':"Internal server Error"});
+  }
+}
+
 const grantBooking = async (req, res) => {
   try {
     const parsedBookingId = parseInt(req.body.bookingId);
@@ -191,6 +201,7 @@ const getMyBookings = async (req, res) => {
 };
 
 module.exports = {
+  getBookingById,
   grantBooking,
   revokeBooking,
   getAllBookings,
