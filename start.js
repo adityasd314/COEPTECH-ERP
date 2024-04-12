@@ -24,4 +24,4 @@ Object.entries(obj).forEach(([key, value]) => {
   locations += `http://localhost:${value} `;
 });
 
-exec(`start chrome ${locations}`);
+exec(`start brave ${locations}`);
