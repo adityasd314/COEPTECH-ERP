@@ -42,6 +42,7 @@ const getAllLecturesLabsPracticals = async (req, res) => {
     const professerIdToNameMap = {};
     const courseIdToNameMap = {};
     const courseIdToCodeMap = {};
+    const courseIdToDepartmentMap = {};
     const [professorData, courseData, feedbackData] = await Promise.all([db.select().from(professors), db.select().from(courses), db.select().from(feedback).where(eq(feedback.studentId, studentId))]);
     const courseIdToFeedbackMap = {};
     feedbackData.forEach((feedback) => {
@@ -57,6 +58,8 @@ const getAllLecturesLabsPracticals = async (req, res) => {
     courseData.forEach((course) => {
       courseIdToNameMap[course.courseId] = course.courseName;
       courseIdToCodeMap[course.courseId] = course.courseCode;
+      courseIdToDepartmentMap[course.courseId] = course.departmentId;
+
     })
     // console.log({ professerIdToNameMap, courseIdToNameMap });
 
@@ -86,6 +89,7 @@ const getAllLecturesLabsPracticals = async (req, res) => {
         professorName: professerIdToNameMap[item.professorId],
         courseName: courseIdToNameMap[item.courseId],
         courseCode: courseIdToCodeMap[item.courseId],
+        departmentId: courseIdToDepartmentMap[item.courseId],
       })),
     });
   } catch (err) {
