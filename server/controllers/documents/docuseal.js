@@ -89,14 +89,14 @@ const getDocument = async(req, res) => {
     axios.request(options).then(function (response) {
         const resp = response.data;
 
-        data = {
-            reportName: 'Permission Letter',
-            reportDate: currentDate,
-            reportType: 'letter',
-            generatedBy: user_id,
-            cloudinaryLink: resp.documents[0].url,
-        }
-        DrizzleClient.insert(reports).values(data)
+        //data = {
+        //     reportName: 'Permission Letter',
+        //     reportDate: currentDate,
+        //     reportType: 'letter',
+        //     generatedBy: user_id,
+        //     cloudinaryLink: resp.documents[0].url,
+        // }
+        // DrizzleClient.insert(reports).values(data)
         res.status(200).json({ resp })
     }).catch(function (error) {
         console.error(error);
