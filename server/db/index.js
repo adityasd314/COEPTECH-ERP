@@ -8,5 +8,5 @@ const pool = new Pool({
 
 const db = drizzle(pool);
 
-const respoinse = await db.select().from(users)
+const response = await db.select().from(users)
 console.log(response)
