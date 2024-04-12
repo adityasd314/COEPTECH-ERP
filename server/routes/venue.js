@@ -6,6 +6,7 @@ const {
   updateVenue,
   deleteVenue,
   getAvailableVenues,
+  getAllAvailableVenues,
 } = require('../controllers/venue/venue');
 
 const {
@@ -40,6 +41,7 @@ router.post('/reports', generateReport);
 router.get('/getVenues', getAllVenues);     
 router.get('/getVenueById/:venue_id', getVenueById); 
 router.post('/availableVenues', getAvailableVenues);  
+router.post('/getAllAvailableVenues', getAllAvailableVenues);
 
 router.post('/booking/make', makeBooking);
 router.post('/booking/edit', editBooking);

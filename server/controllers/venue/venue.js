@@ -3,14 +3,15 @@ const DrizzleClient = require('../../lib/drizzle-client');
 const { venues, bookings } = require('../../db/schema');
 const { use } = require('../../routes/venue');
 const { parse } = require('path');
+const { stat } = require('fs');
 
 const getAllVenues = async (req, res) => {
   try {
     const allVenues = await DrizzleClient.select().from(venues);
     res.status(200).json({ allVenues });
-  }catch(error){
-    console.log({error})
-    res.status(500).json({ error: "Internal Server Error" });
+  } catch (error) {
+    console.log({ error });
+    res.status(500).json({ error: 'Internal Server Error' });
     return;
   }
 };
@@ -112,38 +113,40 @@ const getAvailableVenues = async (req, res) => {
     });
 
     const filteredBookings = SameDateConfirmedBookings.filter((booking) => {
-
       const bookingDate = booking.bookingDate;
       const bookingStartTime = parseDateTime(bookingDate, booking.startTime);
       const bookingEndTime = parseDateTime(bookingDate, booking.endTime);
-    
 
       const queryStartTime = parseDateTime(booking_date, start_time);
       const queryEndTime = parseDateTime(booking_date, end_time);
-    
-      console.log(bookingStartTime, bookingEndTime, queryStartTime, queryEndTime);
-    
+
+      console.log(
+        bookingStartTime,
+        bookingEndTime,
+        queryStartTime,
+        queryEndTime
+      );
+
       return (
-        (bookingStartTime >= queryStartTime && bookingStartTime <= queryEndTime) ||
+        (bookingStartTime >= queryStartTime &&
+          bookingStartTime <= queryEndTime) ||
         (bookingEndTime >= queryStartTime && bookingEndTime <= queryEndTime) ||
         (bookingStartTime <= queryStartTime && bookingEndTime >= queryEndTime)
       );
     });
-    
+
     function parseDateTime(dateString, timeString) {
-      var dateComponents = dateString.split("-");
+      var dateComponents = dateString.split('-');
       var year = parseInt(dateComponents[0]);
-      var monthIndex = parseInt(dateComponents[1]) - 1; 
+      var monthIndex = parseInt(dateComponents[1]) - 1;
       var day = parseInt(dateComponents[2]);
-    
-      
-      var timeComponents = timeString.split(":");
+
+      var timeComponents = timeString.split(':');
       var hours = parseInt(timeComponents[0]);
       var minutes = parseInt(timeComponents[1]);
 
       return new Date(year, monthIndex, day, hours, minutes, 0, 0);
     }
-    
 
     console.log(filteredBookings);
 
@@ -163,6 +166,57 @@ const getAvailableVenues = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+const getAllAvailableVenues = async (req, res) => {
+  try {
+    const { startTime, endTime, bookingDate } = req.body;
+    console.log(req.body);
+    const Allvenues = await DrizzleClient.select().from(venues);
+    console.log(Allvenues);
+    const availableVenues = [];
+    for (let venue of Allvenues) {
+      const Allbookings = await DrizzleClient.select()
+        .from(bookings)
+        .where(eq(bookings.venueId, venue.venueId));
+
+      const available = Allbookings.every((booking) => {
+        const bookingStartTime = parseDateTime(booking.bookingDate, booking.startTime);
+        const bookingEndTime = parseDateTime(booking.bookingDate, booking.endTime);
+
+        const queryStartTime = parseDateTime(bookingDate, startTime);
+        const queryEndTime = parseDateTime(bookingDate, endTime);
+        return (
+          booking.bookingDate !== bookingDate ||
+          (booking.bookingDate === bookingDate &&
+            startTime < booking.startTime &&
+            endTime < booking.startTime) ||
+          (startTime > booking.endTime && endTime > booking.endTime)
+        );
+      });
+      if (available) {
+        availableVenues.push(venue.venueId);
+      }
+    }
+
+    function parseDateTime(dateString, timeString) {
+      var dateComponents = dateString.split('-');
+      var year = parseInt(dateComponents[0]);
+      var monthIndex = parseInt(dateComponents[1]) - 1;
+      var day = parseInt(dateComponents[2]);
+
+      var timeComponents = timeString.split(':');
+      var hours = parseInt(timeComponents[0]);
+      var minutes = parseInt(timeComponents[1]);
+
+      return new Date(year, monthIndex, day, hours, minutes, 0, 0);
+    }
+
+    console.log(availableVenues);
+    res.status(200).json({ availableVenues });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
   getAllVenues,
@@ -171,4 +225,5 @@ module.exports = {
   updateVenue,
   deleteVenue,
   getAvailableVenues,
+  getAllAvailableVenues,
 };
