@@ -9,7 +9,9 @@ const {
 //   getDepartmentByHODUserId,
 // });
 
+const {getAllCoursesWithProfessorsByDepartment} = require('./hod/getAllCoursesWithProfessorsByDepartment');
+const { getDepartmentTimeTable } = require("./hod/getDepartmentTimeTable")
+console.log({getAllCoursesWithProfessorsByDepartment, getDepartmentByHODUserId})
 module.exports = {
-  getDepartmentByHODUserId,
-  getAllCoursesWithProfessorsByDepartment,
+  getDepartmentByHODUserId, getAllCoursesWithProfessorsByDepartment, getDepartmentTimeTable
 };
