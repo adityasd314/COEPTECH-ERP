@@ -35,6 +35,7 @@ export const LoginPage = () => {
       const user = localStorage.getItem("user");
 
       if (user) {
+        document.cookie = `token=${user}`;
         navigate("/");
       } else {
         setModalProps({

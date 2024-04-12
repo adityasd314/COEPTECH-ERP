@@ -6,7 +6,7 @@ const HomePage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white mt-12 p-8 rounded-lg shadow-md w-full max-w-md md:max-w-xl lg:max-w-2xl">
         <h1 className="text-3xl font-semibold mb-4">
-          Welcome to the ARA Attendance and Leave Management System
+          Welcome to the COEP's Attendance and Leave Management System
         </h1>
 
         <p className="text-gray-700 mb-4">

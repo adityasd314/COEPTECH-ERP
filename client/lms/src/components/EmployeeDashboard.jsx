@@ -29,9 +29,9 @@ const EmployeeDashboard = () => {
     <div id="main">
       <div className="p-4 mt-20 text-center">
         <div className=" flex-row header-container">
-          <h1 className="font-bold mt-4 text-4xl mb-8" id="head">
-            Employee Dashboard
-          </h1>
+        <h1 className="font-bold mt-4 text-5xl mb-8 head">
+              Teacher's Dashboard
+            </h1>
         </div>
 
         <Tabs
