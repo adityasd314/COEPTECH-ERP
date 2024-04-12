@@ -16,9 +16,9 @@ const getScheduleForProfessor = async (req, res) => {
       courseIdToNameMap[course.courseId] = course.courseName;
     }
     
-    const lecturesData = (await db.select().from(lectures).where(eq(lectures.professorId, professorId))).map((lecture) => ({ ...lecture, type: "LECTURE" }));;
-    const tutorialsData = (await db.select().from(tutorials).where(eq(tutorials.professorId, professorId))).map((tutorial) => ({ ...tutorial, type: "TUTORIAL" }));;
-    const practicalsData = (await db.select().from(practicals).where(eq(practicals.professorId, professorId))).map((practical) => ({ ...practical, type: "LAB" }));
+    const lecturesData = (await db.select().from(lectures).where(eq(lectures.professorId, professorId))).map((lecture) => ({ ...lecture, type: "LECTURE",id:lecture.lectureId }));;
+    const tutorialsData = (await db.select().from(tutorials).where(eq(tutorials.professorId, professorId))).map((tutorial) => ({ ...tutorial, type: "TUTORIAL",id:tutorial.tutorialId }));;
+    const practicalsData = (await db.select().from(practicals).where(eq(practicals.professorId, professorId))).map((practical) => ({ ...practical, type: "LAB", id:practical.practicalId}));
     const result = [...lecturesData, ...tutorialsData, ...practicalsData].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)).map((item) => ({ ...item, courseName: courseIdToNameMap[item.courseId] }));
     res.status(200).json({ message: "Schedule fetched", data: result });}
     

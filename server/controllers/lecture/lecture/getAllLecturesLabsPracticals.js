@@ -68,7 +68,7 @@ const getAllLecturesLabsPracticals = async (req, res) => {
         db.select().from(tutorials).where(eq(tutorials.courseId, course.courseId)),
         db.select().from(practicals).where(eq(practicals.courseId, course.courseId)),
       ]);
-
+    console.log({lectureData,tutData,practicalData})
       result.push(
         lectureData.map((lecture) => ({ ...lecture,id:lecture.lectureId, type: 'LECTURE' }))
       );
