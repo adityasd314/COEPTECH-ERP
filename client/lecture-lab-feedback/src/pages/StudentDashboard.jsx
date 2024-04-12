@@ -11,7 +11,7 @@ export default function StudentDashboard({ user }) {
   myHeaders.append('Content-Type', 'application/json');
 
   const raw = JSON.stringify({
-    user_id: '47',
+    user_id: user.userId,
   });
 
   const requestOptions = {
@@ -59,9 +59,13 @@ export default function StudentDashboard({ user }) {
         Student Dashboard
       </Heading>
       <Text textAlign="center" fontSize="xl" color="gray.700">
-        Welcome {user.email.split('@')[0]}
+        Welcome {user.email}
       </Text>
-      <Cards setModalOpen={setModalOpen} data={llData} setData={setToBeReviewed} />
+      <Cards
+        setModalOpen={setModalOpen}
+        data={llData}
+        setData={setToBeReviewed}
+      />
       <FeedbackFormModal
         data={toBeReviewed}
         isOpen={modalOpen}
