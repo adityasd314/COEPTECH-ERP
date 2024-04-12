@@ -12,7 +12,7 @@ const {
 
 } = require('../controllers/lecture/teacher');
 const { submitFeedback } = require('../controllers/lecture/student');
-
+const {  getDepartmentByHODUserId, getAllCoursesWithProfessorsByDepartment} = require('../controllers/lecture/hod');
 
 
 
@@ -30,5 +30,8 @@ router.post('/teacher/getScheduleForProfessor', getScheduleForProfessor);
 // studemt
 router.post('/student/submitFeedback', submitFeedback);
 
+// hod
+router.post('/hod/getDepartmentByHODUserId', getDepartmentByHODUserId);
+router.post('/hod/getAllCoursesWithProfessorsByDepartment', getAllCoursesWithProfessorsByDepartment);
 
 module.exports = router;
