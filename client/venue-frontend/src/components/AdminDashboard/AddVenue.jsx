@@ -15,6 +15,7 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
+  Textarea,
   ModalCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -126,11 +127,10 @@ const AddVenue = () => {
                   />
 
                   <FormLabel>Description</FormLabel>
-                  <Input
+                  <Textarea
                     variant="filled"
                     placeholder="Enter description"
                     size="lg"
-                    type="text"
                     name="description"
                     mb={2}
                     value={venueInfo.description}

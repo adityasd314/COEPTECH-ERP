@@ -13,10 +13,12 @@ const HandleVenueBookings = ({ isAdmin, facultyId }) => {
       try {
         const [bookingsResponse, venuesResponse] = await Promise.all([
           axios.post(backendURL + "/venue/booking", {
-            isAdmin: false, facultyId  // Set isAdmin to false and include facultyId
+            isAdmin: false, facultyId
           }),
           axios.get(backendURL + "/venue/getVenues")
         ]);
+
+        console.log(bookingsResponse.data.allBookings);
 
         const allBookings = bookingsResponse.data.allBookings;
         const pendingBookings = allBookings.filter(booking => booking.status === 'pending');

@@ -21,9 +21,9 @@ import {
   Input,
   Alert,
   AlertIcon,
+  Textarea, 
 } from "@chakra-ui/react";
 import AddVenue from "./AddVenue";
-
 const ManageVenues = () => {
   const [venues, setVenues] = useState([]);
   const [selectedVenue, setSelectedVenue] = useState(null);
@@ -85,6 +85,24 @@ const ManageVenues = () => {
     setSelectedVenue({ ...selectedVenue, [name]: value });
   };
 
+  const formatProperties = (description) => {
+    if (!description) return [];
+    const propertiesString = description.split("Properties: ")[1] || '';
+    return propertiesString
+      .replace("{", "")
+      .replace("}", "")
+      .split(",")
+      .map((property, index) => {
+        const [name, value] = property.trim().split(":");
+        return (
+          <li key={index}>
+            <strong>{name}</strong>: {value}
+          </li>
+        );
+      });
+  };
+  
+
   return (
     <div>
       <AddVenue />
@@ -93,6 +111,7 @@ const ManageVenues = () => {
           <Tr>
             <Th>Venue Name</Th>
             <Th>Description</Th>
+            <Th>Properties</Th>
             <Th>Permission Faculty ID</Th>
             <Th>Location</Th>
             <Th>Capacity</Th>
@@ -103,7 +122,12 @@ const ManageVenues = () => {
           {venues.map((venue) => (
             <Tr key={venue.venueId}>
               <Td>{venue.venueName}</Td>
-              <Td>{venue.description}</Td>
+              <Td>{venue.description.split(" Properties: ")[0]}</Td>
+              <Td>
+                <ul>
+                  {formatProperties(venue.description)}
+                </ul>
+              </Td>
               <Td>{venue.permissionFacultyId}</Td>
               <Td>{venue.location}</Td>
               <Td>{venue.capacity}</Td>
@@ -112,7 +136,7 @@ const ManageVenues = () => {
                   colorScheme="teal"
                   size="sm"
                   onClick={() => handleEditVenue(venue)}
-                  style={{ marginRight: "5px" }}
+                  style={{ marginBottom: "5px" }}
                 >
                   Edit
                 </Button>
@@ -150,8 +174,7 @@ const ManageVenues = () => {
                 onChange={handleInputChange}
               />
               <FormLabel>Description</FormLabel>
-              <Input
-                type="text"
+              <Textarea
                 name="description"
                 value={selectedVenue?.description || ""}
                 onChange={handleInputChange}

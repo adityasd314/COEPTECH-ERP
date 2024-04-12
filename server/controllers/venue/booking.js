@@ -77,25 +77,35 @@ const revokeBooking = async (req, res) => {
 const getAllBookings = async (req, res) => {
   try {
     const parsedFacultyId = parseInt(req.body.facultyId);
-    const {isAdmin } = req.body;
-    if(isAdmin){
+    const { isAdmin } = req.body;
+    
+    if (isAdmin) {
       const allBookings = await DrizzleClient.select().from(bookings);
       return res.status(200).json({ allBookings });
     } else {
-      const venueOfInterest = await DrizzleClient.select().from(venues).where(eq(venues.permissionFacultyId, parsedFacultyId));
-      const venueId = venueOfInterest[0].venueId;
+      const venuesOfInterest = await DrizzleClient.select()
+        .from(venues)
+        .where(eq(venues.permissionFacultyId, parsedFacultyId));
 
-      const allBookings = await DrizzleClient.select().from(bookings).where(eq(bookings.venueId, venueId));
-      console.log(allBookings);
+      const allBookings = [];
+      
+      for (const venue of venuesOfInterest) {
+        const venueBookings = await DrizzleClient.select()
+          .from(bookings)
+          .where(eq(bookings.venueId, venue.venueId));
+        allBookings.push(...venueBookings);
+      }
+      
       return res.status(200).json({ allBookings });
-    
     }
-    
   } catch (error) {
     console.error('Error fetching all bookings:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
 
 
 
