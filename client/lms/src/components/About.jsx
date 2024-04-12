@@ -25,11 +25,11 @@ const About = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md md:max-w-xl lg:max-w-2xl">
         <h1 className="text-3xl font-semibold mb-4">
-          ARA Attendance - Leave Policy
+        COEP Attendance - Leave Policy
         </h1>
 
         <p className="text-gray-700 mb-4">
-          Welcome to the official ARA Attendance and Leave Management System's Leave Policy page. This policy outlines the conditions for awarding entitled leave and its usage.
+          Welcome to the official COEP's Attendance and Leave Management System's Leave Policy page. This policy outlines the conditions for awarding entitled leave and its usage.
         </p>
 
         {/* <div className="mb-4">

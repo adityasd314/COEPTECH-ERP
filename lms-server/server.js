@@ -9,7 +9,7 @@ const frontendUrl = process.env.FRONTEND_URL || "https://lmsfrontend.onrender.co
 const serverPort = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "*",
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
 }));
 

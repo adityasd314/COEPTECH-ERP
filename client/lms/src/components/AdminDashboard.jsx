@@ -40,7 +40,7 @@ const AdminDashboard = ({ isManager }) => {
         <div className="flex-row header-container">
           {isManager ? (
             <h1 className="font-bold mt-4 text-5xl mb-8 head">
-              Manager Dashboard
+              HOD's Dashboard
             </h1>
           ) : (
             <h1 className="font-bold mt-4 text-5xl mb-8 head">

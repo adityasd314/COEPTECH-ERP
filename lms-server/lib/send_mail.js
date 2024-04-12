@@ -11,7 +11,7 @@ async function sendMail({ subject, receivers, text, htmlBody, files }) {
 
     const options = {
         from: {
-            name: "Ara Resources",
+            name: "COEP Resources",
             address: GMAIL_ADDRESS
         }, // sender address
         to: receivers, // list of receivers
