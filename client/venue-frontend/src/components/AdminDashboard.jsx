@@ -80,7 +80,7 @@ const AdminDashboard = ({ isManager }) => {
                 <h1 className="text-2xl font-semibold mb-6">Handle Bookings</h1>
                 <div className="mt-4 mb-8 flex flex-col lg:flex-row">
                   <div className="w-full">
-                    <HandleVenueBooking isAdmin={false} facultyId={1}/>
+                    <HandleVenueBooking isAdmin={false} facultyId={170}/>
                   </div>
                 </div>
               </TabPanel>
@@ -90,7 +90,7 @@ const AdminDashboard = ({ isManager }) => {
               <h1 className="text-2xl font-semibold mb-6">Booking History</h1>
               <div className="mt-4 mb-8 flex flex-col lg:flex-row">
                 <div className="w-full">
-                  <BookingHistory isAdmin={isManager?true:false} facultyId={1}/>
+                  <BookingHistory isAdmin={isManager?true:false} facultyId={170}/>
                 </div>
               </div>
             </TabPanel>

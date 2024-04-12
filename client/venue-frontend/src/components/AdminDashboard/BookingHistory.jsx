@@ -12,6 +12,7 @@ const BookingHistory = ({ refresh, isAdmin, facultyId }) => {
             try {
                 let response;
                 if (isAdmin) {
+
                     response = await fetch(backendURL + "/venue/booking", {
                         method: 'POST',
                         headers: {
@@ -34,6 +35,7 @@ const BookingHistory = ({ refresh, isAdmin, facultyId }) => {
                 }
                 const data = await response.json();
                 setBookings(data.allBookings);
+                console.log(data.allBookings);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching bookings:', error.message);

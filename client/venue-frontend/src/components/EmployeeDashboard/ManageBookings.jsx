@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { FaPlus } from "react-icons/fa";
-import { backendURL } from "../../config/config";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { FaPlus } from 'react-icons/fa';
+import { backendURL } from '../../config/config';
 import {
   Table,
   Thead,
@@ -29,7 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 const ManageBookings = ({ professorId }) => {
   const [bookings, setBookings] = useState([]);
@@ -38,14 +38,15 @@ const ManageBookings = ({ professorId }) => {
   const [venues, setVenues] = useState([]);
   const [venuesObject, setVenuesObject] = useState({});
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newVenueLocation, setNewVenueLocation] = useState('');
   const [newBooking, setNewBooking] = useState({
-    professorId,
-    venueId: "",
-    bookingDate: "",
-    startTime: "",
-    endTime: "",
-    purpose: "",
-    status: "pending",
+    professorId:' ',
+    venueId: '',
+    bookingDate: '',
+    startTime: '',
+    endTime: '',
+    purpose: '',
+    status: 'pending',
   });
   const [error, setError] = useState(null);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
@@ -55,19 +56,19 @@ const ManageBookings = ({ professorId }) => {
     const fetchBookings = async () => {
       try {
         const response = await axios.post(
-          backendURL + "/venue/booking/myBookings",
-          { professorId }
+          backendURL + '/venue/booking/myBookings',
+          { professorId },
         );
         setBookings(
-          response.data.myBookings.filter((b) => b.status !== "withdrawn")
+          response.data.myBookings.filter((b) => b.status !== 'withdrawn'),
         );
       } catch (error) {
-        console.error("Error fetching bookings:", error);
+        console.error('Error fetching bookings:', error);
       }
     };
     const fetchVenues = async () => {
       try {
-        const response = await axios.get(backendURL + "/venue/getVenues");
+        const response = await axios.get(backendURL + '/venue/getVenues');
         setVenues(response.data.allVenues);
         const venuesObject = response.data.allVenues.reduce((acc, venue) => {
           acc[venue.venueId] = venue.venueName;
@@ -75,7 +76,7 @@ const ManageBookings = ({ professorId }) => {
         }, {});
         setVenuesObject(venuesObject);
       } catch (error) {
-        console.error("Error fetching venues:", error);
+        console.error('Error fetching venues:', error);
       }
     };
     fetchVenues();
@@ -100,15 +101,15 @@ const ManageBookings = ({ professorId }) => {
       await axios.post(backendURL + `/venue/booking/edit`, selectedBooking);
       setBookings(
         bookings.map((b) =>
-          b.bookingId === selectedBooking.bookingId ? selectedBooking : b
-        )
+          b.bookingId === selectedBooking.bookingId ? selectedBooking : b,
+        ),
       );
       setIsEditModalOpen(false);
       setSelectedBooking(null);
       setError(null);
     } catch (error) {
-      console.error("Error editing booking:", error);
-      setError(error.message || "Failed to update booking");
+      console.error('Error editing booking:', error);
+      setError(error.message || 'Failed to update booking');
     }
   };
 
@@ -125,8 +126,8 @@ const ManageBookings = ({ professorId }) => {
       setBookings(bookings.filter((b) => b.bookingId !== cancelBookingId));
       setCancelDialogOpen(false);
     } catch (error) {
-      console.error("Error cancelling booking:", error);
-      setError(error.message || "Failed to cancel booking");
+      console.error('Error cancelling booking:', error);
+      setError(error.message || 'Failed to cancel booking');
     }
   };
 
@@ -138,19 +139,19 @@ const ManageBookings = ({ professorId }) => {
     setIsAddModalOpen(false);
     setNewBooking({
       professorId,
-      venueId: "",
-      bookingDate: "",
-      startTime: "",
-      endTime: "",
-      purpose: "",
-      status: "pending",
+      venueId: '',
+      bookingDate: '',
+      startTime: '',
+      endTime: '',
+      purpose: '',
+      status: 'pending',
     });
     setError(null);
   };
 
   const handleSaveAdd = async () => {
     try {
-      const response = await axios.post(backendURL + "/venue/availableVenues", {
+      const response = await axios.post(backendURL + '/venue/availableVenues', {
         start_time: newBooking.startTime,
         end_time: newBooking.endTime,
         booking_date: newBooking.bookingDate,
@@ -168,33 +169,39 @@ const ManageBookings = ({ professorId }) => {
       }
 
       if (!isAvailable) {
-        setError("Venue is not available at the selected time");
+        setError('Venue is not available at the selected time');
         return;
       }
+      let bookingProfId = venues.find((venue) => venue.venueId == newBooking.venueId).permissionFacultyId;
 
+
+      newBooking.professorId = bookingProfId;
       const latestBookingResponse = await axios.post(
         backendURL + `/venue/booking/make`,
-        newBooking
+        newBooking,
       );
       const latestBooking = latestBookingResponse.data.createdBooking;
       setBookings([...bookings, ...latestBooking]);
-      console.log(bookings);
 
       setIsAddModalOpen(false);
       setNewBooking({
         professorId,
-        venueId: "",
-        bookingDate: "",
-        startTime: "",
-        endTime: "",
-        purpose: "",
-        status: "pending",
+        venueId: '',
+        bookingDate: '',
+        startTime: '',
+        endTime: '',
+        purpose: '',
+        status: 'pending',
       });
       setError(null);
     } catch (error) {
-      console.error("Error adding booking:", error);
-      setError(error.message || "Failed to add booking");
+      console.error('Error adding booking:', error);
+      setError(error.message || 'Failed to add booking');
     }
+  };
+
+  const handleNewVenueLocation = (e) => {
+    setNewVenueLocation(e.target.value);
   };
 
   const handleNewBookingChange = (e) => {
@@ -206,8 +213,7 @@ const ManageBookings = ({ professorId }) => {
     <div>
       <Button
         onClick={handleAddBooking}
-        style={{ fontSize: "36px", padding: "10px" }}
-      >
+        style={{ fontSize: '36px', padding: '10px' }}>
         <FaPlus size="xl" />
       </Button>
       <Table variant="simple">
@@ -240,8 +246,7 @@ const ManageBookings = ({ professorId }) => {
                   colorScheme="teal"
                   size="sm"
                   onClick={() => handleEditBooking(booking)}
-                  style={{ marginBottom: "5px" }}
-                >
+                  style={{ marginBottom: '5px' }}>
                   Edit
                 </Button>
                 <Button
@@ -250,8 +255,7 @@ const ManageBookings = ({ professorId }) => {
                   onClick={() => {
                     setCancelBookingId(booking.bookingId);
                     setCancelDialogOpen(true);
-                  }}
-                >
+                  }}>
                   Cancel
                 </Button>
               </Td>
@@ -263,8 +267,7 @@ const ManageBookings = ({ professorId }) => {
       <AlertDialog
         isOpen={cancelDialogOpen}
         leastDestructiveRef={undefined}
-        onClose={() => setCancelDialogOpen(false)}
-      >
+        onClose={() => setCancelDialogOpen(false)}>
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
@@ -305,35 +308,35 @@ const ManageBookings = ({ professorId }) => {
               <Input
                 type="text"
                 name="venueId"
-                value={selectedBooking?.venueId || ""}
+                value={selectedBooking?.venueId || ''}
                 onChange={handleInputChange}
               />
               <FormLabel>Booking Date</FormLabel>
               <Input
                 type="date"
                 name="bookingDate"
-                value={selectedBooking?.bookingDate || ""}
+                value={selectedBooking?.bookingDate || ''}
                 onChange={handleInputChange}
               />
               <FormLabel>Start Time</FormLabel>
               <Input
                 type="time"
                 name="startTime"
-                value={selectedBooking?.startTime || ""}
+                value={selectedBooking?.startTime || ''}
                 onChange={handleInputChange}
               />
               <FormLabel>End Time</FormLabel>
               <Input
                 type="time"
                 name="endTime"
-                value={selectedBooking?.endTime || ""}
+                value={selectedBooking?.endTime || ''}
                 onChange={handleInputChange}
               />
               <FormLabel>Purpose</FormLabel>
               <Input
                 type="text"
                 name="purpose"
-                value={selectedBooking?.purpose || ""}
+                value={selectedBooking?.purpose || ''}
                 onChange={handleInputChange}
               />
             </FormControl>
@@ -360,18 +363,30 @@ const ManageBookings = ({ professorId }) => {
               </Alert>
             )}
             <FormControl>
+              <FormLabel>Location</FormLabel>
+              <Select name="location" onChange={handleNewVenueLocation}>
+                <option value="">Select a venue</option>
+                {[...new Set(venues.map((venue) => venue.location))].map(
+                  (location, index) => (
+                    <option key={index} value={location}>
+                      {location}
+                    </option>
+                  ),
+                )}
+              </Select>
               <FormLabel>Venue</FormLabel>
               <Select
                 name="venueId"
                 value={newBooking.venueId}
-                onChange={handleNewBookingChange}
-              >
+                onChange={handleNewBookingChange}>
                 <option value="">Select a venue</option>
-                {venues.map((venue) => (
-                  <option key={venue.venueId} value={venue.venueId}>
-                    {venue.venueName}
-                  </option>
-                ))}
+                {venues
+                  .filter((venue) => venue.location == newVenueLocation)
+                  .map((venue) => (
+                    <option key={venue.venueId} value={venue.venueId}>
+                      {venue.venueName}
+                    </option>
+                  ))}
               </Select>
               <FormLabel>Booking Date</FormLabel>
               <Input
