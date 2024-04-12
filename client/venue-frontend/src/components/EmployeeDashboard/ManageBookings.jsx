@@ -23,6 +23,12 @@ import {
   Alert,
   AlertIcon,
   Select,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from "@chakra-ui/react";
 
 const ManageBookings = ({ professorId }) => {
@@ -30,6 +36,7 @@ const ManageBookings = ({ professorId }) => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [venues, setVenues] = useState([]);
+  const [venuesObject, setVenuesObject] = useState({});
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [newBooking, setNewBooking] = useState({
     professorId,
@@ -41,6 +48,8 @@ const ManageBookings = ({ professorId }) => {
     status: "pending",
   });
   const [error, setError] = useState(null);
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
+  const [cancelBookingId, setCancelBookingId] = useState(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -60,6 +69,11 @@ const ManageBookings = ({ professorId }) => {
       try {
         const response = await axios.get(backendURL + "/venue/getVenues");
         setVenues(response.data.allVenues);
+        const venuesObject = response.data.allVenues.reduce((acc, venue) => {
+          acc[venue.venueId] = venue.venueName;
+          return acc;
+        }, {});
+        setVenuesObject(venuesObject);
       } catch (error) {
         console.error("Error fetching venues:", error);
       }
@@ -77,7 +91,7 @@ const ManageBookings = ({ professorId }) => {
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
     setSelectedBooking(null);
-    setError(null); 
+    setError(null);
   };
 
   const handleSaveEdit = async () => {
@@ -91,7 +105,7 @@ const ManageBookings = ({ professorId }) => {
       );
       setIsEditModalOpen(false);
       setSelectedBooking(null);
-      setError(null); 
+      setError(null);
     } catch (error) {
       console.error("Error editing booking:", error);
       setError(error.message || "Failed to update booking");
@@ -103,18 +117,23 @@ const ManageBookings = ({ professorId }) => {
     setSelectedBooking({ ...selectedBooking, [name]: value });
   };
 
-  const handleCancelBooking = async (bookingId) => {
+  const handleCancelBooking = async () => {
     try {
-      await axios.post(backendURL + `/venue/booking/cancel`, { bookingId });
-      setBookings(bookings.filter((b) => b.bookingId !== bookingId));
+      await axios.post(backendURL + `/venue/booking/cancel`, {
+        bookingId: cancelBookingId,
+      });
+      setBookings(bookings.filter((b) => b.bookingId !== cancelBookingId));
+      setCancelDialogOpen(false);
     } catch (error) {
       console.error("Error cancelling booking:", error);
       setError(error.message || "Failed to cancel booking");
     }
   };
+
   const handleAddBooking = () => {
     setIsAddModalOpen(true);
   };
+
   const handleCloseAddModal = () => {
     setIsAddModalOpen(false);
     setNewBooking({
@@ -128,6 +147,7 @@ const ManageBookings = ({ professorId }) => {
     });
     setError(null);
   };
+
   const handleSaveAdd = async () => {
     try {
       const response = await axios.post(backendURL + "/venue/availableVenues", {
@@ -138,10 +158,9 @@ const ManageBookings = ({ professorId }) => {
       });
       const availableVenueIds = response.data.availableVenueIds;
 
-
       let isAvailable = false;
       for (let i = 0; i < availableVenueIds.length; i++) {
-          console.log(availableVenueIds[i]);
+        console.log(availableVenueIds[i]);
         if (availableVenueIds[i] == newBooking.venueId) {
           isAvailable = true;
           break;
@@ -177,6 +196,7 @@ const ManageBookings = ({ professorId }) => {
       setError(error.message || "Failed to add booking");
     }
   };
+
   const handleNewBookingChange = (e) => {
     const { name, value } = e.target;
     setNewBooking({ ...newBooking, [name]: value });
@@ -186,18 +206,16 @@ const ManageBookings = ({ professorId }) => {
     <div>
       <Button
         onClick={handleAddBooking}
-        // colorScheme="green"
         style={{ fontSize: "36px", padding: "10px" }}
       >
         <FaPlus size="xl" />
-        {/* Add Venue */}
       </Button>
       <Table variant="simple">
         <Thead>
           <Tr>
             <Th>Booking ID</Th>
             <Th>Professor ID</Th>
-            <Th>Venue ID</Th>
+            <Th>Venue</Th>
             <Th>Booking Date</Th>
             <Th>Start Time</Th>
             <Th>End Time</Th>
@@ -211,7 +229,7 @@ const ManageBookings = ({ professorId }) => {
             <Tr key={booking.bookingId}>
               <Td>{booking.bookingId}</Td>
               <Td>{booking.professorId}</Td>
-              <Td>{booking.venueId}</Td>
+              <Td>{venuesObject[booking.venueId]}</Td>
               <Td>{booking.bookingDate}</Td>
               <Td>{booking.startTime}</Td>
               <Td>{booking.endTime}</Td>
@@ -229,7 +247,10 @@ const ManageBookings = ({ professorId }) => {
                 <Button
                   colorScheme="red"
                   size="sm"
-                  onClick={() => handleCancelBooking(booking.bookingId)}
+                  onClick={() => {
+                    setCancelBookingId(booking.bookingId);
+                    setCancelDialogOpen(true);
+                  }}
                 >
                   Cancel
                 </Button>
@@ -238,6 +259,34 @@ const ManageBookings = ({ professorId }) => {
           ))}
         </Tbody>
       </Table>
+
+      <AlertDialog
+        isOpen={cancelDialogOpen}
+        leastDestructiveRef={undefined}
+        onClose={() => setCancelDialogOpen(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Cancel Booking
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              Are you sure you want to cancel this booking? This action cannot
+              be undone.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button colorScheme="red" onClick={handleCancelBooking} ml={3}>
+                Cancel Booking
+              </Button>
+              <Button onClick={() => setCancelDialogOpen(false)} ml={3}>
+                Close
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
 
       <Modal isOpen={isEditModalOpen} onClose={handleCloseEditModal}>
         <ModalOverlay />

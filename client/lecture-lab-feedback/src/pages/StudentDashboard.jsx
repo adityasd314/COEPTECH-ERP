@@ -65,6 +65,7 @@ export default function StudentDashboard({ user }) {
       <FeedbackFormModal
         data={toBeReviewed}
         isOpen={modalOpen}
+        user={user}
         onClose={() => {
           setModalOpen(false);
         }}

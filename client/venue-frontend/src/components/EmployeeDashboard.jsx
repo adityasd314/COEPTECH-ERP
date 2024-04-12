@@ -63,7 +63,7 @@ const EmployeeDashboard = () => {
             </TabPanel>
 
             <TabPanel>
-              <h1 className="text-2xl font-semibold mb-6">Attendance Status</h1>
+              <h1 className="text-2xl font-semibold mb-6">Booking History</h1>
               <BookingHistory professorId={1} isActive={activeTab} />
               <div className="mt-4 flex flex-col lg:flex-row">
                 <div className="w-full"></div>

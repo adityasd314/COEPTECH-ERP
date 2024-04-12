@@ -23,7 +23,7 @@ import { LECTURE_FEEDBACK, LAB_FEEDBACK } from '../../constants/feedback';
 
 import { useForm } from 'react-hook-form';
 
-const FeedbackFormModal = ({ data, isOpen, onClose }) => {
+const FeedbackFormModal = ({ data, isOpen, onClose, user }) => {
   const { register, handleSubmit } = useForm();
   const [feedback, setFeedback] = useState('');
   const onSubmit = (data) => {

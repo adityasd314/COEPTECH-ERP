@@ -17,7 +17,7 @@ const BookingHistory = ({ professorId }) => {
   const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [venues, setVenues] = useState({});
   useEffect(() => {
     const fetchMyBookings = async () => {
       try {
@@ -31,6 +31,24 @@ const BookingHistory = ({ professorId }) => {
         setError("Error fetching bookings. Please try again.");
       }
     };
+    const fetchVenues = async () => {
+      try {
+          const response = await fetch(backendURL + "/venue/getVenues");
+          if (!response.ok) {
+              throw new Error('Failed to fetch venues');
+          }
+          const data = await response.json();
+          // Convert venues array to an object for easy lookup
+          const venuesObject = data.allVenues.reduce((acc, venue) => {
+              acc[venue.venueId] = venue.venueName;
+              return acc;
+          }, {});
+          setVenues(venuesObject);
+      } catch (error) {
+          console.error('Error fetching venues:', error.message);
+      }
+  };
+    fetchVenues();
 
     fetchMyBookings();
   }, [professorId]);
@@ -43,7 +61,7 @@ const BookingHistory = ({ professorId }) => {
             <Tr>
               <Th>Booking ID</Th>
               <Th>Professor ID</Th>
-              <Th>Venue ID</Th>
+              <Th>Venue</Th>
               <Th>Booking Date</Th>
               <Th>Start Time</Th>
               <Th>End Time</Th>
@@ -70,7 +88,7 @@ const BookingHistory = ({ professorId }) => {
                 <Tr key={booking.bookingId}>
                   <Td>{booking.bookingId}</Td>
                   <Td>{booking.professorId}</Td>
-                  <Td>{booking.venueId}</Td>
+                  <Td>{venues[booking.venueId]}</Td>
                   <Td>{booking.bookingDate}</Td>
                   <Td>{booking.startTime}</Td>
                   <Td>{booking.endTime}</Td>
