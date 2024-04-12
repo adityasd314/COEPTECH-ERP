@@ -20,15 +20,45 @@ import {
 } from '@chakra-ui/react';
 
 import { LECTURE_FEEDBACK, LAB_FEEDBACK } from '../../constants/feedback';
-
+const API_ENDPOINT =
+  import.meta.env.VITE_API_ENDPOINT || 'http://localhost:5000';
 import { useForm } from 'react-hook-form';
-
 const FeedbackFormModal = ({ data, isOpen, onClose, user }) => {
   const { register, handleSubmit } = useForm();
   const [feedback, setFeedback] = useState('');
-  const onSubmit = (data) => {
-    console.log(data); // You can handle form submission logic here
+
+  const handleSubmitForm = async () => {
+    console.log(data);
+    const response = await fetch(API_ENDPOINT + '/lecture-lab/student/submitFeedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: user.userId,
+        courseId: data.courseId,
+        sessionType: data.type,
+        sessionId: data.id,
+        data: JSON.stringify({
+          ...Object.fromEntries(
+            Object.entries(
+              data.type == 'LECTURE' ? LECTURE_FEEDBACK : LAB_FEEDBACK
+            ).map(([category, questions]) => [
+              category,
+              questions.map((question, index) => ({
+                [question]: getValues(`${category}${index}`),
+              })),
+            ])
+          ),
+        }),
+        professorId: data.professorId,
+        departmentId: data.departmentId,
+      })});
+    console.log(response);
+
     onClose();
+  };
+
+  const getValues = (name) => { 
+    return document.querySelector(`input[name="${name}"]:checked`).value;
   };
 
   const RATING = {
@@ -50,7 +80,7 @@ const FeedbackFormModal = ({ data, isOpen, onClose, user }) => {
             <Heading fontSize={'large'} mb="4" textTransform={'capitalize'}>
               {data.courseName}
             </Heading>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
               {Object.entries(
                 data.type == 'LECTURE' ? LECTURE_FEEDBACK : LAB_FEEDBACK
               ).map(([category, questions]) => (
@@ -94,7 +124,7 @@ const FeedbackFormModal = ({ data, isOpen, onClose, user }) => {
                   onChange={(e) => setFeedback(e.target.value)}
                 />
               </FormControl>
-              <Button colorScheme="blue" type="submit">
+              <Button colorScheme="blue" onClick={handleSubmitForm}>
                 Submit
               </Button>
             </form>
