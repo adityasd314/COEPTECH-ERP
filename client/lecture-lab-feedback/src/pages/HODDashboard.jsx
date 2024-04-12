@@ -12,12 +12,26 @@ import {
   Tr,
   useToast,
 } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react';
+
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 import useSWR from 'swr';
+import TimeTable from '../components/HOD/TimeTable';
+import Graph from '../components/HOD/Graph';
 
 export default function AdminDashboard({ user }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const onClose = () => setIsOpen(false);
   const toast = useToast();
   const GET_DEPARTMENT_ID_URL =
     'http://localhost:5000/lecture-lab/hod/getDepartmentByHODUserId';
@@ -65,6 +79,23 @@ export default function AdminDashboard({ user }) {
     }
   }, [data]);
 
+  const feedback = {
+    message: 'Average feedback fetched',
+    data: {
+      averageFeedback: 0,
+      feedbackObjectDataRating: {
+        'content clarity': 1,
+        engagement: 1,
+        delivery: 1,
+        relevance: 1,
+        materials: 3,
+        'feedback and support': 1,
+        'overall satisfaction': 1,
+      },
+      comments: [' sefsegsgsgsgsdg'],
+    },
+  };
+
   return (
     <Box>
       <Heading
@@ -88,31 +119,53 @@ export default function AdminDashboard({ user }) {
       ) : null}
       {isError ? <div>Error fetching data</div> : null}
       {data?.data && (
-        <Table variant="simple" size="md">
-          <Thead>
-            <Tr>
-              <Th>Course Name</Th>
-              <Th>Course Code</Th>
-              <Th>Professor Name</Th>
-              <Th>Actions</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {data.data.map((course) => (
-              <Tr key={course.courseId}>
-                <Td>{course.courseName}</Td>
-                <Td>{course.courseCode}</Td>
-                <Td>{course.professorName}</Td>
-                <Td>
-                  <Button colorScheme="teal" size="sm">
-                    Generate Report from Feedback
-                  </Button>
-                </Td>
+        <>
+          <TimeTable departmentId={departmentId} />
+          <Table variant="simple" size="md">
+            <Thead>
+              <Tr>
+                <Th>Course Name</Th>
+                <Th>Course Code</Th>
+                <Th>Professor Name</Th>
+                <Th>Actions</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {data.data.map((course) => (
+                <Tr key={course.courseId}>
+                  <Td>{course.courseName}</Td>
+                  <Td>{course.courseCode}</Td>
+                  <Td>{course.professorName}</Td>
+                  <Td>
+                    <Button
+                      colorScheme="teal"
+                      size="sm"
+                      onClick={() => {
+                        console.log('Generate Report for course:', course);
+                        setIsOpen(true);
+                      }}>
+                      Generate Report from Feedback
+                    </Button>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </>
       )}
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Feedback</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Graph />
+          </ModalBody>
+          <ModalFooter>
+            <Text fontSize="sm">Feedback</Text>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
