@@ -50,9 +50,10 @@ const ProfileCardA = () => {
             <Flex align="center" mb="3">
               <Avatar src="https://bit.ly/dan-abramov" size="lg" />
               <Box ml="3">
-                <Heading as="h2" size="md">
-                  {user.info.name}
-                </Heading>
+              <Heading as="h2" size="md">
+  {user.info ? user.info.name : "Unknown"}
+</Heading>
+
                 <Text color="gray.600">{user.role}</Text>
               </Box>
             </Flex>

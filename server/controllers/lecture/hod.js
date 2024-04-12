@@ -1,6 +1,4 @@
-const { eq } = require('drizzle-orm');
-const db = require("../../lib/drizzle-client");
-const { users,feedback, students, courses, lectures, practicals, tutorials, professors } = require("../../db/schema");
+
 
 const getDepartmentByHODUserId = async (req, res) => {
   try {
@@ -47,5 +45,5 @@ const getAllCoursesWithProfessorsByDepartment = async (req, res) => {
 }
 
 module.exports = {
-  submitFeedback
+  getDepartmentByHODUserId, getAllCoursesWithProfessorsByDepartment
 };

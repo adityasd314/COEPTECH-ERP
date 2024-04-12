@@ -43,6 +43,7 @@ table {
     border-radius: 8px;
     transition: box-shadow 0.3s ease;
     animation: slideInLeft 0.5s ease;
+
 }
 
 th {
@@ -91,7 +92,7 @@ a:hover {
 
 .pagination button {
     background-color: #55608f;
-    color: black;
+    color: white;
     padding: 10px 15px;
     margin: 0 5px;
     border: none;
@@ -100,7 +101,7 @@ a:hover {
 }
 
 .pagination button.active {
-    background-color: #3a4575;
+    background-color: yellow;
 }
 
 ::-webkit-scrollbar {
@@ -178,7 +179,7 @@ button {
     border: none;
     border-radius: 5px;
     background-color: #455082;
-    color: black;
+    color: white;
     cursor: pointer;
     font-size: 16px;
 }
@@ -190,4 +191,8 @@ button:hover {
     margin-bottom: 1vh;
     display: flex;  
     justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+
+
 }
