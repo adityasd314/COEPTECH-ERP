@@ -1,9 +1,15 @@
+const { getDepartmentByHODUserId } = require('./hod/getDepartmentByHODUserId');
 
+const {
+  getAllCoursesWithProfessorsByDepartment,
+} = require('./hod/getAllCoursesWithProfessorsByDepartment');
 
-const {getDepartmentByHODUserId} = require('./hod/getDepartmentByHODUserId');
+// console.log({
+//   getAllCoursesWithProfessorsByDepartment,
+//   getDepartmentByHODUserId,
+// });
 
-const {getAllCoursesWithProfessorsByDepartment} = require('./hod/getAllCoursesWithProfessorsByDepartment');
-console.log({getAllCoursesWithProfessorsByDepartment, getDepartmentByHODUserId})
 module.exports = {
-  getDepartmentByHODUserId, getAllCoursesWithProfessorsByDepartment
+  getDepartmentByHODUserId,
+  getAllCoursesWithProfessorsByDepartment,
 };

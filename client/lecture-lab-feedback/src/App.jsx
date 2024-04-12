@@ -4,7 +4,7 @@ import Navbar from './components/Chakra/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import { useAuthContext } from './hooks/useAuthContext';
 import StudentDashboard from './pages/StudentDashboard';
-import AdminDashboard from './pages/AdminDashboard';
+import HODDashboard from './pages/HODDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import About from './pages/About';
 import LoginForm from './components/Auth/LoginForm';
@@ -29,7 +29,7 @@ function App() {
                   ) : user.role === 'TEACHER' ? (
                     <TeacherDashboard user={user} />
                   ) : (
-                    user.role === 'ADMIN' && <AdminDashboard user={user} />
+                    user.role === 'HOD' && <HODDashboard user={user} />
                   )
                 }
               />
