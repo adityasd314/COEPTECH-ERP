@@ -14,7 +14,8 @@ const { submitFeedback } = require('../controllers/lecture/student');
 const {
   getDepartmentByHODUserId,
   getAllCoursesWithProfessorsByDepartment,
-  getDepartmentTimeTable
+  getDepartmentTimeTable,
+  getStudentAverageFeedback
 } = require('../controllers/lecture/hod');
 console.log({
   getAllCoursesWithProfessorsByDepartment,
@@ -47,5 +48,7 @@ router.post(
   '/hod/getAllCoursesWithProfessorsByDepartment',
   getAllCoursesWithProfessorsByDepartment
 );
+router.post('/hod/getStudentAverageFeedback', getStudentAverageFeedback);
+
 
 module.exports = router;

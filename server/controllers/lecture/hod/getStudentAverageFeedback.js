@@ -21,6 +21,7 @@ const getStudentAverageFeedback = async (req, res) => {
         const feedbackData = await db.select().from(feedback).where(eq(feedback.professorId, professorsId));
         let totalFeedback = 0;
         let totalStudents = 0;
+        const comments = []
         const feedbackObjectDataRating = {
             "content clarity": 0,
             "engagement": 0,
@@ -41,7 +42,7 @@ const getStudentAverageFeedback = async (req, res) => {
             feedbackObjectDataRating["materials"] += parseInt(feedbackObject["materials"][0]["Were the lecture materials (e.g., slides, handouts) helpful in understanding the content?"]);
             feedbackObjectDataRating["feedback and support"] += parseInt(feedbackObject["feedback and support"][0]["Was the lecturer approachable for questions and clarifications?"]);
             feedbackObjectDataRating["overall satisfaction"] += parseInt(feedbackObject["overall satisfaction"][0]["Overall, how satisfied are you with the lecture experience?"]);
-
+            comments.push(feedbackObject["comments"]);
             totalFeedback += feedback.rating;
 
             totalStudents++;
@@ -55,7 +56,7 @@ const getStudentAverageFeedback = async (req, res) => {
         feedbackObjectDataRating["overall satisfaction"] = feedbackObjectDataRating["overall satisfaction"] / totalStudents;
 
         const averageFeedback = totalFeedback / totalStudents;
-        res.status(200).json({ message: "Average feedback fetched", data: { averageFeedback, feedbackObjectDataRating } });
+        res.status(200).json({ message: "Average feedback fetched", data: { averageFeedback, feedbackObjectDataRating, comments } });
       
       
     }
