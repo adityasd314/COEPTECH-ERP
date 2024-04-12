@@ -13,7 +13,7 @@ const {
 } = require('../controllers/lecture/teacher');
 const { submitFeedback } = require('../controllers/lecture/student');
 const {  getDepartmentByHODUserId, getAllCoursesWithProfessorsByDepartment} = require('../controllers/lecture/hod');
-
+console.log({getAllCoursesWithProfessorsByDepartment, getDepartmentByHODUserId})
 
 
 const router = express.Router();

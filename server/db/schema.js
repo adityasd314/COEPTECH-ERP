@@ -1,5 +1,5 @@
-const { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, unique, timestamp, index, boolean } =require ("drizzle-orm/pg-core")
-  const { sql } =require ("drizzle-orm")
+const { pgTable, pgEnum, serial, varchar, text, date, uniqueIndex, foreignKey, integer, time, unique, timestamp, index, boolean }  =  require("drizzle-orm/pg-core")
+  const { sql }  =  require("drizzle-orm")
 
 const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
 const keyType = pgEnum("key_type", ['aead-ietf', 'aead-det', 'hmacsha512', 'hmacsha256', 'auth', 'shorthash', 'generichash', 'kdf', 'secretbox', 'secretstream', 'stream_xchacha20'])
@@ -51,7 +51,7 @@ const professors = pgTable("professors", {
 	professorId: serial("professor_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
-	department: integer("department").references(() => departments.departmentId),
+	departmentId: integer("department_id").references(() => departments.departmentId),
 	position: varchar("position", { length: 100 }),
 	userId: integer("user_id").references(() => users.userId),
 });
@@ -102,6 +102,7 @@ const courses = pgTable("courses", {
 	courseName: varchar("course_name", { length: 255 }).notNull(),
 	courseCode: varchar("course_code", { length: 50 }).notNull(),
 	departmentId: integer("department_id").references(() => departments.departmentId),
+	professorId: integer("professor_id").references(() => professors.professorId),
 });
 
 const headsOfDepartment = pgTable("heads_of_department", {
@@ -258,7 +259,8 @@ const feedback = pgTable("feedback", {
 	professorId: integer("professor_id").references(() => professors.professorId),
 	courseId: integer("course_id").references(() => courses.courseId),
 });
-module.exports =  {
+
+module.exports = {
 	performanceMetrics,
 	reports,
 	userRole,
@@ -283,17 +285,12 @@ module.exports =  {
 	uploadedDocuments,
 	eventDocuments,
 	feedback,
+	roles,
+
+	// Enums
 	keyStatus,
 	keyType,
 	factorType,
 	factorStatus,
 	aalLevel,
-	codeChallengeMethod,
-	equalityOp,
-	action,
-	bookingStatus,
-	documentStatus,
-	roles,
-	lectureStatus
-
 }
