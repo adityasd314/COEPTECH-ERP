@@ -1,12 +1,14 @@
 import { Table, Thead, Tbody, Tr, Th, Td, Button } from '@chakra-ui/react';
 
 const LectureTable = ({ data, toggle }) => {
+  console.log(data);
   return (
     <Table variant="simple">
       <Thead>
         <Tr>
           <Th>Course ID</Th>
           <Th>Course Name</Th>
+          <Th>Type</Th>
           <Th>Date Time</Th>
           <Th>Duration (in hrs)</Th>
           <Th>Status</Th>
@@ -14,9 +16,9 @@ const LectureTable = ({ data, toggle }) => {
         </Tr>
       </Thead>
       <Tbody>
-        {data.map((ll) => (
+        {data.map((ll, idx) => (
           <Tr
-            key={ll.id}
+            key={idx}
             bg={
               ll.state === 'CONDUCTED'
                 ? 'green.100'
@@ -24,9 +26,10 @@ const LectureTable = ({ data, toggle }) => {
                 ? 'yellow.100'
                 : 'red.100'
             }>
-            <Td>{ll.course_id}</Td>
-            <Td>{ll.course_name}</Td>
-            <Td>{ll.date_time.toString()}</Td>
+            <Td>{ll.courseId}</Td>
+            <Td>{ll.courseName}</Td>
+            <Td>{ll.type}</Td>
+            <Td>{ll.dateTime}</Td>
             <Td>{ll.duration / 60}</Td>
             <Td>{ll.state}</Td>
             <Td>
@@ -38,12 +41,12 @@ const LectureTable = ({ data, toggle }) => {
                     ? 'yellow'
                     : 'red'
                 }
-                onClick={() => toggle(ll.id)}>
+                onClick={() => toggle(ll)}>
                 {ll.state === 'CONDUCTED'
                   ? 'View Feedback'
                   : ll.state === 'UPCOMING'
                   ? 'Cancel'
-                  : ll.state === 'CANCELED' && 'Schedule'}
+                  : ll.state === 'CANCELLED' && 'Schedule'}
               </Button>
             </Td>
           </Tr>

@@ -1,4 +1,6 @@
-const {getAllLecturesLabsPracticals} = require("./lecture/getAllLecturesLabsPracticals")
+const {
+  getAllLecturesLabsPracticals,
+} = require('./lecture/getAllLecturesLabsPracticals');
 
 module.exports = {
   getAllLecturesLabsPracticals,
