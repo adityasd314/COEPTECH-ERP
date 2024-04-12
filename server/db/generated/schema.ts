@@ -51,7 +51,7 @@ export const professors = pgTable("professors", {
 	professorId: serial("professor_id").primaryKey().notNull(),
 	name: varchar("name", { length: 100 }).notNull(),
 	email: varchar("email", { length: 255 }).notNull(),
-	department: integer("department").references(() => departments.departmentId),
+	departmentId: integer("department_id").references(() => departments.departmentId),
 	position: varchar("position", { length: 100 }),
 	userId: integer("user_id").references(() => users.userId),
 });
@@ -102,6 +102,7 @@ export const courses = pgTable("courses", {
 	courseName: varchar("course_name", { length: 255 }).notNull(),
 	courseCode: varchar("course_code", { length: 50 }).notNull(),
 	departmentId: integer("department_id").references(() => departments.departmentId),
+	professorId: integer("professor_id").references(() => professors.professorId),
 });
 
 export const headsOfDepartment = pgTable("heads_of_department", {
