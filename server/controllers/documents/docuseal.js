@@ -3,7 +3,7 @@ const { JSDOM } = require('jsdom');
 const fs = require('fs');
 const { eq } = require('drizzle-orm');
 const DrizzleClient = require("../../lib/drizzle-client");
-const { venues, bookings, professors } = require("../../db/schema");
+const { venues, bookings, professors, reports } = require("../../db/schema");
 
 const dom = new JSDOM('<!DOCTYPE html>');
 const document = dom.window.document;
@@ -39,15 +39,11 @@ const getFacultyName = async(venue_id) => {
 
 
 const getDocument = async(req, res) => {
-
-    const {booking_id} = req.body;
+    const {booking_id, user_id} = req.body;
 
     const bookingdata = await getBookingById(booking_id);
-    console.log(bookingdata);
     const professorData = await getProfessorName(bookingdata[0].professorId);
-    console.log(professorData);
     const facultyData = await getFacultyName(bookingdata[0].venueId);
-    console.log(facultyData);
     const currentDate = new Date();
     const htmlContent = fs.readFileSync('./controllers/documents/template2.html', 'utf8');
 
@@ -91,11 +87,21 @@ const getDocument = async(req, res) => {
     };
 
     axios.request(options).then(function (response) {
-        const data = response.data;
-        res.status(200).json({ data })
-      }).catch(function (error) {
+        const resp = response.data;
+
+        //data = {
+        //     reportName: 'Permission Letter',
+        //     reportDate: currentDate,
+        //     reportType: 'letter',
+        //     generatedBy: user_id,
+        //     cloudinaryLink: resp.documents[0].url,
+        // }
+        // DrizzleClient.insert(reports).values(data)
+        res.status(200).json({ resp })
+    }).catch(function (error) {
         console.error(error);
-      });
+    });
+    
 }
 
 module.exports = {

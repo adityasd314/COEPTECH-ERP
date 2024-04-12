@@ -15,7 +15,7 @@ function TeacherDashboard({ user }) {
   const requestOptions = {
     method: 'POST',
     headers: myHeaders,
-    body: JSON.stringify({ userId: '82' }),
+    body: JSON.stringify({ userId: user.userId }),
     redirect: 'follow',
   };
   const url =

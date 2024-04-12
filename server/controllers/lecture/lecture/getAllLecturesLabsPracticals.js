@@ -20,7 +20,7 @@ const getAllLecturesLabsPracticals = async (req, res) => {
         dataFormat: { user_id: 'string' },
       });
     }
-    const {departmentId, studentId} = (
+    const { studentId } = (
       await db
         .select({
           studentId: students.studentId,
@@ -29,8 +29,9 @@ const getAllLecturesLabsPracticals = async (req, res) => {
         .from(students)
         .where(eq(students.userId, user_id))
     )[0];
+    let departmentId = 3;
     // get courses for the department
-    console.log({ departmentId,studentId })
+    console.log({ departmentId, studentId });
     const coursesForDepartment = await db
       .select()
       .from(courses)
@@ -43,41 +44,61 @@ const getAllLecturesLabsPracticals = async (req, res) => {
     const courseIdToNameMap = {};
     const courseIdToCodeMap = {};
     const courseIdToDepartmentMap = {};
-    const [professorData, courseData, feedbackData] = await Promise.all([db.select().from(professors), db.select().from(courses), db.select().from(feedback).where(eq(feedback.studentId, studentId))]);
+    const [professorData, courseData, feedbackData] = await Promise.all([
+      db.select().from(professors),
+      db.select().from(courses),
+      db.select().from(feedback).where(eq(feedback.studentId, studentId)),
+    ]);
     const courseIdToFeedbackMap = {};
     feedbackData.forEach((feedback) => {
       courseIdToFeedbackMap[feedback.courseId] = feedback;
-    }
-    );
+    });
     console.log({ courseIdToFeedbackMap });
 
     professorData.forEach((professor) => {
       professerIdToNameMap[professor.professorId] = professor.name;
-    }
-    );
+    });
     courseData.forEach((course) => {
       courseIdToNameMap[course.courseId] = course.courseName;
       courseIdToCodeMap[course.courseId] = course.courseCode;
       courseIdToDepartmentMap[course.courseId] = course.departmentId;
-
-    })
+    });
     // console.log({ professerIdToNameMap, courseIdToNameMap });
 
     for (let i = 0; i < coursesForDepartment.length; i++) {
       const course = coursesForDepartment[i];
-     
+
       const [lectureData, tutData, practicalData] = await Promise.all([
-        db.select().from(lectures).where(eq(lectures.courseId, course.courseId)),
-        db.select().from(tutorials).where(eq(tutorials.courseId, course.courseId)),
-        db.select().from(practicals).where(eq(practicals.courseId, course.courseId)),
+        db
+          .select()
+          .from(lectures)
+          .where(eq(lectures.courseId, course.courseId)),
+        db
+          .select()
+          .from(tutorials)
+          .where(eq(tutorials.courseId, course.courseId)),
+        db
+          .select()
+          .from(practicals)
+          .where(eq(practicals.courseId, course.courseId)),
       ]);
-    console.log({lectureData,tutData,practicalData})
+      console.log({ lectureData, tutData, practicalData });
       result.push(
-        lectureData.map((lecture) => ({ ...lecture,id:lecture.lectureId, type: 'LECTURE' }))
+        lectureData.map((lecture) => ({
+          ...lecture,
+          id: lecture.lectureId,
+          type: 'LECTURE',
+        }))
       );
-      result.push(tutData.map((tut) => ({ ...tut,id:tut.tutorialId , type: 'TUTORIAL' })));
       result.push(
-        practicalData.map((practical) => ({ ...practical,id:practical.practicalId, type: 'LAB' }))
+        tutData.map((tut) => ({ ...tut, id: tut.tutorialId, type: 'TUTORIAL' }))
+      );
+      result.push(
+        practicalData.map((practical) => ({
+          ...practical,
+          id: practical.practicalId,
+          type: 'LAB',
+        }))
       );
     }
 
