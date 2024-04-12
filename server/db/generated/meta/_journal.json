@@ -15,6 +15,13 @@
       "when": 1712824727517,
       "tag": "0001_classy_inertia",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712904474582,
+      "tag": "0002_clear_penance",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1605 @@
+{
+  "id": "c4ad1c11-32c2-4519-86b1-fb28147b49f0",
+  "prevId": "13efd9f3-d514-494e-921f-6cc3cefa2771",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "account_admins": {
+      "name": "account_admins",
+      "schema": "",
+      "columns": {
+        "admin_id": {
+          "name": "admin_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "account_admins_user_id_key": {
+          "name": "account_admins_user_id_key",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "account_admins_user_id_users_user_id_fk": {
+          "name": "account_admins_user_id_users_user_id_fk",
+          "tableFrom": "account_admins",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "bookings": {
+      "name": "bookings",
+      "schema": "",
+      "columns": {
+        "booking_id": {
+          "name": "booking_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "professor_id": {
+          "name": "professor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "venue_id": {
+          "name": "venue_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "booking_date": {
+          "name": "booking_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "start_time": {
+          "name": "start_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "end_time": {
+          "name": "end_time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "purpose": {
+          "name": "purpose",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "booking_status",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bookings_professor_id_professors_professor_id_fk": {
+          "name": "bookings_professor_id_professors_professor_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "professor_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bookings_venue_id_venues_venue_id_fk": {
+          "name": "bookings_venue_id_venues_venue_id_fk",
+          "tableFrom": "bookings",
+          "tableTo": "venues",
+          "columnsFrom": [
+            "venue_id"
+          ],
+          "columnsTo": [
+            "venue_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "courses": {
+      "name": "courses",
+      "schema": "",
+      "columns": {
+        "course_id": {
+          "name": "course_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "course_name": {
+          "name": "course_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "course_code": {
+          "name": "course_code",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "courses_department_id_departments_department_id_fk": {
+          "name": "courses_department_id_departments_department_id_fk",
+          "tableFrom": "courses",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "departments": {
+      "name": "departments",
+      "schema": "",
+      "columns": {
+        "department_id": {
+          "name": "department_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "department_name": {
+          "name": "department_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "head_of_department_id": {
+          "name": "head_of_department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "departments_head_of_department_id_heads_of_department_hod_id_fk": {
+          "name": "departments_head_of_department_id_heads_of_department_hod_id_fk",
+          "tableFrom": "departments",
+          "tableTo": "heads_of_department",
+          "columnsFrom": [
+            "head_of_department_id"
+          ],
+          "columnsTo": [
+            "hod_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "document_types": {
+      "name": "document_types",
+      "schema": "",
+      "columns": {
+        "document_id": {
+          "name": "document_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "document_name": {
+          "name": "document_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "document_types_document_name_key": {
+          "name": "document_types_document_name_key",
+          "columns": [
+            "document_name"
+          ],
+          "isUnique": true
+        },
+        "idx_document_types_document_name": {
+          "name": "idx_document_types_document_name",
+          "columns": [
+            "document_name"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "documents": {
+      "name": "documents",
+      "schema": "",
+      "columns": {
+        "document_id": {
+          "name": "document_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "document_name": {
+          "name": "document_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uploader_id": {
+          "name": "uploader_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "upload_date": {
+          "name": "upload_date",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "venue_id": {
+          "name": "venue_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cloudinary_link": {
+          "name": "cloudinary_link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "document_status",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'pending'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "documents_uploader_id_professors_professor_id_fk": {
+          "name": "documents_uploader_id_professors_professor_id_fk",
+          "tableFrom": "documents",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "uploader_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "documents_venue_id_venues_venue_id_fk": {
+          "name": "documents_venue_id_venues_venue_id_fk",
+          "tableFrom": "documents",
+          "tableTo": "venues",
+          "columnsFrom": [
+            "venue_id"
+          ],
+          "columnsTo": [
+            "venue_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "event_documents": {
+      "name": "event_documents",
+      "schema": "",
+      "columns": {
+        "event_document_id": {
+          "name": "event_document_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_type_id": {
+          "name": "document_type_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_event_documents_document_type_id": {
+          "name": "idx_event_documents_document_type_id",
+          "columns": [
+            "document_type_id"
+          ],
+          "isUnique": false
+        },
+        "idx_event_documents_event_id": {
+          "name": "idx_event_documents_event_id",
+          "columns": [
+            "event_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "event_documents_event_id_events_event_id_fk": {
+          "name": "event_documents_event_id_events_event_id_fk",
+          "tableFrom": "event_documents",
+          "tableTo": "events",
+          "columnsFrom": [
+            "event_id"
+          ],
+          "columnsTo": [
+            "event_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "event_documents_document_type_id_document_types_document_id_fk": {
+          "name": "event_documents_document_type_id_document_types_document_id_fk",
+          "tableFrom": "event_documents",
+          "tableTo": "document_types",
+          "columnsFrom": [
+            "document_type_id"
+          ],
+          "columnsTo": [
+            "document_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "events": {
+      "name": "events",
+      "schema": "",
+      "columns": {
+        "event_id": {
+          "name": "event_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_name": {
+          "name": "event_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_by_user_id": {
+          "name": "created_by_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_events_created_by_user_id": {
+          "name": "idx_events_created_by_user_id",
+          "columns": [
+            "created_by_user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "events_created_by_user_id_users_user_id_fk": {
+          "name": "events_created_by_user_id_users_user_id_fk",
+          "tableFrom": "events",
+          "tableTo": "users",
+          "columnsFrom": [
+            "created_by_user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "faculty_venue_permissions": {
+      "name": "faculty_venue_permissions",
+      "schema": "",
+      "columns": {
+        "permission_id": {
+          "name": "permission_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "faculty_id": {
+          "name": "faculty_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "venue_id": {
+          "name": "venue_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "permission_required": {
+          "name": "permission_required",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "faculty_venue_permissions_faculty_id_professors_professor_id_fk": {
+          "name": "faculty_venue_permissions_faculty_id_professors_professor_id_fk",
+          "tableFrom": "faculty_venue_permissions",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "faculty_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "faculty_venue_permissions_venue_id_venues_venue_id_fk": {
+          "name": "faculty_venue_permissions_venue_id_venues_venue_id_fk",
+          "tableFrom": "faculty_venue_permissions",
+          "tableTo": "venues",
+          "columnsFrom": [
+            "venue_id"
+          ],
+          "columnsTo": [
+            "venue_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "feedback": {
+      "name": "feedback",
+      "schema": "",
+      "columns": {
+        "feedback_id": {
+          "name": "feedback_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "student_id": {
+          "name": "student_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "session_type": {
+          "name": "session_type",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "session_id": {
+          "name": "session_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "feedback_text": {
+          "name": "feedback_text",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_time": {
+          "name": "date_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "feedback_student_id_students_student_id_fk": {
+          "name": "feedback_student_id_students_student_id_fk",
+          "tableFrom": "feedback",
+          "tableTo": "students",
+          "columnsFrom": [
+            "student_id"
+          ],
+          "columnsTo": [
+            "student_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "feedback_session_id_lectures_lecture_id_fk": {
+          "name": "feedback_session_id_lectures_lecture_id_fk",
+          "tableFrom": "feedback",
+          "tableTo": "lectures",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "lecture_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "feedback_session_id_practicals_practical_id_fk": {
+          "name": "feedback_session_id_practicals_practical_id_fk",
+          "tableFrom": "feedback",
+          "tableTo": "practicals",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "practical_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "feedback_session_id_tutorials_tutorial_id_fk": {
+          "name": "feedback_session_id_tutorials_tutorial_id_fk",
+          "tableFrom": "feedback",
+          "tableTo": "tutorials",
+          "columnsFrom": [
+            "session_id"
+          ],
+          "columnsTo": [
+            "tutorial_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "feedback_department_id_departments_department_id_fk": {
+          "name": "feedback_department_id_departments_department_id_fk",
+          "tableFrom": "feedback",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "heads_of_department": {
+      "name": "heads_of_department",
+      "schema": "",
+      "columns": {
+        "hod_id": {
+          "name": "hod_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "heads_of_department_department_id_departments_department_id_fk": {
+          "name": "heads_of_department_department_id_departments_department_id_fk",
+          "tableFrom": "heads_of_department",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "lectures": {
+      "name": "lectures",
+      "schema": "",
+      "columns": {
+        "lecture_id": {
+          "name": "lecture_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "professor_id": {
+          "name": "professor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_time": {
+          "name": "date_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "lectures_course_id_courses_course_id_fk": {
+          "name": "lectures_course_id_courses_course_id_fk",
+          "tableFrom": "lectures",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "course_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "lectures_professor_id_professors_professor_id_fk": {
+          "name": "lectures_professor_id_professors_professor_id_fk",
+          "tableFrom": "lectures",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "professor_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "observation_checklist": {
+      "name": "observation_checklist",
+      "schema": "",
+      "columns": {
+        "checklist_id": {
+          "name": "checklist_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "checklist_name": {
+          "name": "checklist_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "faculty_id": {
+          "name": "faculty_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "observation_checklist_department_id_departments_department_id_fk": {
+          "name": "observation_checklist_department_id_departments_department_id_fk",
+          "tableFrom": "observation_checklist",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "department_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "observation_checklist_faculty_id_professors_professor_id_fk": {
+          "name": "observation_checklist_faculty_id_professors_professor_id_fk",
+          "tableFrom": "observation_checklist",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "faculty_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "performance_metrics": {
+      "name": "performance_metrics",
+      "schema": "",
+      "columns": {
+        "metric_id": {
+          "name": "metric_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "metric_name": {
+          "name": "metric_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "practicals": {
+      "name": "practicals",
+      "schema": "",
+      "columns": {
+        "practical_id": {
+          "name": "practical_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "professor_id": {
+          "name": "professor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_time": {
+          "name": "date_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "practicals_course_id_courses_course_id_fk": {
+          "name": "practicals_course_id_courses_course_id_fk",
+          "tableFrom": "practicals",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "course_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "practicals_professor_id_professors_professor_id_fk": {
+          "name": "practicals_professor_id_professors_professor_id_fk",
+          "tableFrom": "practicals",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "professor_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "professors": {
+      "name": "professors",
+      "schema": "",
+      "columns": {
+        "professor_id": {
+          "name": "professor_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department": {
+          "name": "department",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "position": {
+          "name": "position",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "reports": {
+      "name": "reports",
+      "schema": "",
+      "columns": {
+        "report_id": {
+          "name": "report_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "report_name": {
+          "name": "report_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "report_date": {
+          "name": "report_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "report_type": {
+          "name": "report_type",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "generated_by": {
+          "name": "generated_by",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cloudinary_link": {
+          "name": "cloudinary_link",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "students": {
+      "name": "students",
+      "schema": "",
+      "columns": {
+        "student_id": {
+          "name": "student_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "mis": {
+          "name": "mis",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "year": {
+          "name": "year",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "students_mis_key": {
+          "name": "students_mis_key",
+          "columns": [
+            "mis"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "students_user_id_users_user_id_fk": {
+          "name": "students_user_id_users_user_id_fk",
+          "tableFrom": "students",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "submitted_documents": {
+      "name": "submitted_documents",
+      "schema": "",
+      "columns": {
+        "submission_id": {
+          "name": "submission_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "event_id": {
+          "name": "event_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_type_id": {
+          "name": "document_type_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_url": {
+          "name": "document_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "submission_date": {
+          "name": "submission_date",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "idx_submitted_documents_document_type_id": {
+          "name": "idx_submitted_documents_document_type_id",
+          "columns": [
+            "document_type_id"
+          ],
+          "isUnique": false
+        },
+        "idx_submitted_documents_event_id": {
+          "name": "idx_submitted_documents_event_id",
+          "columns": [
+            "event_id"
+          ],
+          "isUnique": false
+        },
+        "idx_submitted_documents_user_id": {
+          "name": "idx_submitted_documents_user_id",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "submitted_documents_event_id_events_event_id_fk": {
+          "name": "submitted_documents_event_id_events_event_id_fk",
+          "tableFrom": "submitted_documents",
+          "tableTo": "events",
+          "columnsFrom": [
+            "event_id"
+          ],
+          "columnsTo": [
+            "event_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "submitted_documents_user_id_users_user_id_fk": {
+          "name": "submitted_documents_user_id_users_user_id_fk",
+          "tableFrom": "submitted_documents",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "submitted_documents_document_type_id_document_types_document_id_fk": {
+          "name": "submitted_documents_document_type_id_document_types_document_id_fk",
+          "tableFrom": "submitted_documents",
+          "tableTo": "document_types",
+          "columnsFrom": [
+            "document_type_id"
+          ],
+          "columnsTo": [
+            "document_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "tutorials": {
+      "name": "tutorials",
+      "schema": "",
+      "columns": {
+        "tutorial_id": {
+          "name": "tutorial_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "course_id": {
+          "name": "course_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "professor_id": {
+          "name": "professor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "date_time": {
+          "name": "date_time",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "duration": {
+          "name": "duration",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tutorials_course_id_courses_course_id_fk": {
+          "name": "tutorials_course_id_courses_course_id_fk",
+          "tableFrom": "tutorials",
+          "tableTo": "courses",
+          "columnsFrom": [
+            "course_id"
+          ],
+          "columnsTo": [
+            "course_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "tutorials_professor_id_professors_professor_id_fk": {
+          "name": "tutorials_professor_id_professors_professor_id_fk",
+          "tableFrom": "tutorials",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "professor_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "uploaded_documents": {
+      "name": "uploaded_documents",
+      "schema": "",
+      "columns": {
+        "document_id": {
+          "name": "document_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "document_type_id": {
+          "name": "document_type_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "document_name": {
+          "name": "document_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "upload_date": {
+          "name": "upload_date",
+          "type": "timestamp(6)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "document_url": {
+          "name": "document_url",
+          "type": "varchar(512)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "uploaded_by_user_id": {
+          "name": "uploaded_by_user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "idx_uploaded_documents_document_type_id": {
+          "name": "idx_uploaded_documents_document_type_id",
+          "columns": [
+            "document_type_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "uploaded_documents_document_type_id_document_types_document_id_fk": {
+          "name": "uploaded_documents_document_type_id_document_types_document_id_fk",
+          "tableFrom": "uploaded_documents",
+          "tableTo": "document_types",
+          "columnsFrom": [
+            "document_type_id"
+          ],
+          "columnsTo": [
+            "document_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "uploaded_documents_uploaded_by_user_id_users_user_id_fk": {
+          "name": "uploaded_documents_uploaded_by_user_id_users_user_id_fk",
+          "tableFrom": "uploaded_documents",
+          "tableTo": "users",
+          "columnsFrom": [
+            "uploaded_by_user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user_role": {
+      "name": "user_role",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "role_id": {
+          "name": "role_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "roles",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "users_email_key": {
+          "name": "users_email_key",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "venues": {
+      "name": "venues",
+      "schema": "",
+      "columns": {
+        "venue_id": {
+          "name": "venue_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "venue_name": {
+          "name": "venue_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "capacity": {
+          "name": "capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "permission_faculty_id": {
+          "name": "permission_faculty_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "venues_permission_faculty_id_professors_professor_id_fk": {
+          "name": "venues_permission_faculty_id_professors_professor_id_fk",
+          "tableFrom": "venues",
+          "tableTo": "professors",
+          "columnsFrom": [
+            "permission_faculty_id"
+          ],
+          "columnsTo": [
+            "professor_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "aal_level": {
+      "name": "aal_level",
+      "values": {
+        "aal3": "aal3",
+        "aal2": "aal2",
+        "aal1": "aal1"
+      }
+    },
+    "action": {
+      "name": "action",
+      "values": {
+        "ERROR": "ERROR",
+        "TRUNCATE": "TRUNCATE",
+        "DELETE": "DELETE",
+        "UPDATE": "UPDATE",
+        "INSERT": "INSERT"
+      }
+    },
+    "booking_status": {
+      "name": "booking_status",
+      "values": {
+        "pending": "pending",
+        "confirmed": "confirmed",
+        "cancelled": "cancelled",
+        "withdrawn": "withdrawn"
+      }
+    },
+    "code_challenge_method": {
+      "name": "code_challenge_method",
+      "values": {
+        "plain": "plain",
+        "s256": "s256"
+      }
+    },
+    "document_status": {
+      "name": "document_status",
+      "values": {
+        "pending": "pending",
+        "approved": "approved",
+        "rejected": "rejected",
+        "withdrawn": "withdrawn"
+      }
+    },
+    "equality_op": {
+      "name": "equality_op",
+      "values": {
+        "in": "in",
+        "gte": "gte",
+        "gt": "gt",
+        "lte": "lte",
+        "lt": "lt",
+        "neq": "neq",
+        "eq": "eq"
+      }
+    },
+    "factor_status": {
+      "name": "factor_status",
+      "values": {
+        "verified": "verified",
+        "unverified": "unverified"
+      }
+    },
+    "factor_type": {
+      "name": "factor_type",
+      "values": {
+        "webauthn": "webauthn",
+        "totp": "totp"
+      }
+    },
+    "key_status": {
+      "name": "key_status",
+      "values": {
+        "expired": "expired",
+        "invalid": "invalid",
+        "valid": "valid",
+        "default": "default"
+      }
+    },
+    "key_type": {
+      "name": "key_type",
+      "values": {
+        "stream_xchacha20": "stream_xchacha20",
+        "secretstream": "secretstream",
+        "secretbox": "secretbox",
+        "kdf": "kdf",
+        "generichash": "generichash",
+        "shorthash": "shorthash",
+        "auth": "auth",
+        "hmacsha256": "hmacsha256",
+        "hmacsha512": "hmacsha512",
+        "aead-det": "aead-det",
+        "aead-ietf": "aead-ietf"
+      }
+    },
+    "roles": {
+      "name": "roles",
+      "values": {
+        "admin": "admin",
+        "teacher": "teacher",
+        "student": "student"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
