@@ -56,7 +56,7 @@ const getStudentAverageFeedback = async (req, res) => {
         feedbackObjectDataRating["overall satisfaction"] = feedbackObjectDataRating["overall satisfaction"] / totalStudents;
 
         const averageFeedback = totalFeedback / totalStudents;
-        res.status(200).json({ message: "Average feedback fetched", data: { averageFeedback, feedbackObjectDataRating, comments } });
+        res.status(200).json({ message: "Average feedback fetched", data: { averageFeedback:feedbackObjectDataRating['overall satisfaction'], feedbackObjectDataRating, comments } });
       
       
     }
