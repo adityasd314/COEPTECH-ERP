@@ -10,6 +10,7 @@ const {
   tutorials,
   professors,
   headsOfDepartment,
+  departments
 } = require('../../../db/schema');
 
 const getDepartmentByHODUserId = async (req, res) => {
@@ -20,9 +21,10 @@ const getDepartmentByHODUserId = async (req, res) => {
         return res.status(400).json({ message: "Please provide all the required fields", dataFormat: { userId: "string" } });
       }
 
-      const departmentId = (await db.select({
-        departmentId: headsOfDepartment.departmentId,
-      }).from(headsOfDepartment).where(eq(headsOfDepartment.userId, userId))[0]?.departmentId);
+      const hodId = await db.select().from(headsOfDepartment).where(eq(headsOfDepartment.userId, userId));
+      const {departmentId} =( await db.select().from(departments).where(eq(departments.headOfDepartmentId, hodId[0].hodId)))[0];
+      console.log({departmentId})
+      
       if (!departmentId) {
         return res.status(404).json({ message: "HOD not found" });
       }
