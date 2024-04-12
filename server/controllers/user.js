@@ -1,6 +1,5 @@
 const { eq, lt, gte, ne } = require('drizzle-orm');
 const jwt = require('jsonwebtoken');
-const PrismaClient = require('../lib/prisma-client');
 const DrizzleClient = require('../lib/drizzle-client');
 const client = require('../lib/prisma-client');
 const hashPassword = require('../lib/hash_pass');
