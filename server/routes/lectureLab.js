@@ -14,6 +14,7 @@ const { submitFeedback } = require('../controllers/lecture/student');
 const {
   getDepartmentByHODUserId,
   getAllCoursesWithProfessorsByDepartment,
+  getDepartmentTimeTable
 } = require('../controllers/lecture/hod');
 console.log({
   getAllCoursesWithProfessorsByDepartment,
@@ -37,6 +38,7 @@ router.post('/student/submitFeedback', submitFeedback);
 
 // hod
 router.post('/hod/getDepartmentByHODUserId', getDepartmentByHODUserId);
+router.post('/hod/getDepartmentTimeTable', getDepartmentTimeTable);
 router.post(
   '/hod/getAllCoursesWithProfessorsByDepartment',
   getAllCoursesWithProfessorsByDepartment
