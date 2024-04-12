@@ -13,13 +13,13 @@ const getScheduleForProfessor = async (req, res) => {
     const courseData = await db.select().from(courses)
     for (let i = 0; i < courseData.length; i++) {
       const course = courseData[i];
-      courseIdToNameMap[course.courseId] = course.courseName;
+      courseIdToNameMap[course.courseId] = course;
     }
     
     const lecturesData = (await db.select().from(lectures).where(eq(lectures.professorId, professorId))).map((lecture) => ({ ...lecture, type: "LECTURE",id:lecture.lectureId }));;
     const tutorialsData = (await db.select().from(tutorials).where(eq(tutorials.professorId, professorId))).map((tutorial) => ({ ...tutorial, type: "TUTORIAL",id:tutorial.tutorialId }));;
     const practicalsData = (await db.select().from(practicals).where(eq(practicals.professorId, professorId))).map((practical) => ({ ...practical, type: "LAB", id:practical.practicalId}));
-    const result = [...lecturesData, ...tutorialsData, ...practicalsData].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)).map((item) => ({ ...item, courseName: courseIdToNameMap[item.courseId] }));
+    const result = [...lecturesData, ...tutorialsData, ...practicalsData].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime)).map((item) => ({ ...item, courseName: courseIdToNameMap[item.courseId].courseName, courseCode: courseIdToNameMap[item.courseId].courseCode}));
     res.status(200).json({ message: "Schedule fetched", data: result });}
     
     catch(err){
