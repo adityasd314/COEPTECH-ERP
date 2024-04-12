@@ -21,7 +21,9 @@ function FeaturedCourses() {
 
   return (
 
-    <div className="pt-12 py-12 bg-gray-300 dark:bg-grid-black/[0.2]"  style={{marginBottom:"10vh"}}>
+    <div className="pt-12 py-12  bg-gray-300 dark:bg-grid-black/[0.2]"  style={{marginBottom:"30vh"
+        
+    }}>
         <div>
             <div className="text-center">
 <br/>

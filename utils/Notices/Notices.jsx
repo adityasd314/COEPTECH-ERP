@@ -132,7 +132,7 @@ const Notices = () => {
         <button
           key={i}
           className={`px-4 py-2 ${
-            currentPage === i ? "bg-blue-500 text-black" : "text-black"
+            currentPage === i ? "bg-blue-500 text-white" : "text-yellow"
           }`}
           onClick={() => {
             setCurrentPage(i);
@@ -151,7 +151,7 @@ const Notices = () => {
             renderPage(currentPage - 1);
           }}
           disabled={currentPage === 1}
-          className="px-4 py-2 text-black"
+          className="px-4 py-2 text-white"
         >
           Prev
         </button>
@@ -162,7 +162,7 @@ const Notices = () => {
             renderPage(currentPage + 1);
           }}
           disabled={currentPage === totalPages}
-          className="px-4 py-2 text-black"
+          className="px-4 py-2 text-white"
         >
           Next
         </button>
@@ -204,8 +204,8 @@ const Notices = () => {
   };
 
   return (
-    <HeroHighlight className="h-[50rem] w-full dark:bg-grid-black/[0.2] bg-grid-black/[0.2]  bg-gray-300  text-black relative flex items-center justify-center">
-    <div className="container mx-auto p-8">
+    <HeroHighlight className="h-[100rem] w-full dark:bg-grid-black/[0.2] bg-grid-black/[0.2]  bg-gray-300  text-black relative flex items-center justify-center">
+    <div className="container mt-25 mx-auto p-8">
       <h1 className="text-center text-black my-8 text-2xl font-bold">
         Notices
       </h1>
@@ -216,11 +216,11 @@ const Notices = () => {
             id="searchInput"
             placeholder="Search..."
             onChange={handleSearchInputChange}
-            className="px-4 py-2 border border-gray-300 rounded mr-2"
+            className="px-4 py-2 border mb-2 border-gray-300 rounded mr-2"
           />
           <button
             onClick={() => setCurrentPage(1)}
-            className="px-4 py-2 bg-blue-500 text-black rounded"
+            className="px-4 py-2 mb-2 bg-blue-500 text-white rounded"
           >
             Search
           </button>
@@ -235,7 +235,7 @@ const Notices = () => {
           />
           <button
             onClick={searchByDate}
-            className="px-4 py-2 bg-blue-500 text-black rounded"
+            className="px-4 py-2 bg-blue-500 text-white rounded"
           >
             Search
           </button>
