@@ -43,5 +43,9 @@ router.post(
   '/hod/getAllCoursesWithProfessorsByDepartment',
   getAllCoursesWithProfessorsByDepartment
 );
+router.post(
+  '/hod/getAllCoursesWithProfessorsByDepartment',
+  getAllCoursesWithProfessorsByDepartment
+);
 
 module.exports = router;
