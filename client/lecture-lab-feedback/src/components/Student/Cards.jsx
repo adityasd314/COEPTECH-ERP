@@ -53,7 +53,7 @@ export default function Cards({ data, setModalOpen, setData }) {
             cursor: 'not-allowed',
           }}>
           <CardHeader>
-            {item.courseId} <br /> {item.courseName}
+            {item.courseCode} <br /> {item.courseName}
           </CardHeader>
           <CardBody>
             <p>
@@ -64,15 +64,38 @@ export default function Cards({ data, setModalOpen, setData }) {
             <p>Duartion: {item.duration / 60} hrs</p>
           </CardBody>
           <CardFooter>
-            <Button
-              colorScheme="yellow"
-              variant="solid"
-              onClick={() => {
-                setData(item);
-                setModalOpen(true);
-              }}>
-              Give Feedback
-            </Button>
+            {console.log(item.state, item.feedback)}
+            {item.state == 'CONDUCTED' ? (
+              !item.feedback ? (
+                <Button
+                  colorScheme="yellow"
+                  variant="solid"
+                  onClick={() => {
+                    setData(item);
+                    setModalOpen(true);
+                  }}>
+                  Give Feedback
+                </Button>
+              ) : (
+                <Button
+                  colorScheme="blue"
+                  variant="solid"
+                  onClick={() => {
+                    setData(item);
+                    setModalOpen(true);
+                  }}>
+                  View Feedback
+                </Button>
+              )
+            ) : item.state == 'CANCELLED' ? (
+              <Button colorScheme="red" variant="solid">
+                Cancelled
+              </Button>
+            ) : (
+              <Button colorScheme="green" variant="solid">
+                To be Conducted
+              </Button>
+            )}
           </CardFooter>
         </Card>
       ))}
