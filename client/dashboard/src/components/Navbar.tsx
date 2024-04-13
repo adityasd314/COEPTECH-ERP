@@ -1,18 +1,27 @@
-'use client'
-import React, { useState } from "react";
-import { HoveredLink, Menu, MenuItem, ProductItem } from "./ui/navbar-menu";
-import { cn } from "@/utils/cn";
-import Link from "next/link";
-import  LogOut  from "../components/LogOut";
- 
+'use client';
+import React, { useEffect, useState } from 'react';
+import { HoveredLink, Menu, MenuItem, ProductItem } from './ui/navbar-menu';
+import { cn } from '@/utils/cn';
+import Link from 'next/link';
+import LogOut from '../components/LogOut';
+
 // Import React and other necessary modules
 
 function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
-  const user = localStorage.getItem("user");
-
+  let user = localStorage.getItem('user');
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      user = JSON.parse(storedUser);
+    }
+  }, []);
   return (
-    <div className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50", className)}>
+    <div
+      className={cn(
+        'fixed top-10 inset-x-0 max-w-2xl mx-auto z-50',
+        className
+      )}>
       <Menu setActive={setActive}>
         <MenuItem setActive={setActive} active={active} item="QuickLinks">
           <div className="text-sm grid grid-cols-1 sm:grid-cols-2 gap-10 p-4">

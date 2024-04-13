@@ -11,6 +11,18 @@ import LoginForm from './components/Auth/LoginForm';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
+  const urlParams = new URLSearchParams(window.location.search);
+  let userP;
+  userP = urlParams.get('user');
+  if (userP) {
+    localStorage.setItem('user', userP);
+    window.location.href = '/';
+  }
+  userP = localStorage.getItem('user');
+  if (!userP) {
+    window.location.href = 'http://localhost:3000/';
+  }
+
   const { user, dispatch, isLoading } = useAuthContext();
   if (isLoading) return <div>Loading...</div>;
   console.log('user', user);
@@ -24,12 +36,12 @@ function App() {
             user ? (
               <ProtectedRoute
                 children={
-                  user.role === 'STUDENT' ? (
+                  user.role === 'student' ? (
                     <StudentDashboard user={user} />
-                  ) : user.role === 'TEACHER' ? (
+                  ) : user.role === 'teacher' ? (
                     <TeacherDashboard user={user} />
                   ) : (
-                    user.role === 'HOD' && <HODDashboard user={user} />
+                    user.role === 'hod' && <HODDashboard user={user} />
                   )
                 }
               />
@@ -38,7 +50,7 @@ function App() {
             )
           }
         />
-        
+
         <Route path="/about" element={<About />} />
       </Routes>
     </>

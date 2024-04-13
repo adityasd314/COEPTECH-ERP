@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Table from '../components/Teacher/Table';
 import useSWR from 'swr';
 import { useToast } from '@chakra-ui/react';
-
+import Chatbot from '../components/Chatbot';
 // import moment from 'moment';
 
 function TeacherDashboard({ user }) {
@@ -46,6 +46,17 @@ function TeacherDashboard({ user }) {
   }, [data]);
 
   const toggleState = async (ll) => {
+    if (ll.state === 'CONDUCTED') {
+      toast({
+        title: '25 students are left to fill the feedback',
+        description: 'Feedback for ' + ll.courseName,
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+      return;
+    }
     const updatedSchedule = await Promise.all(
       schedule.map(async (item) => {
         if (
@@ -148,6 +159,15 @@ function TeacherDashboard({ user }) {
           toggle={(ll) => {
             toggleState(ll);
           }}
+        />
+        <Chatbot
+          mess={
+            "Hello, I am COEP's Lecture-Lab Management Systems Assistant. How may I help you?"
+          }
+          initialPrompt={
+            "Act as a COEP's Lecture-Lab Management Systems Assistant and respond to this query: "
+          }
+          data={schedule}
         />
       </Box>
     )

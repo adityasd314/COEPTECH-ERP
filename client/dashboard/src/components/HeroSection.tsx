@@ -1,20 +1,24 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react"; 
-import { motion } from "framer-motion";
-import { HeroHighlight, Highlight } from "./ui/hero-highlight";
-import { Spotlight } from "./ui/Spotlight";
-import { useLogin } from "../../hooks/useLogin";
-import  LogOut  from "../components/LogOut";
-import { redirect } from "next/navigation";
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { HeroHighlight, Highlight } from './ui/hero-highlight';
+import { Spotlight } from './ui/Spotlight';
+import { useLogin } from '../../hooks/useLogin';
+import LogOut from '../components/LogOut';
+import { redirect } from 'next/navigation';
 
-function HeroSection() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+function HeroSection({
+  user,
+  setUser,
+}: {
+  user: any;
+  setUser: (user: any) => void;
+}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { login, error, isLoading } = useLogin();
-  const [user, setUser] = useState("");
-
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -23,38 +27,34 @@ function HeroSection() {
       setUser(JSON.parse(storedUser));
     }
   }, []);
-  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  
+
     try {
       await login(email, password);
-      const storedUser = localStorage.getItem("user");
-      
+      const storedUser = localStorage.getItem('user');
+
       if (storedUser) {
         setIsLoggedIn(true);
         setUser(JSON.parse(storedUser));
-        redirect("/");
+        // redirect('/');
+        window.location.href = '/';
       } else {
         console.error('Login failed');
       }
-      
     } catch (error) {
-      console.error("Error during login:", error);
-    
+      console.error('Error during login:', error);
     }
   };
-  
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value); 
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-
-  
 
   if (!isLoggedIn) {
     return (
@@ -76,10 +76,8 @@ function HeroSection() {
             duration: 0.5,
             ease: [0.4, 0.0, 0.2, 1],
           }}
-          className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-black max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto md:mr-8"
-        >
-          Transforming college management with a unified platform{" "}
-          <br />
+          className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-black max-w-4xl leading-relaxed lg:leading-snug text-center mx-auto md:mr-8">
+          Transforming college management with a unified platform <br />
           <Highlight className="text-white ">
             Experience simplicity in complexity.
             <br />
@@ -94,12 +92,13 @@ function HeroSection() {
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Sign in to your account
                 </h1>
-                <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+                <form
+                  className="space-y-4 md:space-y-6"
+                  onSubmit={handleSubmit}>
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Your email
                     </label>
                     <input
@@ -116,8 +115,7 @@ function HeroSection() {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Password
                     </label>
                     <input
@@ -133,8 +131,7 @@ function HeroSection() {
                   </div>
                   <button
                     type="submit"
-                    className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                  >
+                    className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                     Sign in
                   </button>
                 </form>
@@ -147,11 +144,9 @@ function HeroSection() {
   } else {
     // Render alternative content when user is logged in
     return (
-<div className="pt-24">
-  <h1>Welcome, {(user as any)?.email}</h1>
-</div>
-
-
+      <div className="pt-24">
+        <h1>Welcome, {(user as any)?.email}</h1>
+      </div>
     );
   }
 }

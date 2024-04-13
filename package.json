@@ -16,6 +16,6 @@
     "tailwindcss": "^3.4.3"
   },
   "scripts": {
-    "dev": "concurrently \"cd server && nodemon\" \"cd lms-server && nodemon\" \"cd client/dashboard && npm run dev\" \"cd client/coepresult && npm run dev\" \"cd client/lecture-lab-feedback && npm run dev\" \"cd client/lms && npm run dev\" \"cd client/venue-frontend && npm run dev\""
+    "dev": "concurrently \"cd server && nodemon\" \"cd lms-server && nodemon\" \"cd client/dashboard && npm run dev\" \"cd client/coepresult && npm run dev\" \"cd client/lecture-lab-feedback && npm run dev\" \"cd client/lms && npm run dev\" \"cd client/venue-frontend && npm run dev\" \"cd client/chatbot && npm run dev\" "
   }
 }

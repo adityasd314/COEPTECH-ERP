@@ -5,7 +5,12 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI('AIzaSyB8UqNYSxTM9tgt2IJ3X_eeMb7J3SeYNok');
 
-const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How may I help you?", prompt='Act as a College ERP assistant and respond to this query: '}) => {
+const Chatbot = ({
+  mess = 'Hello, I am your College ERP Management Assistant. How may I help you?',
+  initialPrompt = 'Act as a College ERP assistant and respond to this query: ',
+  data,
+}) => {
+  console.log(data);
   const [chats, setChats] = useState([
     {
       m: mess,
@@ -28,7 +33,13 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
 
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     const prompt =
-      prompt + msg;
+      initialPrompt +
+      `${JSON.stringify(
+        data
+      )} is the data for the current page . you can use it to answer queries in a formatted manner, try to always present answer in some form of list` +
+      msg;
+
+    console.log(prompt);
 
     setMsg('');
 
@@ -53,6 +64,7 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
         <button
           onClick={() => setOpen(!open)}
           id="open-chat"
+          style={{ backgroundColor: '#1f2937' }}
           className="btn_primary text-white py-8 px-4 rounded-full transition duration-300 flex items-center">
           <img
             src="https://cdn-icons-png.flaticon.com/512/10881/10881863.png"
@@ -70,8 +82,10 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
         }
         style={{ zIndex: 999 }}>
         <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
-          <div className="p-4 border-b bg-gray-900 text-white rounded-t-lg flex justify-between items-center">
-            <p className="text-lg font-semibold">Engineer GPT</p>
+          <div
+            className="p-4 border-b text-white rounded-t-lg flex justify-between items-center"
+            style={{ backgroundColor: '#1f2937' }}>
+            <p className="text-lg font-semibold text-white">Engineer GPT</p>
             <button
               onClick={() => setOpen(!open)}
               id="close-chat"
@@ -122,7 +136,7 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
               onClick={getResponse}
               id="send-button"
               className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
-              <span className="relative px-5 py-3 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+              <span className="relative px-5 py-3 rounded-md group-hover:bg-opacity-0">
                 Send
               </span>
             </button>
