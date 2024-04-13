@@ -5,7 +5,11 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI('AIzaSyB8UqNYSxTM9tgt2IJ3X_eeMb7J3SeYNok');
 
-const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How may I help you?", initialPrompt='Act as a College ERP assistant and respond to this query: ', data}) => {
+const Chatbot = ({
+  mess = 'Hello, I am your College ERP Management Assistant. How may I help you?',
+  initialPrompt = 'Act as a College ERP assistant and respond to this query: ',
+  data,
+}) => {
   console.log(data);
   const [chats, setChats] = useState([
     {
@@ -29,9 +33,13 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
 
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     const prompt =
-      initialPrompt  + `${JSON.stringify(data)} is the data for the current page . you can use it to answer queries` + msg;
+      initialPrompt +
+      `${JSON.stringify(
+        data
+      )} is the data for the current page . you can use it to answer queries in a formatted manner, try to always present answer in some form of list` +
+      msg;
 
-      console.log(prompt);
+    console.log(prompt);
 
     setMsg('');
 
@@ -56,7 +64,7 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
         <button
           onClick={() => setOpen(!open)}
           id="open-chat"
-          style={{backgroundColor: '#1f2937'}}
+          style={{ backgroundColor: '#1f2937' }}
           className="btn_primary text-white py-8 px-4 rounded-full transition duration-300 flex items-center">
           <img
             src="https://cdn-icons-png.flaticon.com/512/10881/10881863.png"
@@ -74,7 +82,9 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
         }
         style={{ zIndex: 999 }}>
         <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
-          <div className="p-4 border-b text-white rounded-t-lg flex justify-between items-center" style={{backgroundColor: '#1f2937'}}>
+          <div
+            className="p-4 border-b text-white rounded-t-lg flex justify-between items-center"
+            style={{ backgroundColor: '#1f2937' }}>
             <p className="text-lg font-semibold text-white">Engineer GPT</p>
             <button
               onClick={() => setOpen(!open)}

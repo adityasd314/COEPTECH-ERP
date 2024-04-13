@@ -22,6 +22,8 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 
+import Chatbot from '../components/Chatbot';
+
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
@@ -39,7 +41,8 @@ export default function AdminDashboard({ user }) {
   const GET_COURSES_URL =
     'http://localhost:5000/lecture-lab/hod/getAllCoursesWithProfessorsByDepartment';
 
-    const GET_FEEDBACK_URL = 'http://localhost:5000/lecture-lab/hod/getStudentAverageFeedback'
+  const GET_FEEDBACK_URL =
+    'http://localhost:5000/lecture-lab/hod/getStudentAverageFeedback';
   const [departmentId, setDepartmentId] = useState(null);
   const [feedback, setFeedback] = useState(null);
 
@@ -64,7 +67,7 @@ export default function AdminDashboard({ user }) {
       return Error('Department not found');
     }
     setDepartmentId(data.data.departmentId);
-    console.log('Department ID:', data.data.departmentId)
+    console.log('Department ID:', data.data.departmentId);
     const coursesResponse = await fetch(url, {
       method: 'POST',
       headers: {
@@ -73,7 +76,7 @@ export default function AdminDashboard({ user }) {
       body: JSON.stringify({ departmentId: data.data.departmentId }),
     });
     const coursesData = await coursesResponse.json();
-    console.log(coursesData)
+    console.log(coursesData);
     return coursesData;
   });
 
@@ -152,16 +155,16 @@ export default function AdminDashboard({ user }) {
                           headers: {
                             'Content-Type': 'application/json',
                           },
-                          body: JSON.stringify({ professorsId: course.professorId }),
+                          body: JSON.stringify({
+                            professorsId: course.professorId,
+                          }),
                         })
                           .then((res) => res.json())
                           .then((data) => {
-                            
                             console.log('Feedback data:', data);
-                            
-                            setFeedback(data.data)}
-                          
-                          );
+
+                            setFeedback(data.data);
+                          });
                         setIsOpen(true);
                       }}>
                       Generate Report from Feedback
@@ -179,13 +182,22 @@ export default function AdminDashboard({ user }) {
           <ModalHeader>Feedback</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Graph  data={feedback}/>
+            <Graph data={feedback} />
           </ModalBody>
           <ModalFooter>
             <Text fontSize="sm">Feedback</Text>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <Chatbot
+        mess={
+          "Hello, I am COEP's Lecture-Lab Management Systems Assistant. How may I help you?"
+        }
+        initialPrompt={
+          "Act as a COEP's Lecture-Lab Management Systems Assistant and respond to this query: "
+        }
+        data={data.data}
+      />
     </Box>
   );
 }
