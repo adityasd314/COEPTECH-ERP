@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { HoveredLink, Menu, MenuItem, ProductItem } from "./ui/navbar-menu";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
+import  LogOut  from "../components/LogOut";
  
 // Import React and other necessary modules
 
 function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
+  const userId = localStorage.getItem("userId");
 
   return (
     <div className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50", className)}>
@@ -51,6 +53,7 @@ function Navbar({ className }: { className?: string }) {
             <HoveredLink href="/pricing">View Team</HoveredLink>
           </div>
         </MenuItem>
+        {userId ? <LogOut /> : null}
       </Menu>
     </div>
   );
