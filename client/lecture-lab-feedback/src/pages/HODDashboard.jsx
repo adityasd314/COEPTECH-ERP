@@ -64,6 +64,7 @@ export default function AdminDashboard({ user }) {
       return Error('Department not found');
     }
     setDepartmentId(data.data.departmentId);
+    console.log('Department ID:', data.data.departmentId)
     const coursesResponse = await fetch(url, {
       method: 'POST',
       headers: {
@@ -72,6 +73,7 @@ export default function AdminDashboard({ user }) {
       body: JSON.stringify({ departmentId: data.data.departmentId }),
     });
     const coursesData = await coursesResponse.json();
+    console.log(coursesData)
     return coursesData;
   });
 
