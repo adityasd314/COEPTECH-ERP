@@ -3,10 +3,11 @@ import { Chart } from "react-google-charts";
 
 const options = {
   title: "Feedback for Teacher",
-  chartArea: { width: "50%" },
+  chartArea: { width: "70%" },
   hAxis: {
     title: "Criteria for feedback",
     minValue: 0,
+    maxValue: 5,
   },
   vAxis: {
     title: "Score",
