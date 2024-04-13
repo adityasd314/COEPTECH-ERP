@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useLogout } from "../hooks/useLogout";
+// import { useLogout } from "../hooks/useLogout";
 import { CiLogout } from "react-icons/ci";
 import { Icon } from "@chakra-ui/react";
 import axios from "axios"; // Don't forget to import Axios

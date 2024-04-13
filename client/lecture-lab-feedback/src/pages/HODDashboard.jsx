@@ -196,7 +196,7 @@ export default function AdminDashboard({ user }) {
         initialPrompt={
           "Act as a COEP's Lecture-Lab Management Systems Assistant and respond to this query: "
         }
-        data={data.data}
+        data={data}
       />
     </Box>
   );
