@@ -12,7 +12,7 @@ exec('npm run dev', (err, stdout, stderr) => {
 
 const obj = {
   dashboard: '3000',
-  coepress: '3001',
+  coepresult: '3001',
   'lecture-lab-feedback': '3002',
   lms: '3003',
   'venue-frontend': '3004',
