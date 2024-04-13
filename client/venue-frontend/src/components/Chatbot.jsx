@@ -5,7 +5,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const genAI = new GoogleGenerativeAI('AIzaSyB8UqNYSxTM9tgt2IJ3X_eeMb7J3SeYNok');
 
-const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How may I help you?", initialPrompt='Act as a College ERP assistant and respond to this query: '}) => {
+const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How may I help you?", initialPrompt='Act as a College ERP assistant and respond to this query: ', data}) => {
+  console.log(data);
   const [chats, setChats] = useState([
     {
       m: mess,
@@ -28,7 +29,7 @@ const Chatbot = ({mess="Hello, I am your College ERP Management Assistant. How m
 
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     const prompt =
-      initialPrompt + msg ;
+      initialPrompt +`${JSON.stringify(data)  } is the data which you can use to answer`+ msg ;
 
       console.log(prompt);
 
