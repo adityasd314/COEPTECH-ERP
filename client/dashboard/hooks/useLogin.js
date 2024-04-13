@@ -19,12 +19,8 @@ export const useLogin = () => {
       setError(json.error)
     }
     if (response.ok) {
-      console.log("> ",JSON.stringify(json.userId).toString());
       
-      localStorage.setItem('email', JSON.stringify(json.email));
-      localStorage.setItem('role', JSON.stringify(json.role));
-      localStorage.setItem('token', JSON.stringify(json.token));
-      localStorage.setItem('userId', JSON.stringify(json.userId).toString());
+      localStorage.setItem('user', JSON.stringify(json));
 
       setIsLoading(false)
     }

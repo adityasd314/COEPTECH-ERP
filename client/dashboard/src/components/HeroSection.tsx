@@ -13,14 +13,38 @@ function HeroSection() {
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { login, error, isLoading } = useLogin();
+  const [user, setUser] = useState("");
 
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
       setIsLoggedIn(true);
+      setUser(JSON.parse(storedUser));
     }
-  }, []); 
+  }, []);
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  
+    try {
+      await login(email, password);
+      const storedUser = localStorage.getItem("user");
+      
+      if (storedUser) {
+        setIsLoggedIn(true);
+        setUser(JSON.parse(storedUser));
+        redirect("/");
+      } else {
+        console.error('Login failed');
+      }
+      
+    } catch (error) {
+      console.error("Error during login:", error);
+    
+    }
+  };
+  
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value); 
@@ -30,26 +54,7 @@ function HeroSection() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      await login(email, password);
-      const userId = localStorage.getItem("userId");
-
-      if (userId) {
-        window.location.href = "/";
-        // redirect("/asds");
-      } else {
-        console.error('Login failed');
-      }
-      
-      
-    } catch (error) {
-      console.error("Error during login:", error);
-    
-    }
-  };
+  
 
   if (!isLoggedIn) {
     return (
@@ -126,33 +131,6 @@ function HeroSection() {
                       required
                     />
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-start">
-                      <div className="flex items-center h-5">
-                        <input
-                          id="remember"
-                          aria-describedby="remember"
-                          type="checkbox"
-                          className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                          required
-                        />
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label
-                          htmlFor="remember"
-                          className="text-gray-500 dark:text-gray-300"
-                        >
-                          Remember me
-                        </label>
-                      </div>
-                    </div>
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
                   <button
                     type="submit"
                     className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -169,9 +147,11 @@ function HeroSection() {
   } else {
     // Render alternative content when user is logged in
     return (
-      <div className="pt-24">
-        <h1>Welcome, {localStorage.getItem('email')}</h1>
-      </div>
+<div className="pt-24">
+  <h1>Welcome, {(user as any)?.email}</h1>
+</div>
+
+
     );
   }
 }
