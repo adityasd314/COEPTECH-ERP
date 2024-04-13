@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const genAI = new GoogleGenerativeAI("AIzaSyB8UqNYSxTM9tgt2IJ3X_eeMb7J3SeYNok");
 
 const App = () => {
-    const [chats, setChats] = useState([{ m: "Hello, I am your Sugar Tender Management Assistant. How may I help you?", role: "ai" }]);
+    const [chats, setChats] = useState([{ m: "Hello, I am your College ERP Management Assistant. How may I help you?", role: "ai" }]);
     const [msg, setMsg] = useState("");
     const [open, setOpen] = useState(true);
 
@@ -20,7 +20,7 @@ const App = () => {
         setChats(chats => [...chats, { m: msg, role: 'me' }]);
 
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-        const prompt = "Act as a sugar tenders management assistant and respond to this query: " + msg;
+        const prompt = "Act as a College ERP assistant and respond to this query: " + msg;
 
         setMsg("");
 

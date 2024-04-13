@@ -6,8 +6,8 @@ import AdminDashboard from "./components/AdminDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
-
 import { useAuthContext } from "./hooks/useAuthContext.js";
+import Chatbot from "./components/Chatbot.jsx";
 
 function App() {
   const { user } = useAuthContext();
@@ -24,6 +24,7 @@ function App() {
   
 
   return (
+    <>
     <Router>
       <div className="bg-white text-white">
         <Navbar />
@@ -37,6 +38,8 @@ function App() {
         </Routes>
       </div>
     </Router>
+    <Chatbot mess={"Hello, I am COEP's Venue Booking Systems Assistant. How may I help you?"} initialPrompt={"'Act as a COEP's Venue Booking Systems Assistan and respond to this query: '"}/>
+    </>
   );
 }
 

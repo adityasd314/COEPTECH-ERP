@@ -5,9 +5,11 @@ import { Box } from '@chakra-ui/react';
 import FeedbackFormModal from '../components/Student/FeedbackModal';
 import { Heading } from '@chakra-ui/react';
 import useSWR from 'swr';
+import Chatbot from '../components/Chatbot';
 
 export default function StudentDashboard({ user }) {
   const myHeaders = new Headers();
+
   myHeaders.append('Content-Type', 'application/json');
 
   const raw = JSON.stringify({
@@ -32,20 +34,19 @@ export default function StudentDashboard({ user }) {
         .catch((err) => console.log(err))
   );
 
-  const [llData, setllData] = useState([]);
+  const [llData, setLlData] = useState([]);
   const [toBeReviewed, setToBeReviewed] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (data) {
-      // console.log(data);
-      // console.log(data.data);
-      setllData(data.data);
+      console.log("Data fetched:", data.data); // Debugging: Check if data is fetched correctly
+      setLlData(data.data);
     }
   }, [data]);
 
   if (error) return <div>Error: {error}</div>;
-  if (isLoading) return <div>loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <Box>
@@ -73,6 +74,11 @@ export default function StudentDashboard({ user }) {
         onClose={() => {
           setModalOpen(false);
         }}
+      />
+      <Chatbot
+        mess={"Hello, I am COEP's Lecture-Lab Management Systems Assistant. How may I help you?"}
+        initialPrompt={"Act as a COEP's Lecture-Lab Management Systems Assistant and respond to this query: "}
+        data={llData} // Pass llData directly to the Chatbot component
       />
     </Box>
   );
