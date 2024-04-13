@@ -84,12 +84,12 @@ export default function AdminDashboard({ user }) {
     data: {
       averageFeedback: 0,
       feedbackObjectDataRating: {
-        'content clarity': 1,
+        'content clarity': 1.5,
         engagement: 1,
-        delivery: 1,
-        relevance: 1,
+        delivery: 4,
+        relevance: 2,
         materials: 3,
-        'feedback and support': 1,
+        'feedback and support': 2.5,
         'overall satisfaction': 1,
       },
       comments: [' sefsegsgsgsgsdg'],
@@ -159,7 +159,7 @@ export default function AdminDashboard({ user }) {
           <ModalHeader>Feedback</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Graph />
+            <Graph data={feedback} />
           </ModalBody>
           <ModalFooter>
             <Text fontSize="sm">Feedback</Text>

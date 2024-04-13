@@ -7,14 +7,24 @@ import {
   YAxis,
 } from 'react-vis';
 
-const CompoundBarChart = () => {
+const CompoundBarChart = (feedback) => {
+  console.log(feedback.data.data)
+  const graphdata = Object.entries(feedback.data.data.feedbackObjectDataRating).map(([key, value], i) => ({ x: i+1, y: value }));
+  const keys = Object.keys(feedback.data.data.feedbackObjectDataRating);
   return (
-    <XYPlot width={300} height={300} stackBy="y">
+    <XYPlot width={450} height={300} stackBy="y">
       <VerticalGridLines />
       <HorizontalGridLines />
-      <XAxis />
+      <XAxis 
+        //tickValues={graphdata.map(item => item.x)} // Specify custom tick values
+        tickFormat={d => keys[d - 1]} // Use keys as labels
+        tickLabelAngle={-15}
+        style={{
+          text: { fontSize: 10 } // Adjust font size if needed
+        }}
+      />
       <YAxis />
-        <VerticalBarSeries data={[{x: 2, y: 10}, {x: 4, y: 5}, {x: 5, y: 15}]} />
+        <VerticalBarSeries data={graphdata} />
     </XYPlot>
   );
 };
