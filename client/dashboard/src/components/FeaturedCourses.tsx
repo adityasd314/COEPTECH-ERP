@@ -17,6 +17,7 @@ interface Course {
 }
 
 const ports = {};
+
 function FeaturedCourses() {
   const featuredCourses = courseData.courses.filter(
     (course: Course) => course.isFeatured
@@ -45,7 +46,7 @@ function FeaturedCourses() {
             <Link
               key={i}
               href={`http://localhost:${course.port}?user=${encodeURI(
-                JSON.stringify(JSON.parse(user))
+                JSON.stringify(JSON.parse(user!))
               )}`}>
               <div className="flex justify-center">
                 <BackgroundGradient className="flex flex-col rounded-[10px] bg-white dark:bg-white overflow-hidden h-full max-w-sm">
