@@ -1,32 +1,35 @@
-import {
-  XYPlot,
-  VerticalBarSeries,
-  VerticalGridLines,
-  HorizontalGridLines,
-  XAxis,
-  YAxis,
-} from 'react-vis';
+import React from "react";
+import { Chart } from "react-google-charts";
 
-const CompoundBarChart = (feedback) => {
-  console.log(feedback.data.data)
-  const graphdata = Object.entries(feedback.data.data.feedbackObjectDataRating).map(([key, value], i) => ({ x: i+1, y: value }));
-  const keys = Object.keys(feedback.data.data.feedbackObjectDataRating);
-  return (
-    <XYPlot width={450} height={300} stackBy="y">
-      <VerticalGridLines />
-      <HorizontalGridLines />
-      <XAxis 
-        //tickValues={graphdata.map(item => item.x)} // Specify custom tick values
-        tickFormat={d => keys[d - 1]} // Use keys as labels
-        tickLabelAngle={-15}
-        style={{
-          text: { fontSize: 10 } // Adjust font size if needed
-        }}
-      />
-      <YAxis />
-        <VerticalBarSeries data={graphdata} />
-    </XYPlot>
-  );
+const options = {
+  title: "Feedback for Teacher",
+  chartArea: { width: "50%" },
+  hAxis: {
+    title: "Criteria for feedback",
+    minValue: 0,
+  },
+  vAxis: {
+    title: "Score",
+  },
 };
 
-export default CompoundBarChart;
+const Graph = (feedback) => {
+    const feedbackData = Object.entries(feedback.data.data.feedbackObjectDataRating).map(([key, value]) => [key, value]);
+
+    const newData = [
+    ["Score", "Value"],
+    ...feedbackData
+    ];
+
+    return (
+        <Chart
+        chartType="BarChart"
+        width="100%"
+        height="400px"
+        data={newData}
+        options={options}
+        />
+    );
+    }
+
+export default Graph;

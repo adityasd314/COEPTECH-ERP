@@ -159,7 +159,7 @@ export default function AdminDashboard({ user }) {
           <ModalHeader>Feedback</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Graph data={feedback} />
+            <Graph  data={feedback}/>
           </ModalBody>
           <ModalFooter>
             <Text fontSize="sm">Feedback</Text>
