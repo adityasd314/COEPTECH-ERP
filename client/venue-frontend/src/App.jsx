@@ -49,8 +49,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin" element={checkRoleAndNavigate(["admin"], <AdminDashboard isManager={true}/>)} />
-          <Route path="/faculty" element={checkRoleAndNavigate(["faculty", "admin"], <AdminDashboard/>)} />
-          <Route path="/employee" element={checkRoleAndNavigate(["professor", "hod", "admin"], <EmployeeDashboard />)}/>
+          <Route path="/faculty" element={checkRoleAndNavigate(["faculty"], <AdminDashboard/>)} />
+          <Route path="/employee" element={checkRoleAndNavigate(["professor", "hod", "student"], <EmployeeDashboard />)}/>
         </Routes>
       </div>
     </Router>

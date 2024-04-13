@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
-
+import ProfileCardA from "./ProfileCardA";  
 function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { user } = useAuthContext();
@@ -79,15 +79,15 @@ function Navbar() {
                   </li>
                 )}
 
-                {user.role === "hod" && (
+                {(user.role === "hod" || user.role ==="teacher" )&& (
                   <li className={`text-gray-100 hover:bg-white hover:text-pink-800 rounded-full px-4 py-2 border border-transparent transition-all duration-300 ${location.pathname === '/manager' ? 'bg-white text-pink-800' : ''}`}>
-                    <Link to="/manager">HOD's Dashboard</Link>
+                    <Link to="/manager">Faculty's Dashboard</Link>
                   </li>
                 )}
 
-                {(user.role === "teacher" || user.role === "hod") && (
+                {(user.role === "student" || user.role === "teacher" || user.role === "hod") && (
                   <li className={`text-gray-100 hover:bg-white hover:text-pink-800 rounded-full px-4 py-2 border border-transparent transition-all duration-300 ${location.pathname === '/employee' ? 'bg-white text-pink-800' : ''}`}>
-                    <Link to="/employee">Teacher's Dashboard</Link>
+                    <Link to="/employee">User's Dashboard</Link>
                   </li>
                 )}
 
@@ -121,7 +121,7 @@ function Navbar() {
             </Link>
           ) : (
               <div>
-                {/* <ProfileCardA /> */}
+                <ProfileCardA />
               </div>
             )}
         </div>
