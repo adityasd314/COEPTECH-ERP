@@ -79,7 +79,12 @@ const App = () => {
           </button>
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4"
+        style={{
+          backgroundImage: `url('https://th.bing.com/th/id/OIG1..S44hSONtNMOsoG1IEca?w=1024&h=1024&rs=1&pid=ImgDetMain')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+      }}>
         {chats.map((chat, index) => (
           <div
             key={index}
@@ -93,8 +98,8 @@ const App = () => {
               dangerouslySetInnerHTML={{ __html: chat.m }}
               className={
                 chat.role === 'ai'
-                  ? 'bg-gray-800 text-white rounded-lg py-2 px-4 max-w-md'
-                  : 'bg-gray-200 text-gray-800 rounded-lg py-2 px-4 max-w-md'
+                  ? 'bg-gray-800/75 text-lg text-white rounded-lg py-2 px-4 max-w-md'
+                  : 'bg-gray-200/75 text-lg text-gray-800 rounded-lg py-2 px-4 max-w-md'
               }></div>
           </div>
         ))}

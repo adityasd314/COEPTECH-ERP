@@ -4,8 +4,7 @@ const courses = [
     id: 1,
     title: 'Leave Management System',
     slug: '#',
-    description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description: 'Streamline and automate leave requests effortlessly.',
     price: 99.99,
     instructor: 'John Doe',
     isFeatured: true,
@@ -16,8 +15,7 @@ const courses = [
     id: 8,
     title: 'Venue Booking System',
     slug: 'piano-for-beginners',
-    description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description: 'Simplify event planning with seamless venue reservations.',
     price: 109.99,
     instructor: 'Jane Smith',
     isFeatured: true,
@@ -29,7 +27,7 @@ const courses = [
     title: 'Easy Results',
     slug: 'advanced-vocal-techniques',
     description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'Access academic outcomes effortlessly with our intuitive interface.',
     price: 119.99,
     instructor: 'Emily Johnson',
     isFeatured: true,
@@ -41,7 +39,7 @@ const courses = [
     title: 'Lecture Lab Conduction',
     slug: 'drumming-mastery',
     description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'Enhance learning experiences through comprehensive feedback mechanisms.',
     price: 129.99,
     instructor: 'Mike Brown',
     isFeatured: true,
@@ -53,7 +51,7 @@ const courses = [
     title: 'Engineer GPT',
     slug: 'jazz-improvisation',
     description:
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      'Revolutionize engineering workflows with AI-powered assistance and insights.',
     price: 139.99,
     instructor: 'Chris Davis',
     isFeatured: true,
