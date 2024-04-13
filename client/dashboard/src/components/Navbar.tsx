@@ -9,7 +9,7 @@ import  LogOut  from "../components/LogOut";
 
 function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
-  const userId = localStorage.getItem("userId");
+  const user = localStorage.getItem("user");
 
   return (
     <div className={cn("fixed top-10 inset-x-0 max-w-2xl mx-auto z-50", className)}>
@@ -53,7 +53,7 @@ function Navbar({ className }: { className?: string }) {
             <HoveredLink href="/pricing">View Team</HoveredLink>
           </div>
         </MenuItem>
-        {userId ? <LogOut /> : null}
+        {user ? <LogOut /> : null}
       </Menu>
     </div>
   );
