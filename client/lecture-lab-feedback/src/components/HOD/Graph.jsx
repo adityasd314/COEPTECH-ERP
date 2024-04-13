@@ -14,8 +14,10 @@ const options = {
 };
 
 const Graph = (feedback) => {
-    const feedbackData = Object.entries(feedback.data.data.feedbackObjectDataRating).map(([key, value]) => [key, value]);
-
+  console.log(feedback.data == null);
+    if(feedback.data == null) return (<div>No feedback available</div>)
+    const feedbackData = Object.entries(feedback.data.feedbackObjectDataRating).map(([key, value]) => [key, value]);
+    
     const newData = [
     ["Score", "Value"],
     ...feedbackData

@@ -19,6 +19,9 @@ const getStudentAverageFeedback = async (req, res) => {
             return res.status(400).json({ message: "Please provide all the required fields", dataFormat: { professorsId: "string" } });
         }
         const feedbackData = await db.select().from(feedback).where(eq(feedback.professorId, professorsId));
+        if (feedbackData.length === 0) {
+            return res.status(404).json({ message: "Feedback not found", success: false});
+        }
         let totalFeedback = 0;
         let totalStudents = 0;
         const comments = []
@@ -56,7 +59,7 @@ const getStudentAverageFeedback = async (req, res) => {
         feedbackObjectDataRating["overall satisfaction"] = feedbackObjectDataRating["overall satisfaction"] / totalStudents;
 
         const averageFeedback = totalFeedback / totalStudents;
-        res.status(200).json({ message: "Average feedback fetched", data: { averageFeedback:feedbackObjectDataRating['overall satisfaction'], feedbackObjectDataRating, comments } });
+        res.status(200).json({success:true, message: "Average feedback fetched", data: { averageFeedback:feedbackObjectDataRating['overall satisfaction'], feedbackObjectDataRating, comments } });
       
       
     }

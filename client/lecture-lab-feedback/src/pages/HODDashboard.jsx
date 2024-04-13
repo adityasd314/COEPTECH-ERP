@@ -39,7 +39,9 @@ export default function AdminDashboard({ user }) {
   const GET_COURSES_URL =
     'http://localhost:5000/lecture-lab/hod/getAllCoursesWithProfessorsByDepartment';
 
+    const GET_FEEDBACK_URL = 'http://localhost:5000/lecture-lab/hod/getStudentAverageFeedback'
   const [departmentId, setDepartmentId] = useState(null);
+  const [feedback, setFeedback] = useState(null);
 
   const { data, isLoading, isError } = useSWR(GET_COURSES_URL, async (url) => {
     const response = await fetch(GET_DEPARTMENT_ID_URL, {
@@ -79,22 +81,22 @@ export default function AdminDashboard({ user }) {
     }
   }, [data]);
 
-  const feedback = {
-    message: 'Average feedback fetched',
-    data: {
-      averageFeedback: 0,
-      feedbackObjectDataRating: {
-        'content clarity': 1.5,
-        engagement: 1,
-        delivery: 4,
-        relevance: 2,
-        materials: 3,
-        'feedback and support': 2.5,
-        'overall satisfaction': 1,
-      },
-      comments: [' sefsegsgsgsgsdg'],
-    },
-  };
+  // const feedback = {
+  //   message: 'Average feedback fetched',
+  //   data: {
+  //     averageFeedback: 0,
+  //     feedbackObjectDataRating: {
+  //       'content clarity': 1.5,
+  //       engagement: 1,
+  //       delivery: 4,
+  //       relevance: 2,
+  //       materials: 3,
+  //       'feedback and support': 2.5,
+  //       'overall satisfaction': 1,
+  //     },
+  //     comments: [' sefsegsgsgsgsdg'],
+  //   },
+  // };
 
   return (
     <Box>
@@ -142,6 +144,22 @@ export default function AdminDashboard({ user }) {
                       size="sm"
                       onClick={() => {
                         console.log('Generate Report for course:', course);
+                        console.log('Professor ID:', course.professorId);
+                        fetch(GET_FEEDBACK_URL, {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ professorsId: course.professorId }),
+                        })
+                          .then((res) => res.json())
+                          .then((data) => {
+                            
+                            console.log('Feedback data:', data);
+                            
+                            setFeedback(data.data)}
+                          
+                          );
                         setIsOpen(true);
                       }}>
                       Generate Report from Feedback
