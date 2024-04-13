@@ -9,7 +9,7 @@ const App = () => {
   user = urlParams.get('user');
   if (user) {
     localStorage.setItem('user', user);
-    window.history.pushState({}, '/');
+    window.location.href = '/';
   }
   user = localStorage.getItem('user');
   if (!user) {
@@ -17,7 +17,7 @@ const App = () => {
   }
   const [chats, setChats] = useState([
     {
-      m: 'Hello, I am your College ERP Management Assistant. How may I help you?',
+      m: 'Hello, I am your EngineeringGPT. How may I help you?',
       role: 'ai',
     },
   ]);
@@ -65,8 +65,19 @@ const App = () => {
       className={`fixed inset-0 flex flex-col bg-black text-white ${
         open ? '' : 'hidden'
       }`}>
-      <div className="bg-gray-900 text-white py-4">
+      <div className="bg-gray-900 text-white py-4 flex flex-row justify-between">
         <h1 className="text-3xl text-center">EngineerGPT</h1>
+        <div>
+          <span>{JSON.parse(user).email}</span>
+          <button
+            onClick={() => {
+              localStorage.removeItem('user');
+              window.location.href = 'http://localhost:3000/';
+            }}
+            className="ml-4 py-1 px-2 bg-red-500 text-white rounded-lg">
+            Logout
+          </button>
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto p-4">
         {chats.map((chat, index) => (
@@ -84,9 +95,7 @@ const App = () => {
                 chat.role === 'ai'
                   ? 'bg-gray-800 text-white rounded-lg py-2 px-4 max-w-md'
                   : 'bg-gray-200 text-gray-800 rounded-lg py-2 px-4 max-w-md'
-              }>
-              
-            </div>
+              }></div>
           </div>
         ))}
       </div>
