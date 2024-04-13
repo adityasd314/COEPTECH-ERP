@@ -75,13 +75,16 @@ function App() {
               )}
             />
             <Route
-              path="/faculty"
-              element={checkRoleAndNavigate(['faculty'], <AdminDashboard />)}
+              path="/manager"
+              element={checkRoleAndNavigate(
+                ['teacher', 'hod'],
+                <AdminDashboard />,
+              )}
             />
             <Route
               path="/employee"
               element={checkRoleAndNavigate(
-                ['professor', 'hod', 'student'],
+                ['teacher', 'hod', 'student'],
                 <EmployeeDashboard />,
               )}
             />

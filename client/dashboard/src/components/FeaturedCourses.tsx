@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import courseData from '../data/music_courses.json';
+import courseData from '../data/apps';
 import { BackgroundGradient } from './ui/background-gradient';
 import { HeroHighlight, Highlight } from './ui/hero-highlight';
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ interface Course {
 const ports = {};
 
 function FeaturedCourses() {
-  const featuredCourses = courseData.courses.filter(
+  const featuredCourses = courseData.filter(
     (course: Course) => course.isFeatured
   );
 
@@ -35,7 +35,11 @@ function FeaturedCourses() {
           <br />
           <br />
           <br />
-          <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-black sm:text-4xl">
+          <p
+            className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-black sm:text-4xl"
+            style={{
+              wordSpacing: '0.3em',
+            }}>
             ONE PLATFORM FOR ALL THE PROBLEMS
           </p>
         </div>

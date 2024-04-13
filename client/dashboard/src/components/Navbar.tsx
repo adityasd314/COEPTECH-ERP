@@ -27,31 +27,31 @@ function Navbar({ className }: { className?: string }) {
           <div className="text-sm grid grid-cols-1 sm:grid-cols-2 gap-10 p-4">
             <ProductItem
               title="LeavePro"
-              href="/leave-management"
+              href="#"
               src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
               description="Efficient leave management system for students and faculty."
             />
             <ProductItem
               title="VenueMaster"
-              href="/venue-booking"
+              href="#"
               src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
               description="Streamlined venue booking system for college events."
             />
             <ProductItem
               title="Resultify"
-              href="/results"
+              href="#"
               src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
               description="Manage and publish exam results effortlessly."
             />
             <ProductItem
-              title="HostelEase"
-              href="/hostel-management"
+              title="EngineerGPT"
+              href="#"
               src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
               description="Comprehensive hostel management system for students and administrators."
             />
             <ProductItem
               title="LectureLabPro"
-              href="/lecture-lab"
+              href="#"
               src="https://assets.aceternity.com/demos/Screenshot+2024-02-21+at+11.47.07%E2%80%AFPM.png"
               description="Optimize lecture and lab scheduling for better academic efficiency."
             />
@@ -59,7 +59,7 @@ function Navbar({ className }: { className?: string }) {
         </MenuItem>
         <MenuItem setActive={setActive} active={active} item="Team">
           <div className="flex flex-col space-y-4 text-sm">
-            <HoveredLink href="/pricing">View Team</HoveredLink>
+            <HoveredLink href="#">View Team</HoveredLink>
           </div>
         </MenuItem>
         {user ? <LogOut /> : null}
