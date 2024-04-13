@@ -143,6 +143,7 @@ export default function WithSubnavigation({ user, currentPage }) {
                   textColor={'black'}
                   onClick={() => {
                     logout();
+                    localStorage.removeItem('user');
                     window.location.href = '/';
                   }}>
                   Logout

@@ -22,7 +22,7 @@ function FeaturedCourses() {
     (course: Course) => course.isFeatured
   );
 
-  const user = localStorage.getItem("user");
+  const user = localStorage.getItem('user');
 
   return (
     <div
@@ -41,9 +41,12 @@ function FeaturedCourses() {
       </div>
       <div className="mt-10 mx-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-center">
-
           {featuredCourses.map((course: Course, i) => (
-            <Link key={i} href={`http://localhost:${course.port}?user=${encodeURIComponent(JSON.stringify(user))}`}>
+            <Link
+              key={i}
+              href={`http://localhost:${course.port}?user=${encodeURI(
+                JSON.stringify(JSON.parse(user))
+              )}`}>
               <div className="flex justify-center">
                 <BackgroundGradient className="flex flex-col rounded-[10px] bg-white dark:bg-white overflow-hidden h-full max-w-sm">
                   <div className="p-4 sm:p-6 flex flex-col items-center text-center flex-grow">

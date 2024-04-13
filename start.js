@@ -16,6 +16,7 @@ const obj = {
   'lecture-lab-feedback': '3002',
   lms: '3003',
   'venue-frontend': '3004',
+  chatbot: '3005',
 };
 
 let locations = '';
