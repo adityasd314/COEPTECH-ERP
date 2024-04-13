@@ -37,14 +37,18 @@ const App = () => {
 
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
     const prompt =
-      'Act as a College ERP assistant and respond to this query: ' + msg;
+      'Act as a assistant for engineering student and answer to his/her queries: ' +
+      msg;
 
     setMsg('');
 
     try {
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      const text = await response.text();
+      const text = (await response.text()).replace(
+        /\*\*(.*?)\*\*/g,
+        '<br><strong>$1</strong><br>'
+      );
 
       setChats((chats) => [...chats, { m: text, role: 'ai' }]);
     } catch (error) {
@@ -74,12 +78,14 @@ const App = () => {
                 : 'mb-4 flex justify-end'
             }>
             <div
+              id="chat-bubble"
+              dangerouslySetInnerHTML={{ __html: chat.m }}
               className={
                 chat.role === 'ai'
                   ? 'bg-gray-800 text-white rounded-lg py-2 px-4 max-w-md'
                   : 'bg-gray-200 text-gray-800 rounded-lg py-2 px-4 max-w-md'
               }>
-              {chat.m}
+              
             </div>
           </div>
         ))}
